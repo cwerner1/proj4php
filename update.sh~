@@ -1,7 +1,7 @@
 #!/bin/bash
 
-search='qs2'
-replace='qsTwo'
+search='ml0'
+replace='mlZero'
 list=$(find . -name \*.php)
 for i in $list; do
  sed -i "s/${search}/${replace}/g" $i
