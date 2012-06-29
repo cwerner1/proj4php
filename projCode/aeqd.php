@@ -30,7 +30,7 @@ class Proj4php_ProjAeqd
 
         $sinphi = sin($p->y);
         $cosphi = cos($p->y);
-        $dlon = Proj4php::$common->adjust_lon(lon - $this->long0);
+        $dlon =  Proj4php_common::adjustLon(lon - $this->long0);
         $coslon = cos($dlon);
         $g = $this->sin_p12 * $sinphi + $this->cos_p12 * $cosphi * $coslon;
         if (abs(abs($g) - 1.0) < Proj4php::$common->epsln) {
@@ -79,9 +79,9 @@ class Proj4php_ProjAeqd
             $con = abs($this->lat0) - Proj4php::$common->halfPi;
             if (abs($con) <= Proj4php::$common->epsln) {
                 if ($this->lat0 >= 0.0) {
-                    $lon = Proj4php::$common->adjust_lon($this->long0 + atan2($p->x, -$p->y));
+                    $lon =  Proj4php_common::adjustLon($this->long0 + atan2($p->x, -$p->y));
                 } else {
-                    $lon = Proj4php::$common->adjust_lon($this->long0 - atan2(-$p->x, $p->y));
+                    $lon =  Proj4php_common::adjustLon($this->long0 - atan2(-$p->x, $p->y));
                 }
             } else {
                 $con = $cosz - $this->sin_p12 * sin($lat);
@@ -89,7 +89,7 @@ class Proj4php_ProjAeqd
                     //no-op, just keep the lon value as is
                 } else {
                     #$temp = atan2( ($p->x * $sinz * $this->cos_p12 ), ($con * $rh ) ); // $temp is unused !?!
-                    $lon = Proj4php::$common->adjust_lon($this->long0 + atan2(($p->x * $sinz * $this->cos_p12), ($con * $rh)));
+                    $lon =  Proj4php_common::adjustLon($this->long0 + atan2(($p->x * $sinz * $this->cos_p12), ($con * $rh)));
                 }
             }
         }

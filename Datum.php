@@ -23,10 +23,10 @@ class Proj4php_Datum
     public function __construct($proj)
     {
 
-        $this->datum_type = Proj4php::$common->pjdWgs84;   //default setting
+        $this->datum_type = Proj4php_common::$pjdWgs84;   //default setting
 
         if (isset($proj->datumCode) && $proj->datumCode == 'none') {
-            $this->datum_type = Proj4php::$common->pjdNodatum;
+            $this->datum_type = Proj4php_common::$pjdNodatum;
         }
 
         if (isset($proj->datum_params)) {
@@ -36,17 +36,17 @@ class Proj4php_Datum
             }
 
             if ($proj->datum_params[0] != 0 || $proj->datum_params[1] != 0 || $proj->datum_params[2] != 0) {
-                $this->datum_type = Proj4php::$common->pjd3Param;
+                $this->datum_type = Proj4php_common::$pjd3Param;
             }
 
             if (sizeof($proj->datum_params) > 3) {
                 if ($proj->datum_params[3] != 0 || $proj->datum_params[4] != 0 ||
                         $proj->datum_params[5] != 0 || $proj->datum_params[6] != 0) {
 
-                    $this->datum_type = Proj4php::$common->pjd7Param;
-                    $proj->datum_params[3] *= Proj4php::$common->secToRad;
-                    $proj->datum_params[4] *= Proj4php::$common->secToRad;
-                    $proj->datum_params[5] *= Proj4php::$common->secToRad;
+                    $this->datum_type = Proj4php_common::$pjd7Param;
+                    $proj->datum_params[3] *= Proj4php_common::$secToRad;
+                    $proj->datum_params[4] *= Proj4php_common::$secToRad;
+                    $proj->datum_params[5] *= Proj4php_common::$secToRad;
                     $proj->datum_params[6] = ($proj->datum_params[6] / 1000000.0) + 1.0;
                 }
             }
@@ -77,11 +77,11 @@ class Proj4php_Datum
             // the tolerence for es is to ensure that GRS80 and WGS84
             // are considered identical
             return false;
-        } else if ($this->datum_type == Proj4php::$common->pjd3Param) {
+        } else if ($this->datum_type == Proj4php_common::$pjd3Param) {
             return ($this->datum_params[0] == $dest->datum_params[0]
                     && $this->datum_params[1] == $dest->datum_params[1]
                     && $this->datum_params[2] == $dest->datum_params[2]);
-        } else if ($this->datum_type == Proj4php::$common->pjd7Param) {
+        } else if ($this->datum_type == Proj4php_common::$pjd7Param) {
             return ($this->datum_params[0] == $dest->datum_params[0]
                     && $this->datum_params[1] == $dest->datum_params[1]
                     && $this->datum_params[2] == $dest->datum_params[2]
@@ -89,8 +89,8 @@ class Proj4php_Datum
                     && $this->datum_params[4] == $dest->datum_params[4]
                     && $this->datum_params[5] == $dest->datum_params[5]
                     && $this->datum_params[6] == $dest->datum_params[6]);
-        } else if ($this->datum_type == Proj4php::$common->pjdGridshift ||
-                $dest->datum_type == Proj4php::$common->pjdGridshift) {
+        } else if ($this->datum_type == Proj4php_common::$pjdGridshift ||
+                $dest->datum_type == Proj4php_common::$pjdGridshift) {
             throw(new Exception("ERROR: Grid shift transformations are not implemented."));
             return false;
         }
@@ -125,18 +125,18 @@ class Proj4php_Datum
          * * range as it may just be a rounding issue.  Also removed longitude
          * * test, it should be wrapped by cos() and sin().  NFW for PROJ.4, Sep/2001.
          */
-        if ($Latitude < -Proj4php::$common->halfPi && $Latitude > -1.001 * Proj4php::$common->halfPi) {
-            $Latitude = -Proj4php::$common->halfPi;
-        } else if ($Latitude > Proj4php::$common->halfPi && $Latitude < 1.001 * Proj4php::$common->halfPi) {
-            $Latitude = Proj4php::$common->halfPi;
-        } else if (($Latitude < -Proj4php::$common->halfPi) || ($Latitude > Proj4php::$common->halfPi)) {
+        if ($Latitude < - Proj4php_common::$halfPi && $Latitude > -1.001 * Proj4php_common::$halfPi) {
+            $Latitude = - Proj4php_common::$halfPi;
+        } else if ($Latitude > Proj4php_common::$halfPi && $Latitude < 1.001 * Proj4php_common::$halfPi) {
+            $Latitude = Proj4php_common::$halfPi;
+        } else if (($Latitude < - Proj4php_common::$halfPi) || ($Latitude > Proj4php_common::$halfPi)) {
             /* Latitude out of range */
             Proj4php::reportError('geocent:lat out of range:' . $Latitude);
             return null;
         }
 
-        if ($Longitude > Proj4php::$common->pi)
-            $Longitude -= (2 * Proj4php::$common->pi);
+        if ($Longitude > Proj4php_common::$pi)
+            $Longitude -= (2 * Proj4php_common::$pi);
 
         $Sin_Lat = sin($Latitude); /*  sin(Latitude)  */
         $Cos_Lat = cos($Latitude); /*  cos(Latitude)  */
@@ -200,7 +200,7 @@ class Proj4php_Datum
             /*  if (X,Y,Z)=(0.,0.,0.) then Height becomes semi-minor axis
              *  of ellipsoid (=center of mass), Latitude becomes PI/2 */
             if ($RR / $this->a < $genau) {
-                $Latitude = Proj4php::$common->halfPi;
+                $Latitude = Proj4php_common::$halfPi;
                 $Height = -$this->b;
                 return;
             }
@@ -295,18 +295,18 @@ class Proj4php_Datum
             $Longitude = atan2($Y, $X);
         } else {
             if ($Y > 0) {
-                $Longitude = Proj4php::$common->halfPi;
+                $Longitude = Proj4php_common::$halfPi;
             } else if (Y < 0) {
-                $Longitude = -Proj4php::$common->halfPi;
+                $Longitude = - Proj4php_common::$halfPi;
             } else {
                 $At_Pole = true;
                 $Longitude = 0.0;
                 if ($Z > 0.0) { /* north pole */
-                    $Latitude = Proj4php::$common->halfPi;
+                    $Latitude = Proj4php_common::$halfPi;
                 } else if (Z < 0.0) { /* south pole */
-                    $Latitude = -Proj4php::$common->halfPi;
+                    $Latitude = - Proj4php_common::$halfPi;
                 } else { /* center of earth */
-                    $Latitude = Proj4php::$common->halfPi;
+                    $Latitude = Proj4php_common::$halfPi;
                     $Height = -$this->b;
                     return;
                 }
@@ -314,7 +314,7 @@ class Proj4php_Datum
         }
         $W2 = $X * $X + $Y * $Y;
         $W = sqrt($W2);
-        $T0 = $Z * Proj4php::$common->adC;
+        $T0 = $Z * Proj4php_common::$adC;
         $S0 = sqrt($T0 * $T0 + $W2);
         $Sin_B0 = $T0 / $S0;
         $Cos_B0 = $W / $S0;
@@ -325,9 +325,9 @@ class Proj4php_Datum
         $Sin_p1 = $T1 / $S1;
         $Cos_p1 = $Sum / $S1;
         $Rn = $this->a / sqrt(1.0 - $this->es * $Sin_p1 * $Sin_p1);
-        if ($Cos_p1 >= Proj4php::$common->cosOf67P5) {
+        if ($Cos_p1 >= Proj4php_common::$cosOf67P5) {
             $Height = $W / $Cos_p1 - $Rn;
-        } else if ($Cos_p1 <= -Proj4php::$common->cosOf67P5) {
+        } else if ($Cos_p1 <= - Proj4php_common::$cosOf67P5) {
             $Height = $W / -$Cos_p1 - $Rn;
         } else {
             $Height = $Z / $Sin_p1 + $Rn * ($this->es - 1.0);
@@ -350,13 +350,13 @@ class Proj4php_Datum
     public function geocentric_to_wgs84($p)
     {
 
-        if ($this->datum_type == Proj4php::$common->pjd3Param) {
+        if ($this->datum_type == Proj4php_common::$pjd3Param) {
             // if( x[io] == HUGE_VAL )
             //    continue;
             $p->x += $this->datum_params[0];
             $p->y += $this->datum_params[1];
             $p->z += $this->datum_params[2];
-        } else if ($this->datum_type == Proj4php::$common->pjd7Param) {
+        } else if ($this->datum_type == Proj4php_common::$pjd7Param) {
             $Dx_BF = $this->datum_params[0];
             $Dy_BF = $this->datum_params[1];
             $Dz_BF = $this->datum_params[2];
@@ -380,13 +380,13 @@ class Proj4php_Datum
     public function geocentric_from_wgs84($p)
     {
 
-        if ($this->datum_type == Proj4php::$common->pjd3Param) {
+        if ($this->datum_type == Proj4php_common::$pjd3Param) {
             //if( x[io] == HUGE_VAL )
             //    continue;
             $p->x -= $this->datum_params[0];
             $p->y -= $this->datum_params[1];
             $p->z -= $this->datum_params[2];
-        } else if ($this->datum_type == Proj4php::$common->pjd7Param) {
+        } else if ($this->datum_type == Proj4php_common::$pjd7Param) {
             $Dx_BF = $this->datum_params[0];
             $Dy_BF = $this->datum_params[1];
             $Dz_BF = $this->datum_params[2];

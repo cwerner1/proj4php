@@ -37,8 +37,8 @@ class Proj4php_ProjCass
     public function init()
     {
         if (!$this->sphere) {
-            $this->en = Proj4php::$common->pj_enfn($this->es);
-            $this->m0 = Proj4php::$common->pj_mlfn($this->lat0, sin($this->lat0), cos($this->lat0), $this->en);
+            $this->en = Proj4php::$common->pjEnfn($this->es);
+            $this->m0 = Proj4php::$common->pjMlfn($this->lat0, sin($this->lat0), cos($this->lat0), $this->en);
         }
     }
 
@@ -60,7 +60,7 @@ class Proj4php_ProjCass
         #$y;
         $lam = $p->x;
         $phi = $p->y;
-        $lam = Proj4php::$common->adjust_lon($lam - $this->long0);
+        $lam =  Proj4php_common::adjustLon($lam - $this->long0);
 
         if ($this->sphere) {
             $x = asin(cos($phi) * sin($lam));
@@ -102,7 +102,7 @@ class Proj4php_ProjCass
             $lam = atan2(tan($x), cos($this->dd));
         } else {
             /* ellipsoid */
-            $ph1 = Proj4php::$common->pj_inv_mlfn($this->m0 + $y, $this->es, $this->en);
+            $ph1 = Proj4php::$common->pjInvMlfn($this->m0 + $y, $this->es, $this->en);
             $this->tn = tan($ph1);
             $this->t = $this->tn * $this->tn;
             $this->n = sin($ph1);
@@ -114,7 +114,7 @@ class Proj4php_ProjCass
             $phi = $ph1 - ($this->n * $this->tn / $this->r) * $this->d2 * (.5 - (1. + 3. * $this->t) * $this->d2 * $this->C3);
             $lam = $this->dd * (1. + $this->t * $this->d2 * (-$this->C4 + (1. + 3. * $this->t) * $this->d2 * $this->C5)) / cos($ph1);
         }
-        $p->x = Proj4php::$common->adjust_lon($this->long0 + $lam);
+        $p->x =  Proj4php_common::adjustLon($this->long0 + $lam);
         $p->y = $phi;
 
         return $p;

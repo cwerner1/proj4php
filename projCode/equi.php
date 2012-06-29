@@ -54,7 +54,7 @@ class Proj4php_ProjEqui
         $lon = $p->x;
         $lat = $p->y;
 
-        $dlon = Proj4php::$common->adjust_lon($lon - $this->long0);
+        $dlon =  Proj4php_common::adjustLon($lon - $this->long0);
         $x = $this->x0 + $this->a * $dlon * cos($this->lat0);
         $y = $this->y0 + $this->a * $lat;
 
@@ -78,7 +78,7 @@ class Proj4php_ProjEqui
         if (abs($lat) > Proj4php::$common->halfPi) {
             Proj4php::reportError("equi:Inv:DataError");
         }
-        $lon = Proj4php::$common->adjust_lon($this->long0 + $p->x / ($this->a * cos($this->lat0)));
+        $lon =  Proj4php_common::adjustLon($this->long0 + $p->x / ($this->a * cos($this->lat0)));
         $p->x = $lon;
         $p->y = $lat;
     }
