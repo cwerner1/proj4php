@@ -56,9 +56,9 @@ class Proj4php_ProjLaea
     public function init()
     {
         $t = abs($this->lat0);
-        if (abs($t - Proj4php_common::$halfPi) < Proj4php_common::$epsln) {
+        if (abs($t - Proj4php_Common::$halfPi) < Proj4php_Common::$epsln) {
             $this->mode = $this->lat0 < 0. ? $this->S_POLE : $this->N_POLE;
-        } else if (abs($t) < Proj4php_common::$epsln) {
+        } else if (abs($t) < Proj4php_Common::$epsln) {
             $this->mode = $this->EQUIT;
         } else {
             $this->mode = $this->OBLIQ;
@@ -110,7 +110,7 @@ class Proj4php_ProjLaea
         #$y;
         $lam = $p->x;
         $phi = $p->y;
-        $lam = Proj4php_common::adjustLon($lam - $this->long0);
+        $lam = Proj4php_Common::adjustLon($lam - $this->long0);
 
         if ($this->sphere) {
             /*
@@ -126,7 +126,7 @@ class Proj4php_ProjLaea
                 case $this->OBLIQ:
                 case $this->EQUIT:
                     $y = ($this->mode == $this->EQUIT) ? 1. + $cosphi * $coslam : 1. + $this->sinph0 * $sinphi + $this->cosph0 * $cosphi * $coslam;
-                    if (y <= Proj4php_common::$epsln) {
+                    if (y <= Proj4php_Common::$epsln) {
                         Proj4php::reportError("laea:fwd:y less than eps");
                         return null;
                     }
@@ -137,7 +137,7 @@ class Proj4php_ProjLaea
                 case $this->N_POLE:
                     $coslam = -$coslam;
                 case $this->S_POLE:
-                    if (abs($phi + $this->phi0) < Proj4php_common::$epsln) {
+                    if (abs($phi + $this->phi0) < Proj4php_Common::$epsln) {
                         Proj4php::reportError("laea:fwd:phi < eps");
                         return null;
                     }
@@ -174,15 +174,15 @@ class Proj4php_ProjLaea
                     $b = 1. + $cosb * $coslam;
                     break;
                 case $this->N_POLE:
-                    $b = Proj4php_common::$halfPi + $phi;
+                    $b = Proj4php_Common::$halfPi + $phi;
                     $q = $this->qp - $q;
                     break;
                 case $this->S_POLE:
-                    $b = $phi - Proj4php_common::$halfPi;
+                    $b = $phi - Proj4php_Common::$halfPi;
                     $q = $this->qp + $q;
                     break;
             }
-            if (abs($b) < Proj4php_common::$epsln) {
+            if (abs($b) < Proj4php_Common::$epsln) {
                 Proj4php::reportError("laea:fwd:b < eps");
                 return null;
             }
@@ -260,21 +260,21 @@ class Proj4php_ProjLaea
             }
             switch ($this->mode) {
                 case $this->EQUIT:
-                    $phi = (abs($rh) <= Proj4php_common::$epsln) ? 0. : asin($y * $sinz / $rh);
+                    $phi = (abs($rh) <= Proj4php_Common::$epsln) ? 0. : asin($y * $sinz / $rh);
                     $x *= $sinz;
                     $y = $cosz * $rh;
                     break;
                 case $this->OBLIQ:
-                    $phi = (abs($rh) <= Proj4php_common::$epsln) ? $this->phi0 : asin($cosz * $this->sinph0 + $y * $sinz * $this->cosph0 / $rh);
+                    $phi = (abs($rh) <= Proj4php_Common::$epsln) ? $this->phi0 : asin($cosz * $this->sinph0 + $y * $sinz * $this->cosph0 / $rh);
                     $x *= $sinz * $this->cosph0;
                     $y = ($cosz - sin($phi) * $this->sinph0) * $rh;
                     break;
                 case $this->N_POLE:
                     $y = -$y;
-                    $phi = Proj4php_common::$halfPi - $phi;
+                    $phi = Proj4php_Common::$halfPi - $phi;
                     break;
                 case $this->S_POLE:
-                    $phi -= Proj4php_common::$halfPi;
+                    $phi -= Proj4php_Common::$halfPi;
                     break;
             }
             $lam = ($y == 0. && ($this->mode == $this->EQUIT || $this->mode == $this->OBLIQ)) ? 0. : atan2($x, $y);
@@ -293,7 +293,7 @@ class Proj4php_ProjLaea
                     $x /= $this->dd;
                     $y *= $this->dd;
                     $rho = sqrt($x * $x + $y * $y);
-                    if ($rho < Proj4php_common::$epsln) {
+                    if ($rho < Proj4php_Common::$epsln) {
                         $p->x = 0.;
                         $p->y = $this->phi0;
                         return $p;
@@ -363,7 +363,7 @@ class Proj4php_ProjLaea
           }
          */
         //return(OK);
-        $p->x = Proj4php_common::adjustLon($this->long0 + $lam);
+        $p->x = Proj4php_Common::adjustLon($this->long0 + $lam);
         $p->y = $phi;
         return $p;
     }

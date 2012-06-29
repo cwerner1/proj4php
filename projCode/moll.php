@@ -53,7 +53,7 @@ class Proj4php_ProjMoll
         $lon = $p->x;
         $lat = $p->y;
 
-        $delta_lon = Proj4php_common::adjustLon($lon - $this->long0);
+        $delta_lon = Proj4php_Common::adjustLon($lon - $this->long0);
         $theta = $lat;
         $con = Proj4php::$common->pi * sin($lat);
 
@@ -62,7 +62,7 @@ class Proj4php_ProjMoll
         for ($i = 0; true; ++$i) {
             $delta_theta = -($theta + sin($theta) - $con) / (1.0 + cos($theta));
             $theta += $delta_theta;
-            if (abs($delta_theta) < Proj4php_common::$epsln)
+            if (abs($delta_theta) < Proj4php_Common::$epsln)
                 break;
             if ($i >= 50) {
                 Proj4php::reportError("moll:Fwd:IterationError");
@@ -74,7 +74,7 @@ class Proj4php_ProjMoll
         /* If the latitude is 90 deg, force the x coordinate to be "0 . false easting"
           this is done here because of precision problems with "cos(theta)"
           -------------------------------------------------------------------------- */
-        if (Proj4php::$common->pi / 2 - abs($lat) < Proj4php_common::$epsln)
+        if (Proj4php::$common->pi / 2 - abs($lat) < Proj4php_Common::$epsln)
             $delta_lon = 0;
         $x = 0.900316316158 * $this->a * $delta_lon * cos($theta) + $this->x0;
         $y = 1.4142135623731 * $this->a * sin($theta) + $this->y0;
@@ -106,7 +106,7 @@ class Proj4php_ProjMoll
         if (abs($arg) > 0.999999999999)
             $arg = 0.999999999999;
         $theta = asin($arg);
-        $lon = Proj4php_common::adjustLon($this->long0 + ($p->x / (0.900316316158 * $this->a * cos($theta))));
+        $lon = Proj4php_Common::adjustLon($this->long0 + ($p->x / (0.900316316158 * $this->a * cos($theta))));
         if ($lon < (-Proj4php::$common->pi))
             $lon = -Proj4php::$common->pi;
         if ($lon > Proj4php::$common->pi)

@@ -81,7 +81,6 @@ if ($error === true) {
         echo "    <message>Wrong parameters</message>";
         echo "  </erreur>";
         echo "</reponse>";
-        
     }
 }
 
@@ -92,7 +91,6 @@ $tgtProjection = str_replace(':', '::', $tgtProjection);
 
 if ($format == 'json') {
     echo "{\"status\" :\"success\", \"point\" : {\"x\":" . $pointDest->x . ", \"y\":" . $pointDest->y . ",\"projection\" :\"" . $tgtProjection . "\"}}";
-   
 } else {
     header("Content-Type:text/xml");
     echo "<reponse>";

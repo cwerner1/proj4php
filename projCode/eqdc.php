@@ -62,7 +62,7 @@ class Proj4php_ProjEqdc
         /* format B
           --------- */
         if ($this->mode != 0) {
-            if (abs($this->lat1 + $this->lat2) < Proj4php_common::$epsln) {
+            if (abs($this->lat1 + $this->lat2) < Proj4php_Common::$epsln) {
                 Proj4php::reportError("eqdc:Init:EqualLatitudes");
                 //return(81);
             }
@@ -71,7 +71,7 @@ class Proj4php_ProjEqdc
 
             $this->ms2 = Proj4php::$common->msfnz($this->e, $this->sinphi, $this->cosphi);
             $this->ml2 = Proj4php::$common->mlfn($this->e0, $this->e1, $this->e2, $this->e3, $this->lat2);
-            if (abs($this->lat1 - $this->lat2) >= Proj4php_common::$epsln) {
+            if (abs($this->lat1 - $this->lat2) >= Proj4php_Common::$epsln) {
                 $this->ns = ($this->ms1 - $this->ms2) / ($this->ml2 - $this->ml1);
             } else {
                 $this->ns = $this->sinphi;
@@ -96,7 +96,7 @@ class Proj4php_ProjEqdc
           ----------------- */
         $ml = Proj4php::$common->mlfn($this->e0, $this->e1, $this->e2, $this->e3, $lat);
         $rh1 = $this->a * ($this->g - $ml);
-        $theta = $this->ns *  Proj4php_common::adjustLon($lon - $this->long0);
+        $theta = $this->ns *  Proj4php_Common::adjustLon($lon - $this->long0);
 
         $x = $this->x0 + $rh1 * sin($theta);
         $y = $this->y0 + $this->rh - $rh1 * cos($theta);
@@ -127,7 +127,7 @@ class Proj4php_ProjEqdc
             $theta = atan2($con * $p->x, $con * $p->y);
         $ml = $this->g - $rh1 / $this->a;
         $lat = $this->phi3z($ml, $this->e0, $this->e1, $this->e2, $this->e3);
-        $lon =  Proj4php_common::adjustLon($this->long0 + $theta / $this->ns);
+        $lon =  Proj4php_Common::adjustLon($this->long0 + $theta / $this->ns);
 
         $p->x = $lon;
         $p->y = $lat;
