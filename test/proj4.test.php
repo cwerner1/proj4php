@@ -1,7 +1,7 @@
 <?php
 
 require_once 'Proj4php/proj4php.php';
-
+/*
 $proj4 = new Proj4php();
 $projL93 = new Proj4php_Proj('EPSG:2154', $proj4);
 $projWGS84 = new Proj4php_Proj('EPSG:4326', $proj4);
@@ -54,3 +54,7 @@ $pointSrc = $pointDest;
 echo "Source : " . $pointSrc->toShortString() . " in LI<br>";
 $pointDest = $proj4->transform($projLI, $projL93, $pointSrc);
 echo "Conversion : " . $pointDest->toShortString() . " in L93<br><br>";
+ * 
+ * 
+ * 
+ */
