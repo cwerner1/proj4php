@@ -42,7 +42,7 @@ class Proj4php_ProjEqui
             $this->latZero = 0;
         if (!$this->longZero)
             $this->longZero = 0;
-        ///$this->t2;
+        ///$this->tTwo;
     }
 
     /* Equirectangular forward equations--mapping lat,long to x,y
@@ -58,8 +58,8 @@ class Proj4php_ProjEqui
         $x = $this->xZero + $this->a * $dlon * cos($this->latZero);
         $y = $this->yZero + $this->a * $lat;
 
-        $this->t1 = $x;
-        $this->t2 = cos($this->latZero);
+        $this->tOne = $x;
+        $this->tTwo = cos($this->latZero);
         $p->x = $x;
         $p->y = $y;
         return $p;

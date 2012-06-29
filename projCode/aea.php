@@ -40,7 +40,7 @@ class Proj4php_ProjAea
     public function init()
     {
 
-        if (abs($this->lat1 + $this->lat2) < Proj4php_Common::$epsln) {
+        if (abs($this->latOne + $this->latTwo) < Proj4php_Common::$epsln) {
             Proj4php::reportError("aeaInitEqualLatitudes");
             return;
         }
@@ -48,31 +48,31 @@ class Proj4php_ProjAea
         $this->es = 1.0 - pow($this->temp, 2);
         $this->e3 = sqrt($this->es);
 
-        $this->sinPo = sin($this->lat1);
-        $this->cosPo = cos($this->lat1);
-        $this->t1 = $this->sinPo;
+        $this->sinPo = sin($this->latOne);
+        $this->cosPo = cos($this->latOne);
+        $this->tOne = $this->sinPo;
         $this->con = $this->sinPo;
-        $this->ms1 = Proj4php_Common::msfnz($this->e3, $this->sinPo, $this->cosPo);
-        $this->qs1 = Proj4php_Common::qsfnz($this->e3, $this->sinPo, $this->cosPo);
+        $this->msOne = Proj4php_Common::msfnz($this->e3, $this->sinPo, $this->cosPo);
+        $this->qsOne = Proj4php_Common::qsfnz($this->e3, $this->sinPo, $this->cosPo);
 
-        $this->sinPo = sin($this->lat2);
-        $this->cosPo = cos($this->lat2);
-        $this->t2 = $this->sinPo;
-        $this->ms2 = Proj4php_Common::msfnz($this->e3, $this->sinPo, $this->cosPo);
-        $this->qs2 = Proj4php_Common::qsfnz($this->e3, $this->sinPo, $this->cosPo);
+        $this->sinPo = sin($this->latTwo);
+        $this->cosPo = cos($this->latTwo);
+        $this->tTwo = $this->sinPo;
+        $this->msTwo = Proj4php_Common::msfnz($this->e3, $this->sinPo, $this->cosPo);
+        $this->qsTwo = Proj4php_Common::qsfnz($this->e3, $this->sinPo, $this->cosPo);
 
         $this->sinPo = sin($this->latZero);
         $this->cosPo = cos($this->latZero);
         $this->t3 = $this->sinPo;
         $this->qsZero = Proj4php_Common::qsfnz($this->e3, $this->sinPo, $this->cosPo);
 
-        if (abs($this->lat1 - $this->lat2) > Proj4php_Common::$epsln) {
-            $this->nsZero = ($this->ms1 * $this->ms1 - $this->ms2 * $this->ms2) / ($this->qs2 - $this->qs1);
+        if (abs($this->latOne - $this->latTwo) > Proj4php_Common::$epsln) {
+            $this->nsZero = ($this->msOne * $this->msOne - $this->msTwo * $this->msTwo) / ($this->qsTwo - $this->qsOne);
         } else {
             $this->nsZero = $this->con;
         }
 
-        $this->c = $this->ms1 * $this->ms1 + $this->nsZero * $this->qs1;
+        $this->c = $this->msOne * $this->msOne + $this->nsZero * $this->qsOne;
         $this->rh = $this->a * sqrt($this->c - $this->nsZero * $this->qsZero) / $this->nsZero;
     }
 
@@ -92,10 +92,10 @@ class Proj4php_ProjAea
         $this->cosPhi = cos($lat);
 
         $qs = Proj4php_Common::qsfnz($this->e3, $this->sinPhi, $this->cosPhi);
-        $rh1 = $this->a * sqrt($this->c - $this->nsZero * $qs) / $this->nsZero;
+        $rhOne = $this->a * sqrt($this->c - $this->nsZero * $qs) / $this->nsZero;
         $theta = $this->nsZero * Proj4php_Common::adjustLon($lon - $this->longZero);
-        $x = rh1 * sin($theta) + $this->xZero;
-        $y = $this->rh - $rh1 * cos($theta) + $this->yZero;
+        $x = rhOne * sin($theta) + $this->xZero;
+        $y = $this->rh - $rhOne * cos($theta) + $this->yZero;
 
         $p->x = $x;
         $p->y = $y;
@@ -115,19 +115,19 @@ class Proj4php_ProjAea
         $p->y = $this->rh - $p->y + $this->yZero;
 
         if ($this->nsZero >= 0) {
-            $rh1 = sqrt($p->x * $p->x + $p->y * $p->y);
+            $rhOne = sqrt($p->x * $p->x + $p->y * $p->y);
             $con = 1.0;
         } else {
-            $rh1 = -sqrt($p->x * $p->x + $p->y * $p->y);
+            $rhOne = -sqrt($p->x * $p->x + $p->y * $p->y);
             $con = -1.0;
         }
 
         $theta = 0.0;
-        if ($rh1 != 0.0) {
+        if ($rhOne != 0.0) {
             $theta = atan2($con * $p->x, $con * $p->y);
         }
 
-        $con = $rh1 * $this->nsZero / $this->a;
+        $con = $rhOne * $this->nsZero / $this->a;
         $qs = ($this->c - $con * $con) / $this->nsZero;
 
         if ($this->e3 >= 1e-10) {
