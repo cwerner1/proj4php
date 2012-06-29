@@ -1,7 +1,7 @@
 #!/bin/bash
 
-search='$z_tmp'
-replace='$zTmp'
+search='pjd3Param'
+replace='$pjdThreeParam'
 list=$(find . -name \*.php)
 for i in $list; do
  sed -i "s/${search}/${replace}/g" $i

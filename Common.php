@@ -25,7 +25,7 @@ class Proj4php_Common
 
     /* datum_type values */
     public static $pjdUnknown = 0;
-    public static $pjd3Param = 1;
+    public static $pjdThreeParam = 1;
     public static $pjd7Param = 2;
     public static $pjdGridshift = 3;
     public static $pjdWgs84 = 4;   // WGS84 or equivalent
@@ -47,32 +47,35 @@ class Proj4php_Common
      * *		with typical major axis values.
      * *	Inverse determines phi to EPS (1e-11) radians, about 1e-6 seconds.
      */
-    protected static $c00 = 1.0;
-    protected static $c02 = .25;
-    protected static $c04 = .046875;
-    protected static $c06 = .01953125;
-    protected static $c08 = .01068115234375;
-    protected static $c22 = .75;
-    protected static $c44 = .46875;
-    protected static $c46 = .01302083333333333333;
-    protected static $c48 = .00712076822916666666;
-    protected static $c66 = .36458333333333333333;
-    protected static $c68 = .00569661458333333333;
-    protected static $c88 = .3076171875;
+    protected static $_c00 = 1.0;
+    protected static $_c02 = .25;
+    protected static $_c04 = .046875;
+    protected static $_c06 = .01953125;
+    protected static $_c08 = .01068115234375;
+    protected static $_c22 = .75;
+    protected static $_c44 = .46875;
+    protected static $_c46 = .01302083333333333333;
+    protected static $_c48 = .00712076822916666666;
+    protected static $_c66 = .36458333333333333333;
+    protected static $_c68 = .00569661458333333333;
+    protected static $_c88 = .3076171875;
 
-// Function to compute the constant small m which is the radius of
-//   a parallel of latitude, phi, divided by the semimajor axis.
-// -----------------------------------------------------------------
+    /*
+     * Function to compute the constant small m which is the radius of
+     *   a parallel of latitude, phi, divided by the semimajor axis.
+     */
+
     public static function msfnz($eccent, $sinphi, $cosphi)
     {
         $con = $eccent * $sinphi;
         return $cosphi / (sqrt(1.0 - $con * $con));
     }
 
-// Function to compute the constant small t for use in the forward
-//   computations in the Lambert Conformal Conic and the Polar
-//   Stereographic projections.
-// -----------------------------------------------------------------
+    /**
+     * Function to compute the constant small t for use in the forward
+     *  computations in the Lambert Conformal Conic and the Polar
+     *   Stereographic projections.
+     */
     public static function tsfnz($eccent, $phi, $sinphi)
     {
         $con = $eccent * $sinphi;
@@ -197,22 +200,22 @@ class Proj4php_Common
         return log(tan((self::$halfPi + $phi) / 2.0)) + $eccent * log((1.0 - $con) / (1.0 + $con)) / 2.0;
     }
 
-    public static function fL($x, $L)
+    public static function fL($x, $l)
     {
-        return 2.0 * atan($x * exp($L)) - self::$halfPi;
+        return 2.0 * atan($x * exp($l)) - self::$halfPi;
     }
 
 // Inverse Latitude Isometrique - close to ph2z
     public static function invlatiso($eccent, $ts)
     {
         $phi = self::$fL(1.0, $ts);
-        $Iphi = 0.0;
+        $iPhi = 0.0;
         $con = 0.0;
         do {
-            $Iphi = $phi;
-            $con = $eccent * sin($Iphi);
+            $iPhi = $phi;
+            $con = $eccent * sin($iPhi);
             $phi = self::$fL(exp($eccent * log((1.0 + $con) / (1.0 - $con)) / 2.0), $ts);
-        } while (abs($phi - $Iphi) > 1.0e-12);
+        } while (abs($phi - $iPhi) > 1.0e-12);
         return $phi;
     }
 
@@ -228,13 +231,13 @@ class Proj4php_Common
     {
 
         $en = array();
-        $en[0] = self::$c00 - $es * (self::$c02 + $es * (self::$c04 + $es * (self::$c06 + $es * self::$c08)));
-        $en[1] = es * (self::$c22 - $es * (self::$c04 + $es * (self::$c06 + $es * self::$c08)));
+        $en[0] = self::$_c00 - $es * (self::$_c02 + $es * (self::$_c04 + $es * (self::$_c06 + $es * self::$_c08)));
+        $en[1] = es * (self::$_c22 - $es * (self::$_c04 + $es * (self::$_c06 + $es * self::$_c08)));
         $t = $es * $es;
-        $en[2] = $t * (self::$c44 - $es * (self::$c46 + $es * self::$c48));
+        $en[2] = $t * (self::$_c44 - $es * (self::$_c46 + $es * self::$_c48));
         $t *= $es;
-        $en[3] = $t * (self::$c66 - $es * self::$c68);
-        $en[4] = $t * $es * self::$c88;
+        $en[3] = $t * (self::$_c66 - $es * self::$_c68);
+        $en[4] = $t * $es * self::$_c88;
         return $en;
     }
 

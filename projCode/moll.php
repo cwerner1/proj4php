@@ -53,7 +53,7 @@ class Proj4php_ProjMoll
         $lon = $p->x;
         $lat = $p->y;
 
-        $delta_lon = Proj4php_Common::adjustLon($lon - $this->long0);
+        $deltaLon = Proj4php_Common::adjustLon($lon - $this->longZero);
         $theta = $lat;
         $con = Proj4php::$common->pi * sin($lat);
 
@@ -75,9 +75,9 @@ class Proj4php_ProjMoll
           this is done here because of precision problems with "cos(theta)"
           -------------------------------------------------------------------------- */
         if (Proj4php::$common->pi / 2 - abs($lat) < Proj4php_Common::$epsln)
-            $delta_lon = 0;
-        $x = 0.900316316158 * $this->a * $delta_lon * cos($theta) + $this->x0;
-        $y = 1.4142135623731 * $this->a * sin($theta) + $this->y0;
+            $deltaLon = 0;
+        $x = 0.900316316158 * $this->a * $deltaLon * cos($theta) + $this->xZero;
+        $y = 1.4142135623731 * $this->a * sin($theta) + $this->yZero;
 
         $p->x = $x;
         $p->y = $y;
@@ -96,8 +96,8 @@ class Proj4php_ProjMoll
 
         /* Inverse equations
           ----------------- */
-        $p->x-= $this->x0;
-        //~ $p->y -= $this->y0;
+        $p->x-= $this->xZero;
+        //~ $p->y -= $this->yZero;
         $arg = $p->y / (1.4142135623731 * $this->a);
 
         /* Because of division by zero problems, 'arg' can not be 1.0.  Therefore
@@ -106,7 +106,7 @@ class Proj4php_ProjMoll
         if (abs($arg) > 0.999999999999)
             $arg = 0.999999999999;
         $theta = asin($arg);
-        $lon = Proj4php_Common::adjustLon($this->long0 + ($p->x / (0.900316316158 * $this->a * cos($theta))));
+        $lon = Proj4php_Common::adjustLon($this->longZero + ($p->x / (0.900316316158 * $this->a * cos($theta))));
         if ($lon < (-Proj4php::$common->pi))
             $lon = -Proj4php::$common->pi;
         if ($lon > Proj4php::$common->pi)

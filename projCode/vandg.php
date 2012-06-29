@@ -59,21 +59,21 @@ class Proj4php_ProjVandg
 
         /* Forward equations
           ----------------- */
-        $dlon = Proj4php_Common::adjustLon($lon - $this->long0);
+        $dlon = Proj4php_Common::adjustLon($lon - $this->longZero);
         $x;
         $y;
 
         if (abs($lat) <= Proj4php_Common::$epsln) {
-            $x = $this->x0 + $this->R * $dlon;
-            $y = $this->y0;
+            $x = $this->xZero + $this->R * $dlon;
+            $y = $this->yZero;
         }
         $theta = Proj4php::$common . asinz(2.0 * abs($lat / Proj4php::$common->pi));
         if ((abs($dlon) <= Proj4php_Common::$epsln) || (abs(abs($lat) - Proj4php_Common::$halfPi) <= Proj4php_Common::$epsln)) {
-            $x = $this->x0;
+            $x = $this->xZero;
             if ($lat >= 0) {
-                $y = $this->y0 + Proj4php::$common->pi * $this->R * tan(.5 * $theta);
+                $y = $this->yZero + Proj4php::$common->pi * $this->R * tan(.5 * $theta);
             } else {
-                $y = $this->y0 + Proj4php::$common->pi * $this->R * - tan(.5 * $theta);
+                $y = $this->yZero + Proj4php::$common->pi * $this->R * - tan(.5 * $theta);
             }
             //  return(OK);
         }
@@ -90,12 +90,12 @@ class Proj4php_ProjVandg
         if ($dlon < 0) {
             $con = -$con;
         }
-        $x = $this->x0 + $con;
+        $x = $this->xZero + $con;
         $con = abs($con / (Proj4php::$common->pi * $this->R));
         if ($lat >= 0) {
-            $y = $this->y0 + Proj4php::$common->pi * $this->R * sqrt(1.0 - $con * $con - 2.0 * $al * $con);
+            $y = $this->yZero + Proj4php::$common->pi * $this->R * sqrt(1.0 - $con * $con - 2.0 * $al * $con);
         } else {
-            $y = $this->y0 - Proj4php::$common->pi * $this->R * sqrt(1.0 - $con * $con - 2.0 * $al * $con);
+            $y = $this->yZero - Proj4php::$common->pi * $this->R * sqrt(1.0 - $con * $con - 2.0 * $al * $con);
         }
 
         $p->x = $x;
@@ -129,8 +129,8 @@ class Proj4php_ProjVandg
 
         /* inverse equations
           ----------------- */
-        $p->x -= $this->x0;
-        $p->y -= $this->y0;
+        $p->x -= $this->xZero;
+        $p->y -= $this->yZero;
         $con = Proj4php::$common->pi * $this->R;
         $xx = $p->x / $con;
         $yy = $p->y / $con;
@@ -159,7 +159,7 @@ class Proj4php_ProjVandg
         if (abs($xx) < Proj4php_Common::$epsln) {
             $lon = $this->$long0;
         }
-        $lon = Proj4php_Common::adjustLon($this->long0 + Proj4php::$common->pi * ($xys - 1.0 + sqrt(1.0 + 2.0 * ($xx * $xx - $yy * $yy) + $xys * $xys)) / 2.0 / $xx);
+        $lon = Proj4php_Common::adjustLon($this->longZero + Proj4php::$common->pi * ($xys - 1.0 + sqrt(1.0 + 2.0 * ($xx * $xx - $yy * $yy) + $xys * $xys)) / 2.0 / $xx);
 
         $p->x = $lon;
         $p->y = $lat;

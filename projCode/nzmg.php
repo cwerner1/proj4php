@@ -201,8 +201,8 @@ class Proj4php_ProjNzmg
         $lon = $p->x;
         $lat = $p->y;
 
-        $deltaLat = $lat - $this->lat0;
-        $deltaLon = $lon - $this->long0;
+        $deltaLat = $lat - $this->latZero;
+        $deltaLon = $lon - $this->longZero;
 
         // 1. Calculate d_phi and d_psi    ...                          // and d_lambda
         // For this algorithm, delta_latitude is in seconds of arc x 10-5, so we need to scale to those units. Longitude is radians.
@@ -238,8 +238,8 @@ class Proj4php_ProjNzmg
         }
 
         // 4. Calculate easting and northing
-        $p->x = ($zIm * $this->a) + $this->x0;
-        $p->y = ($zRe * $this->a) + $this->y0;
+        $p->x = ($zIm * $this->a) + $this->xZero;
+        $p->y = ($zRe * $this->a) + $this->yZero;
 
         return $p;
     }
@@ -253,8 +253,8 @@ class Proj4php_ProjNzmg
         $x = $p->x;
         $y = $p->y;
 
-        $deltaX = $x - $this->x0;
-        $deltaY = $y - $this->y0;
+        $deltaX = $x - $this->xZero;
+        $deltaY = $y - $this->yZero;
 
         // 1. Calculate z
         $zRe = $deltaY / $this->a;
@@ -330,8 +330,8 @@ class Proj4php_ProjNzmg
 
         // 4. Calculate latitude and longitude
         // d_phi is calcuated in second of arc * 10^-5, so we need to scale back to radians. d_lambda is in radians.
-        $lat = $this->lat0 + ($dPhi * Proj4php::$common->secToRad * 1E5);
-        $lon = $this->long0 + $dLambda;
+        $lat = $this->latZero + ($dPhi * Proj4php::$common->secToRad * 1E5);
+        $lon = $this->longZero + $dLambda;
 
         $p->x = $lon;
         $p->y = $lat;

@@ -41,8 +41,8 @@ class Proj4php_ProjOrtho
 
         /* Place parameters in static storage for common use
           ------------------------------------------------- */;
-        $this->sin_p14 = sin($this->lat0);
-        $this->cos_p14 = cos($this->lat0);
+        $this->sin_p14 = sin($this->latZero);
+        $this->cos_p14 = cos($this->latZero);
     }
 
     /* Orthographic forward equations--mapping lat,long to x,y
@@ -65,7 +65,7 @@ class Proj4php_ProjOrtho
 
         /* Forward equations
           ----------------- */
-        $dlon = Proj4php_Common::adjustLon($lon - $this->long0);
+        $dlon = Proj4php_Common::adjustLon($lon - $this->longZero);
 
         $sinphi = sin($lat);
         $cosphi = cos($lat);
@@ -76,7 +76,7 @@ class Proj4php_ProjOrtho
 
         if (($g > 0) || (abs($g) <= Proj4php_Common::$epsln)) {
             $x = $this->a * $ksp * $cosphi * sin($dlon);
-            $y = $this->y0 + $this->a * $ksp * ($this->cos_p14 * $sinphi - $this->sin_p14 * $cosphi * $coslon);
+            $y = $this->yZero + $this->a * $ksp * ($this->cos_p14 * $sinphi - $this->sin_p14 * $cosphi * $coslon);
         } else {
             Proj4php::reportError("orthoFwdPointError");
         }
@@ -108,8 +108,8 @@ class Proj4php_ProjOrtho
 
         /* Inverse equations
           ----------------- */
-        $p->x -= $this->x0;
-        $p->y -= $this->y0;
+        $p->x -= $this->xZero;
+        $p->y -= $this->yZero;
         $rh = sqrt($p->x * $p->x + $p->y * $p->y);
         if ($rh > $this->a + .0000001) {
             Proj4php::reportError("orthoInvDataError");
@@ -119,17 +119,17 @@ class Proj4php_ProjOrtho
         $sinz = sin($z);
         $cosz = cos($z);
 
-        $lon = $this->long0;
+        $lon = $this->longZero;
         if (abs($rh) <= Proj4php_Common::$epsln) {
-            $lat = $this->lat0;
+            $lat = $this->latZero;
         }
         $lat = Proj4php::$common . asinz($cosz * $this->sin_p14 + ($p->y * $sinz * $this->cos_p14) / $rh);
-        $con = abs($this->lat0) - Proj4php_Common::$halfPi;
+        $con = abs($this->latZero) - Proj4php_Common::$halfPi;
         if (abs(con) <= Proj4php_Common::$epsln) {
-            if ($this->lat0 >= 0) {
-                $lon = Proj4php_Common::adjustLon($this->long0 + atan2($p->x, -$p->y));
+            if ($this->latZero >= 0) {
+                $lon = Proj4php_Common::adjustLon($this->longZero + atan2($p->x, -$p->y));
             } else {
-                $lon = Proj4php_Common::adjustLon($this->long0 - atan2(-$p->x, $p->y));
+                $lon = Proj4php_Common::adjustLon($this->longZero - atan2(-$p->x, $p->y));
             }
         }
         $con = $cosz - $this->sin_p14 * sin($lat);

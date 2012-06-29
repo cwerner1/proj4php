@@ -48,11 +48,11 @@ class Proj4php_ProjUtm
             return;
         }
 
-        $this->lat0 = 0.0;
-        $this->long0 = ((6 * abs($this->zone)) - 183) * Proj4php::$common->dToR;
-        $this->x0 = 500000.0;
-        $this->y0 = $this->utmSouth ? 10000000.0 : 0.0;
-        $this->k0 = 0.9996;
+        $this->latZero = 0.0;
+        $this->longZero = ((6 * abs($this->zone)) - 183) * Proj4php::$common->dToR;
+        $this->xZero = 500000.0;
+        $this->yZero = $this->utmSouth ? 10000000.0 : 0.0;
+        $this->kZero = 0.9996;
     }
 
     /**

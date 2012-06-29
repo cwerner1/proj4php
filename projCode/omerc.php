@@ -57,23 +57,23 @@ class Proj4php_ProjOmerc
         $es = 1.0 - pow($temp, 2);
         $e = sqrt($es);
 
-        $this->sinP20 = sin($this->lat0);
-        $this->cosP20 = cos($this->lat0);
+        $this->sinP20 = sin($this->latZero);
+        $this->cosP20 = cos($this->latZero);
 
         $this->con = 1.0 - $this->es * $this->sinP20 * $this->sinP20;
         $this->com = sqrt(1.0 - $es);
         $this->bl = sqrt(1.0 + $this->es * pow($this->cosP20, 4.0) / (1.0 - $es));
-        $this->al = $this->a * $this->bl * $this->k0 * $this->com / $this->con;
-        if (abs($this->lat0) < Proj4php_Common::$epsln) {
+        $this->al = $this->a * $this->bl * $this->kZero * $this->com / $this->con;
+        if (abs($this->latZero) < Proj4php_Common::$epsln) {
             $this->ts = 1.0;
             $this->d = 1.0;
             $this->el = 1.0;
         } else {
-            $this->ts = Proj4php::$common->tsfnz($this->e, $this->lat0, $this->sinP20);
+            $this->ts = Proj4php::$common->tsfnz($this->e, $this->latZero, $this->sinP20);
             $this->con = sqrt($this->con);
             $this->d = $this->bl * $this->com / ($this->cosP20 * $this->con);
             if (($this->d * $this->d - 1.0) > 0.0) {
-                if ($this->lat0 >= 0.0) {
+                if ($this->latZero >= 0.0) {
                     $this->f = $this->d + sqrt($this->d * $this->d - 1.0);
                 } else {
                     $this->f = $this->d - sqrt($this->d * $this->d - 1.0);
@@ -97,7 +97,7 @@ class Proj4php_ProjOmerc
             //cenlon(lon_origin);
             // cenlat(lat_origin);
 
-            $this->con = abs($this->lat0);
+            $this->con = abs($this->latZero);
             if (($this->con > Proj4php_Common::$epsln) && (abs($this->con - Proj4php_Common::$halfPi) > Proj4php_Common::$epsln)) {
                 $this->singam = sin($this->gama);
                 $this->cosgam = cos($this->gama);
@@ -105,7 +105,7 @@ class Proj4php_ProjOmerc
                 $this->sinaz = sin($this->alpha);
                 $this->cosaz = cos($this->alpha);
 
-                if ($this->lat0 >= 0) {
+                if ($this->latZero >= 0) {
                     $this->u = ($this->al / $this->bl) * atan(sqrt($this->d * $this->d - 1.0) / $this->cosaz);
                 } else {
                     $this->u = -($this->al / $this->bl) * atan(sqrt($this->d * $this->d - 1.0) / $this->cosaz);
@@ -147,7 +147,7 @@ class Proj4php_ProjOmerc
                 Proj4php::reportError("omercInitDataError");
                 //return(202);
             } else {
-                if (abs(abs($this->lat0) - Proj4php_Common::$halfPi) <= Proj4php_Common::$epsln) {
+                if (abs(abs($this->latZero) - Proj4php_Common::$halfPi) <= Proj4php_Common::$epsln) {
                     Proj4php::reportError("omercInitDataError");
                     //return(202);
                 }
@@ -160,7 +160,7 @@ class Proj4php_ProjOmerc
             $this->cosaz = cos($this->alpha);
 
 
-            if ($this->lat0 >= 0) {
+            if ($this->latZero >= 0) {
                 $this->u = ($this->al / $this->bl) * atan(sqrt($this->d * $this->d - 1.0) / $this->cosaz);
             } else {
                 $this->u = -($this->al / $this->bl) * atan(sqrt($this->d * $this->d - 1.0) / $this->cosaz);
@@ -232,8 +232,8 @@ class Proj4php_ProjOmerc
         }
         $vs = .5 * $this->al * log((1.0 - $ul) / (1.0 + $ul)) / $this->bl;
         $us = $us - $this->u;
-        $p->x = $this->x0 + $vs * $this->cosaz + $us * $this->sinaz;
-        $p->y = $this->y0 + $us * $this->cosaz - $vs * $this->sinaz;
+        $p->x = $this->xZero + $vs * $this->cosaz + $us * $this->sinaz;
+        $p->y = $this->yZero + $us * $this->cosaz - $vs * $this->sinaz;
 
         return $p;
     }
@@ -246,7 +246,7 @@ class Proj4php_ProjOmerc
     public function inverse($p)
     {
         /*
-          $delta_lon; /* Delta longitude (Given longitude - center
+          $deltaLon; /* Delta longitude (Given longitude - center
           $theta;  /* angle
           $delta_theta; /* adjusted longitude
           $sin_phi;
@@ -272,8 +272,8 @@ class Proj4php_ProjOmerc
 
         /* Inverse equations
           ----------------- */
-        $p->x -= $this->x0;
-        $p->y -= $this->y0;
+        $p->x -= $this->xZero;
+        $p->y -= $this->yZero;
         #$flag = 0;
         $vs = $p->x * $this->cosaz - $p->y * $this->sinaz;
         $us = $p->y * $this->cosaz + $p->x * $this->sinaz;

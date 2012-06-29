@@ -38,7 +38,7 @@ class Proj4php_ProjCass
     {
         if (!$this->sphere) {
             $this->en = Proj4php::$common->pjEnfn($this->es);
-            $this->m0 = Proj4php::$common->pjMlfn($this->lat0, sin($this->lat0), cos($this->lat0), $this->en);
+            $this->m0 = Proj4php::$common->pjMlfn($this->latZero, sin($this->latZero), cos($this->latZero), $this->en);
         }
     }
 
@@ -60,7 +60,7 @@ class Proj4php_ProjCass
         #$y;
         $lam = $p->x;
         $phi = $p->y;
-        $lam =  Proj4php_Common::adjustLon($lam - $this->long0);
+        $lam =  Proj4php_Common::adjustLon($lam - $this->longZero);
 
         if ($this->sphere) {
             $x = asin(cos($phi) * sin($lam));
@@ -80,8 +80,8 @@ class Proj4php_ProjCass
             $y -= $this->m0 - $this->n * $this->tn * $this->a2 * (.5 + (5. - $this->t + 6. * $this->c) * $this->a2 * $this->C3);
         }
 
-        $p->x = $this->a * $x + $this->x0;
-        $p->y = $this->a * $y + $this->y0;
+        $p->x = $this->a * $x + $this->xZero;
+        $p->y = $this->a * $y + $this->yZero;
 
         return $p;
     }
@@ -91,13 +91,13 @@ class Proj4php_ProjCass
 
     public function inverse($p)
     {
-        $p->x -= $this->x0;
-        $p->y -= $this->y0;
+        $p->x -= $this->xZero;
+        $p->y -= $this->yZero;
         $x = $p->x / $this->a;
         $y = $p->y / $this->a;
 
         if ($this->sphere) {
-            $this->dd = $y + $this->lat0;
+            $this->dd = $y + $this->latZero;
             $phi = asin(sin($this->dd) * cos($x));
             $lam = atan2(tan($x), cos($this->dd));
         } else {
@@ -114,7 +114,7 @@ class Proj4php_ProjCass
             $phi = $ph1 - ($this->n * $this->tn / $this->r) * $this->d2 * (.5 - (1. + 3. * $this->t) * $this->d2 * $this->C3);
             $lam = $this->dd * (1. + $this->t * $this->d2 * (-$this->C4 + (1. + 3. * $this->t) * $this->d2 * $this->C5)) / cos($ph1);
         }
-        $p->x =  Proj4php_Common::adjustLon($this->long0 + $lam);
+        $p->x =  Proj4php_Common::adjustLon($this->longZero + $lam);
         $p->y = $phi;
 
         return $p;
