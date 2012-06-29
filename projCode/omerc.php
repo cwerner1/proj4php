@@ -131,7 +131,7 @@ class Proj4php_ProjOmerc
                 $this->lon2 = $this->lon2 + 2.0 * Proj4php::$common->pi;
             $this->dlon = $this->lon1 - $this->lon2;
             $this->longc = .5 * ($this->lon1 + $this->lon2) - atan($this->j * tan(.5 * $this->bl * $this->dlon) / $this->p) / $this->bl;
-            $this->dlon = Proj4php::$common->adjustLon($this->lon1 - $this->longc);
+            $this->dlon = Proj4php_common::adjustLon($this->lon1 - $this->longc);
             $this->gama = atan(sin($this->bl * $this->dlon) / $this->g);
             $this->alpha = Proj4php::$common->asinz($this->d * sin($this->gama));
 
@@ -201,7 +201,7 @@ class Proj4php_ProjOmerc
         /* Forward equations
           ----------------- */
         $sin_phi = sin($lat);
-        $dlon = Proj4php::$common->adjustLon($lon - $this->longc);
+        $dlon = Proj4php_common::adjustLon($lon - $this->longc);
         $vl = sin($this->bl * $dlon);
         if (abs(abs($lat) - Proj4php::$common->halfPi) > Proj4php::$common->epsln) {
             $ts1 = Proj4php::$common->tsfnz($this->e, $lat, $sin_phi);
@@ -298,7 +298,7 @@ class Proj4php_ProjOmerc
             //return($flag);
             //~ con = cos($this->bl * us /al);
             $theta = $this->longc - atan2(($s * $this->cosgam - $vl * $this->singam), $con) / $this->bl;
-            $lon = Proj4php::$common->adjustLon($theta);
+            $lon = Proj4php_common::adjustLon($theta);
         }
         $p->x = $lon;
         $p->y = $lat;

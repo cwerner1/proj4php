@@ -65,7 +65,7 @@ class Proj4php_ProjOrtho
 
         /* Forward equations
           ----------------- */
-        $dlon = Proj4php::$common->adjustLon($lon - $this->long0);
+        $dlon = Proj4php_common::adjustLon($lon - $this->long0);
 
         $sinphi = sin($lat);
         $cosphi = cos($lat);
@@ -127,9 +127,9 @@ class Proj4php_ProjOrtho
         $con = abs($this->lat0) - Proj4php::$common->halfPi;
         if (abs(con) <= Proj4php::$common->epsln) {
             if ($this->lat0 >= 0) {
-                $lon = Proj4php::$common->adjustLon($this->long0 + atan2($p->x, -$p->y));
+                $lon = Proj4php_common::adjustLon($this->long0 + atan2($p->x, -$p->y));
             } else {
-                $lon = Proj4php::$common->adjustLon($this->long0 - atan2(-$p->x, $p->y));
+                $lon = Proj4php_common::adjustLon($this->long0 - atan2(-$p->x, $p->y));
             }
         }
         $con = $cosz - $this->sin_p14 * sin($lat);
