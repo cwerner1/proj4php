@@ -32,7 +32,7 @@
 class ProjFourphp_ProjTmerc
 {
 
-    private $e0, $e1, $e2, $e3, $mlZero;
+    private $e0, $eOne, $e2, $eThree, $mlZero;
 
     /**
      * 
@@ -41,10 +41,10 @@ class ProjFourphp_ProjTmerc
     {
 
         $this->e0 = ProjFourphp::$common->e0fn($this->es);
-        $this->e1 = ProjFourphp::$common->e1fn($this->es);
+        $this->eOne = ProjFourphp::$common->eOnefn($this->es);
         $this->e2 = ProjFourphp::$common->e2fn($this->es);
-        $this->e3 = ProjFourphp::$common->e3fn($this->es);
-        $this->mlZero = $this->a * ProjFourphp::$common->mlfn($this->e0, $this->e1, $this->e2, $this->e3, $this->latZero);
+        $this->eThree = ProjFourphp::$common->eThreefn($this->es);
+        $this->mlZero = $this->a * ProjFourphp::$common->mlfn($this->e0, $this->eOne, $this->e2, $this->eThree, $this->latZero);
     }
 
     /**
@@ -85,7 +85,7 @@ class ProjFourphp_ProjTmerc
             $con = 1.0 - $this->es * pow($sinPhi, 2);
             $n = $this->a / sqrt($con);
 
-            $ml = $this->a * ProjFourphp::$common->mlfn($this->e0, $this->e1, $this->e2, $this->e3, $lat);
+            $ml = $this->a * ProjFourphp::$common->mlfn($this->e0, $this->eOne, $this->e2, $this->eThree, $lat);
 
             $x = $this->kZero * $n * $al * (1.0 + $als / 6.0 * (1.0 - $t + $c + $als / 20.0 * (5.0 - 18.0 * $t + pow($t, 2) + 72.0 * $c - 58.0 * $this->ep2))) + $this->xZero;
             $y = $this->kZero * ($ml - $this->mlZero + $n * $tq * ($als * (0.5 + $als / 24.0 * (5.0 - $t + 9.0 * $c + 4.0 * pow($c, 2) + $als / 30.0 * (61.0 - 58.0 * $t + pow($t, 2) + 600.0 * $c - 330.0 * $this->ep2))))) + $this->yZero;
@@ -129,7 +129,7 @@ class ProjFourphp_ProjTmerc
             $phi = $con;
 
             for ($i = 0; true; $i++) {
-                $deltaPhi = (($con + $this->e1 * sin(2.0 * $phi) - $this->e2 * sin(4.0 * $phi) + $this->e3 * sin(6.0 * $phi)) / $this->e0) - $phi;
+                $deltaPhi = (($con + $this->eOne * sin(2.0 * $phi) - $this->e2 * sin(4.0 * $phi) + $this->eThree * sin(6.0 * $phi)) / $this->e0) - $phi;
                 $phi += $deltaPhi;
                 if (abs($deltaPhi) <= ProjFourphp_Common::$epsln)
                     break;
