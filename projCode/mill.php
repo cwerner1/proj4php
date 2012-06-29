@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Author : Julien Moquet
  * 
@@ -6,7 +7,7 @@
  *                      and Richard Greenwood rich@greenwoodma$p->com 
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
-/*******************************************************************************
+/* * *****************************************************************************
   NAME                    MILLER CYLINDRICAL
 
   PURPOSE:	Transforms input longitude and latitude to Easting and
@@ -35,48 +36,55 @@
   Package", U.S. Geological Survey National Mapping Division, May 1982.
  * ***************************************************************************** */
 
-class Proj4phpProjMill {
+class Proj4php_ProjMill
+{
     /* Initialize the Miller Cylindrical projection
       ------------------------------------------- */
 
-    public function init() {
+    public function init()
+    {
         //no-op
     }
 
     /* Miller Cylindrical forward equations--mapping lat,long to x,y
       ------------------------------------------------------------ */
-    public function forward( $p ) {
-        
+
+    public function forward($p)
+    {
+
         $lon = $p->x;
         $lat = $p->y;
-        
+
         /* Forward equations
           ----------------- */
-        $dlon = Proj4php::$common->adjust_lon( $lon - $this->long0 );
+        $dlon = Proj4php::$common->adjust_lon($lon - $this->long0);
         $x = $this->x0 + $this->a * $dlon;
-        $y = $this->y0 + $this->a * log( tan( (Proj4php::$common->pi / 4.0) + ($lat / 2.5) ) ) * 1.25;
+        $y = $this->y0 + $this->a * log(tan((Proj4php::$common->pi / 4.0) + ($lat / 2.5))) * 1.25;
 
         $p->x = $x;
         $p->y = $y;
-        
+
         return $p;
     }
 
     /* Miller Cylindrical inverse equations--mapping x,y to lat/long
       ------------------------------------------------------------ */
-    public function inverse( $p ) {
-        
+
+    public function inverse($p)
+    {
+
         $p->x -= $this->x0;
         $p->y -= $this->y0;
 
-        $lon = Proj4php::$common->adjust_lon( $this->long0 + $p->x / $this->a );
-        $lat = 2.5 * (atan( exp( 0.8 * $p->y / $this->a ) ) - Proj4php::$common->pi / 4.0);
+        $lon = Proj4php::$common->adjust_lon($this->long0 + $p->x / $this->a);
+        $lat = 2.5 * (atan(exp(0.8 * $p->y / $this->a)) - Proj4php::$common->pi / 4.0);
 
         $p->x = $lon;
         $p->y = $lat;
-        
+
         return $p;
     }
+
 }
 
-Proj4php::$proj['mill'] = new Proj4phpProjMill();
+Proj4php::$proj['mill'] = new Proj4php_ProjMill();

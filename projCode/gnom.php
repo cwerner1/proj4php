@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Author : Julien Moquet
  * 
@@ -6,7 +7,7 @@
  *                      and Richard Greenwood rich@greenwoodma$p->com 
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
-/*****************************************************************************
+/* * ***************************************************************************
   NAME                             GNOMONIC
 
   PURPOSE:	Transforms input longitude and latitude to Easting and
@@ -26,23 +27,25 @@
   2.  Wolfram Mathworld "Gnomonic Projection"
   http://mathworld.wolfram.com/GnomonicProjection.html
   Accessed: 12th November 2009
-******************************************************************************/
+ * **************************************************************************** */
 
-class Proj4phpProjGnom {
-    
+class Proj4php_ProjGnom
+{
+
     /**
      * Initialize the Gnomonic projection
      * 
      * @todo $def not used in context...?
      * @param type $def 
      */
-    public function init( $def ) {
+    public function init($def)
+    {
 
         /* Place parameters in static storage for common use
           ------------------------------------------------- */
-        $this->sin_p14 = sin( $this->lat0 );
-        $this->cos_p14 = cos( $this->lat0 );
-        
+        $this->sin_p14 = sin($this->lat0);
+        $this->cos_p14 = cos($this->lat0);
+
         // Approximation for projecting points to the horizon (infinity)
         $this->infinity_dist = 1000 * $this->a;
         $this->rc = 1;
@@ -50,35 +53,37 @@ class Proj4phpProjGnom {
 
     /* Gnomonic forward equations--mapping lat,long to x,y
       --------------------------------------------------- */
-    public function forward( $p ) {
-        
+
+    public function forward($p)
+    {
+
         /*
-        $sinphi;
-        $cosphi; // sin and cos value
-        $dlon;  // delta longitude value
-        $coslon;  // cos of longitude
-        $ksp;  // scale factor
-        $g;
-        */
-        
+          $sinphi;
+          $cosphi; // sin and cos value
+          $dlon;  // delta longitude value
+          $coslon;  // cos of longitude
+          $ksp;  // scale factor
+          $g;
+         */
+
         $lon = $p->x;
         $lat = $p->y;
         /* Forward equations
           ----------------- */
-        $dlon = Proj4php::$common->adjust_lon( $lon - $this->long0 );
+        $dlon = Proj4php::$common->adjust_lon($lon - $this->long0);
 
-        $sinphi = sin( $lat );
-        $cosphi = cos( $lat );
+        $sinphi = sin($lat);
+        $cosphi = cos($lat);
 
-        $coslon = cos( $dlon );
+        $coslon = cos($dlon);
         $g = $this->sin_p14 * $sinphi + $this->cos_p14 * $cosphi * $coslon;
         $ksp = 1.0;
-        
-        if( (g > 0) || (abs( g ) <= Proj4php::$common->epsln) ) {
-            $x = $this->x0 + $this->a * $ksp * $cosphi * sin( $dlon ) / $g;
+
+        if ((g > 0) || (abs(g) <= Proj4php::$common->epsln)) {
+            $x = $this->x0 + $this->a * $ksp * $cosphi * sin($dlon) / $g;
             $y = $this->y0 + $this->a * $ksp * ($this->cos_p14 * $sinphi - $this->sin_p14 * $cosphi * $coslon) / $g;
         } else {
-            Proj4php::reportError( "orthoFwdPointError" );
+            Proj4php::reportError("orthoFwdPointError");
 
             // Point is in the opposing hemisphere and is unprojectable
             // We still need to return a reasonable point, so we project 
@@ -87,13 +92,13 @@ class Proj4phpProjGnom {
             // This is a reasonable approximation for short shapes and lines that 
             // straddle the horizon.
 
-            $x = $this->x0 + $this->infinity_dist * $cosphi * sin( $dlon );
+            $x = $this->x0 + $this->infinity_dist * $cosphi * sin($dlon);
             $y = $this->y0 + $this->infinity_dist * ($this->cos_p14 * $sinphi - $this->sin_p14 * $cosphi * $coslon);
         }
-        
+
         $p->x = $x;
         $p->y = $y;
-        
+
         return $p;
     }
 
@@ -102,18 +107,19 @@ class Proj4phpProjGnom {
      * @param type $p
      * @return type 
      */
-    public function inverse( $p ) {
-        
+    public function inverse($p)
+    {
+
         /*
-        $rh;  // Rho 
-        $z;  // angle 
-        $sinc;
-        $cosc;
-        $c;
-        $lon;
-        $lat;
-        */
-        
+          $rh;  // Rho
+          $z;  // angle
+          $sinc;
+          $cosc;
+          $c;
+          $lon;
+          $lat;
+         */
+
         /* Inverse equations
           ----------------- */
         $p->x = ($p->x - $this->x0) / $this->a;
@@ -122,14 +128,14 @@ class Proj4phpProjGnom {
         $p->x /= $this->k0;
         $p->y /= $this->k0;
 
-        if( ($rh = sqrt( $p->x * $p->x + $p->y * $p->y ) ) ) {
-            $c = atan2( $rh, $this->rc );
-            $sinc = sin( $c );
-            $cosc = cos( $c );
+        if (($rh = sqrt($p->x * $p->x + $p->y * $p->y))) {
+            $c = atan2($rh, $this->rc);
+            $sinc = sin($c);
+            $cosc = cos($c);
 
-            $lat = Proj4php::$common->asinz( $cosc * $this->sin_p14 + ($p->y * $sinc * $this->cos_p14) / $rh );
-            $lon = atan2( $p->x * sinc, rh * $this->cos_p14 * $cosc - $p->y * $this->sin_p14 * $sinc );
-            $lon = Proj4php::$common->adjust_lon( $this->long0 + $lon );
+            $lat = Proj4php::$common->asinz($cosc * $this->sin_p14 + ($p->y * $sinc * $this->cos_p14) / $rh);
+            $lon = atan2($p->x * sinc, rh * $this->cos_p14 * $cosc - $p->y * $this->sin_p14 * $sinc);
+            $lon = Proj4php::$common->adjust_lon($this->long0 + $lon);
         } else {
             $lat = $this->phic0;
             $lon = 0.0;
@@ -137,9 +143,10 @@ class Proj4phpProjGnom {
 
         $p->x = $lon;
         $p->y = $lat;
-        
+
         return $p;
     }
+
 }
 
-Proj4php::$proj['gnom'] = new Proj4phpProjGnom();
+Proj4php::$proj['gnom'] = new Proj4php_ProjGnom();

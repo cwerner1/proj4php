@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Author : Julien Moquet
  * 
@@ -6,7 +7,7 @@
  *                      and Richard Greenwood rich@greenwoodma$p->com 
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
-/*******************************************************************************
+/* * *****************************************************************************
   NAME                            NEW ZEALAND MAP GRID
 
   PURPOSE:	Transforms input longitude and latitude to Easting and
@@ -119,7 +120,8 @@
 /**
   Initialize New Zealand Map Grip projection
  */
-class Proj4phpProjNzmg {
+class Proj4php_ProjNzmg
+{
 
     /**
      * iterations: Number of iterations to refine inverse transform.
@@ -132,8 +134,9 @@ class Proj4phpProjNzmg {
     /**
      * 
      */
-    public function init() {
-        $this->A = array( );
+    public function init()
+    {
+        $this->A = array();
         $this->A[1] = +0.6399175073;
         $this->A[2] = -0.1358797613;
         $this->A[3] = +0.063294409;
@@ -145,8 +148,8 @@ class Proj4phpProjNzmg {
         $this->A[9] = +0.00067;
         $this->A[10] = -0.00034;
 
-        $this->B_re = array( );
-        $this->B_im = array( );
+        $this->B_re = array();
+        $this->B_im = array();
         $this->B_re[1] = +0.7557853228;
         $this->B_im[1] = 0.0;
         $this->B_re[2] = +0.249204646;
@@ -160,8 +163,8 @@ class Proj4phpProjNzmg {
         $this->B_re[6] = -0.6870983;
         $this->B_im[6] = -1.1651967;
 
-        $this->C_re = array( );
-        $this->C_im = array( );
+        $this->C_re = array();
+        $this->C_im = array();
         $this->C_re[1] = +1.3231270439;
         $this->C_im[1] = 0.0;
         $this->C_re[2] = -0.577245789;
@@ -175,7 +178,7 @@ class Proj4phpProjNzmg {
         $this->C_re[6] = +1.9660549;
         $this->C_im[6] = +2.5127645;
 
-        $this->D = array( );
+        $this->D = array();
         $this->D[1] = +1.5627014243;
         $this->D[2] = +0.5185406398;
         $this->D[3] = -0.03333098;
@@ -191,8 +194,9 @@ class Proj4phpProjNzmg {
       New Zealand Map Grid Forward  - long/lat to x/y
       long/lat in radians
      */
-    public function forward( $p ) {
-        
+    public function forward($p)
+    {
+
         $lon = $p->x;
         $lat = $p->y;
 
@@ -206,7 +210,7 @@ class Proj4phpProjNzmg {
         $d_phi_n = 1;  // d_phi^0
 
         $d_psi = 0;
-        for( $n = 1; $n <= 10; $n++ ) {
+        for ($n = 1; $n <= 10; $n++) {
             $d_phi_n = $d_phi_n * $d_phi;
             $d_psi = $d_psi + $this->A[$n] * $d_phi_n;
         }
@@ -223,7 +227,7 @@ class Proj4phpProjNzmg {
 
         $z_re = 0;
         $z_im = 0;
-        for( $n = 1; $n <= 6; $n++ ) {
+        for ($n = 1; $n <= 6; $n++) {
             $th_n_re1 = $th_n_re * $th_re - $th_n_im * $th_im;
             $th_n_im1 = $th_n_im * $th_re + $th_n_re * $th_im;
             $th_n_re = $th_n_re1;
@@ -242,7 +246,8 @@ class Proj4phpProjNzmg {
     /**
       New Zealand Map Grid Inverse  -  x/y to long/lat
      */
-    public function inverse( $p ) {
+    public function inverse($p)
+    {
 
         $x = $p->x;
         $y = $p->y;
@@ -262,7 +267,7 @@ class Proj4phpProjNzmg {
 
         $th_re = 0;
         $th_im = 0;
-        for( $n = 1; $n <= 6; $n++ ) {
+        for ($n = 1; $n <= 6; $n++) {
             $z_n_re1 = $z_n_re * $z_re - $z_n_im * $z_im;
             $z_n_im1 = $z_n_im * $z_re + $z_n_re * $z_im;
             $z_n_re = $z_n_re1;
@@ -275,7 +280,7 @@ class Proj4phpProjNzmg {
         //        0 iterations gives km accuracy
         //        1 iteration gives m accuracy -- good enough for most mapping applications
         //        2 iterations bives mm accuracy
-        for( $i = 0; $i < $this->iterations; $i++ ) {
+        for ($i = 0; $i < $this->iterations; $i++) {
             $th_n_re = $th_re;
             $th_n_im = $th_im;
             $th_n_re1;
@@ -283,7 +288,7 @@ class Proj4phpProjNzmg {
 
             $num_re = $z_re;
             $num_im = $z_im;
-            for( $n = 2; $n <= 6; $n++ ) {
+            for ($n = 2; $n <= 6; $n++) {
                 $th_n_re1 = $th_n_re * th_re - $th_n_im * $th_im;
                 $th_n_im1 = $th_n_im * $th_re + $th_n_re * $th_im;
                 $th_n_re = $th_n_re1;
@@ -296,7 +301,7 @@ class Proj4phpProjNzmg {
             $th_n_im = 0;
             $den_re = $this->B_re[1];
             $den_im = $this->B_im[1];
-            for( $n = 2; $n <= 6; $n++ ) {
+            for ($n = 2; $n <= 6; $n++) {
                 $th_n_re1 = $th_n_re * $th_re - $th_n_im * $th_im;
                 $th_n_im1 = $th_n_im * $th_re + $th_n_re * $th_im;
                 $th_n_re = $th_n_re1;
@@ -317,7 +322,7 @@ class Proj4phpProjNzmg {
         $d_psi_n = 1;  // d_psi^0
 
         $d_phi = 0;
-        for( $n = 1; $n <= 9; $n++ ) {
+        for ($n = 1; $n <= 9; $n++) {
             $d_psi_n = $d_psi_n * $d_psi;
             $d_phi = $d_phi + $this->D[$n] * $d_psi_n;
         }
@@ -335,4 +340,4 @@ class Proj4phpProjNzmg {
 
 }
 
-Proj4php::$proj['nzmg'] = new Proj4phpProjNzmg();
+Proj4php::$proj['nzmg'] = new Proj4php_ProjNzmg();

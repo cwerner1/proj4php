@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Author : Julien Moquet
  * 
@@ -6,7 +7,7 @@
  *                      and Richard Greenwood rich@greenwoodma$p->com 
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
-/*******************************************************************************
+/* * *****************************************************************************
   NAME                            TRANSVERSE MERCATOR
 
   PURPOSE:	Transforms input longitude and latitude to Easting and
@@ -23,42 +24,45 @@
   2.  Snyder, John P. and Voxland, Philip M., "An Album of Map Projections",
   U.S. Geological Survey Professional Paper 1453 , United State Government
   Printing Office, Washington D.C., 1989.
-*******************************************************************************/
+ * ***************************************************************************** */
 
 /**
   Initialize Transverse Mercator projection
  */
-class Proj4phpProjUtm {
+class Proj4php_ProjUtm
+{
 
     public $dependsOn = 'tmerc';
-    
     public $utmSouth = false; // UTM north/south
-    
+
     /**
      *
      * @return void 
      */
-    public function init() {
-        
-        if( !isset($this->zone) ) {
-            Proj4php::reportError( "utm:init: zone must be specified for UTM" );
+
+    public function init()
+    {
+
+        if (!isset($this->zone)) {
+            Proj4php::reportError("utm:init: zone must be specified for UTM");
             return;
         }
-        
+
         $this->lat0 = 0.0;
-        $this->long0 = ((6 * abs( $this->zone )) - 183) * Proj4php::$common->dToR;
+        $this->long0 = ((6 * abs($this->zone)) - 183) * Proj4php::$common->dToR;
         $this->x0 = 500000.0;
         $this->y0 = $this->utmSouth ? 10000000.0 : 0.0;
         $this->k0 = 0.9996;
     }
-    
+
     /**
      *
      * @param type $p
      * @return type 
      */
-    public function forward( $p ) {
-        return Proj4php::$proj['tmerc']->forward( $p );
+    public function forward($p)
+    {
+        return Proj4php::$proj['tmerc']->forward($p);
     }
 
     /**
@@ -66,9 +70,11 @@ class Proj4phpProjUtm {
      * @param type $p
      * @return type 
      */
-    public function inverse( $p ) {
-        return Proj4php::$proj['tmerc']->inverse( $p );
+    public function inverse($p)
+    {
+        return Proj4php::$proj['tmerc']->inverse($p);
     }
+
 }
 
-Proj4php::$proj['utm'] = new Proj4phpProjUtm();
+Proj4php::$proj['utm'] = new Proj4php_ProjUtm();

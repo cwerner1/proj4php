@@ -28,7 +28,7 @@
 /**
   Initialize Transverse Mercator projection
  */
-class Proj4phpProjTmerc {
+class Proj4php_ProjTmerc {
     
     private $e0, $e1, $e2, $e3, $ml0;
     
@@ -163,4 +163,4 @@ class Proj4phpProjTmerc {
 
 }
 
-Proj4php::$proj['tmerc'] = new Proj4phpProjTmerc();
+Proj4php::$proj['tmerc'] = new Proj4php_ProjTmerc();

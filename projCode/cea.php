@@ -1,5 +1,6 @@
 <?php
-/*******************************************************************************
+
+/* * *****************************************************************************
   NAME                    LAMBERT CYLINDRICAL EQUAL AREA
 
   PURPOSE:	Transforms input longitude and latitude to Easting and
@@ -32,7 +33,7 @@
 
   2.  Snyder, John P., "Flattening the Earth - Two Thousand Years of Map
   Projections", Univ. Chicago Press, 1993
- ****************************************************************************** */
+ * ***************************************************************************** */
 
 /**
  * Author : Julien Moquet
@@ -41,26 +42,30 @@
  *                      and Richard Greenwood rich@greenwoodma$p->com 
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
-class Proj4phpProjCea {
+class Proj4php_ProjCea
+{
     /* Initialize the Cylindrical Equal Area projection
       ------------------------------------------- */
 
-    public function init() {
+    public function init()
+    {
         //no-op
     }
 
     /* Cylindrical Equal Area forward equations--mapping lat,long to x,y
       ------------------------------------------------------------ */
-    public function forward( $p ) {
-        
+
+    public function forward($p)
+    {
+
         $lon = $p->x;
         $lat = $p->y;
-        
+
         /* Forward equations
           ----------------- */
-        $dlon = Proj4php::$common->adjust_lon( $lon - $this->long0 );
-        $x = $this->x0 + $this->a * $dlon * cos( $this->lat_ts );
-        $y = $this->y0 + $this->a * sin( $lat ) / cos( $this->lat_ts );
+        $dlon = Proj4php::$common->adjust_lon($lon - $this->long0);
+        $x = $this->x0 + $this->a * $dlon * cos($this->lat_ts);
+        $y = $this->y0 + $this->a * sin($lat) / cos($this->lat_ts);
         /* Elliptical Forward Transform
           Not implemented due to a lack of a matchign inverse function
           {
@@ -73,7 +78,7 @@ class Proj4phpProjCea {
 
         $p->x = $x;
         $p->y = $y;
-        
+
         return $p;
     }
 
@@ -83,15 +88,17 @@ class Proj4phpProjCea {
      * @param type $p
      * @return type 
      */
-    public function inverse( $p ) {
+    public function inverse($p)
+    {
         $p->x -= $this->x0;
         $p->y -= $this->y0;
 
-        $p->x = Proj4php::$common->adjust_lon( $this->long0 + ($p->x / $this->a) / cos( $this->lat_ts ) );
-        $p->y = asin( ($p->y / $this->a) * cos( $this->lat_ts ) );
-        
+        $p->x = Proj4php::$common->adjust_lon($this->long0 + ($p->x / $this->a) / cos($this->lat_ts));
+        $p->y = asin(($p->y / $this->a) * cos($this->lat_ts));
+
         return $p;
     }
+
 }
 
-Proj4php::$proj['cea'] = new Proj4phpProjCea();
+Proj4php::$proj['cea'] = new Proj4php_ProjCea();
