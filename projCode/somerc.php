@@ -3,7 +3,7 @@
 /**
  * Author : Julien Moquet
  * 
- * Inspired by Proj4php from Mike Adair madairATdmsolutions.ca
+ * Inspired by ProjFourphp from Mike Adair madairATdmsolutions.ca
  *                      and Richard Greenwood rich@greenwoodma$p->com 
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
@@ -18,11 +18,11 @@
   1. "Formules et constantes pour le Calcul pour la
   projection cylindrique conforme à axe oblique et pour la transformation entre
   des systèmes de référence".
-  http://www.swisstopo.admin.ch/internet/swisstopo/fr/home/topics/survey/sys/refsys/switzerland.parsysrelated1.31216.downloadList.77004.DownloadFile.tmp/swissprojectionfr.pdf
+  http://www.swisstopo.admin.ch/internet/swisstopo/fr/home/topics/survey/sys/refsys/switzerland.parsysrelatedOne.31216.downloadList.77004.DownloadFile.tmp/swissprojectionfr.pdf
 
  * ***************************************************************************** */
 
-class Proj4php_ProjSomerc
+class ProjFourphp_ProjSomerc
 {
 
     /**
@@ -64,7 +64,7 @@ class Proj4php_ProjSomerc
         $S = -$this->alpha * ($SaOne + $SaTwo) + $this->K;
 
         // spheric latitude
-        $b = 2.0 * (atan(exp($S)) - proj4phpCommon::PI / 4.0);
+        $b = 2.0 * (atan(exp($S)) - projFourphpCommon::PI / 4.0);
 
         // spheric longitude
         $I = $this->alpha * ($p->x - $this->lambdaZero);
@@ -114,7 +114,7 @@ class Proj4php_ProjSomerc
         $iteration = 0;
         while (abs($phy - $prevPhy) > 0.0000001) {
             if (++$iteration > 20) {
-                Proj4php::reportError("omercFwdInfinity");
+                ProjFourphp::reportError("omercFwdInfinity");
                 return;
             }
             //S = log(tan(PI / 4.0 + phy / 2.0));
@@ -137,4 +137,4 @@ class Proj4php_ProjSomerc
 
 }
 
-Proj4php::$proj['somerc'] = new Proj4php_ProjSomerc();
+ProjFourphp::$proj['somerc'] = new ProjFourphp_ProjSomerc();

@@ -3,7 +3,7 @@
 /**
  * Author : Julien Moquet
  * 
- * Inspired by Proj4php from Mike Adair madairATdmsolutions.ca
+ * Inspired by ProjFourphp from Mike Adair madairATdmsolutions.ca
  *                      and Richard Greenwood rich@greenwoodma$p->com 
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
@@ -32,7 +32,7 @@
   State Government Printing Office, Washington D.C., 1987.
  * ***************************************************************************** */
 
-class Proj4php_ProjMoll
+class ProjFourphp_ProjMoll
 {
     /* Initialize the Mollweide projection
       ------------------------------------ */
@@ -53,19 +53,19 @@ class Proj4php_ProjMoll
         $lon = $p->x;
         $lat = $p->y;
 
-        $deltaLon = Proj4php_Common::adjustLon($lon - $this->longZero);
+        $deltaLon = ProjFourphp_Common::adjustLon($lon - $this->longZero);
         $theta = $lat;
-        $con = Proj4php::$common->pi * sin($lat);
+        $con = ProjFourphp::$common->pi * sin($lat);
 
         /* Iterate using the Newton-Raphson method to find theta
           ----------------------------------------------------- */
         for ($i = 0; true; ++$i) {
             $delta_theta = -($theta + sin($theta) - $con) / (1.0 + cos($theta));
             $theta += $delta_theta;
-            if (abs($delta_theta) < Proj4php_Common::$epsln)
+            if (abs($delta_theta) < ProjFourphp_Common::$epsln)
                 break;
             if ($i >= 50) {
-                Proj4php::reportError("moll:Fwd:IterationError");
+                ProjFourphp::reportError("moll:Fwd:IterationError");
                 //return(241);
             }
         }
@@ -74,7 +74,7 @@ class Proj4php_ProjMoll
         /* If the latitude is 90 deg, force the x coordinate to be "0 . false easting"
           this is done here because of precision problems with "cos(theta)"
           -------------------------------------------------------------------------- */
-        if (Proj4php::$common->pi / 2 - abs($lat) < Proj4php_Common::$epsln)
+        if (ProjFourphp::$common->pi / 2 - abs($lat) < ProjFourphp_Common::$epsln)
             $deltaLon = 0;
         $x = 0.900316316158 * $this->a * $deltaLon * cos($theta) + $this->xZero;
         $y = 1.4142135623731 * $this->a * sin($theta) + $this->yZero;
@@ -106,12 +106,12 @@ class Proj4php_ProjMoll
         if (abs($arg) > 0.999999999999)
             $arg = 0.999999999999;
         $theta = asin($arg);
-        $lon = Proj4php_Common::adjustLon($this->longZero + ($p->x / (0.900316316158 * $this->a * cos($theta))));
-        if ($lon < (-Proj4php::$common->pi))
-            $lon = -Proj4php::$common->pi;
-        if ($lon > Proj4php::$common->pi)
-            $lon = Proj4php::$common->pi;
-        $arg = (2.0 * $theta + sin(2.0 * $theta)) / Proj4php::$common->pi;
+        $lon = ProjFourphp_Common::adjustLon($this->longZero + ($p->x / (0.900316316158 * $this->a * cos($theta))));
+        if ($lon < (-ProjFourphp::$common->pi))
+            $lon = -ProjFourphp::$common->pi;
+        if ($lon > ProjFourphp::$common->pi)
+            $lon = ProjFourphp::$common->pi;
+        $arg = (2.0 * $theta + sin(2.0 * $theta)) / ProjFourphp::$common->pi;
         if (abs($arg) > 1.0)
             $arg = 1.0;
         $lat = asin($arg);
@@ -125,4 +125,4 @@ class Proj4php_ProjMoll
 
 }
 
-Proj4php::$proj['moll'] = new Proj4php_ProjMoll();
+ProjFourphp::$proj['moll'] = new ProjFourphp_ProjMoll();

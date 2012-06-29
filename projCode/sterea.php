@@ -3,11 +3,11 @@
 /**
  * Author : Julien Moquet
  * 
- * Inspired by Proj4php from Mike Adair madairATdmsolutions.ca
+ * Inspired by ProjFourphp from Mike Adair madairATdmsolutions.ca
  *                      and Richard Greenwood rich@greenwoodma$p->com 
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
-class Proj4php_ProjSterea
+class ProjFourphp_ProjSterea
 {
 
     protected $dependsOn = 'gauss';
@@ -20,7 +20,7 @@ class Proj4php_ProjSterea
     {
 
         if (!$this->rc) {
-            Proj4php::reportError("sterea:init:E_ERROR_0");
+            ProjFourphp::reportError("sterea:init:E_ERROR_0");
             return;
         }
 
@@ -40,8 +40,8 @@ class Proj4php_ProjSterea
     public function forward($p)
     {
 
-        $p->x = Proj4php_Common::adjustLon($p->x - $this->longZero); /* adjust del longitude */
-        $p = Proj4php::$proj['gauss']->forward($p);
+        $p->x = ProjFourphp_Common::adjustLon($p->x - $this->longZero); /* adjust del longitude */
+        $p = ProjFourphp::$proj['gauss']->forward($p);
         $sinc = sin($p->y);
         $cosc = cos($p->y);
         $cosl = cos($p->x);
@@ -85,12 +85,12 @@ class Proj4php_ProjSterea
 
         $p->x = $lon;
         $p->y = $lat;
-        $p = Proj4php::$proj['gauss']->inverse($p);
-        $p->x = Proj4php_Common::adjustLon($p->x + $this->longZero); /* adjust longitude to CM */
+        $p = ProjFourphp::$proj['gauss']->inverse($p);
+        $p->x = ProjFourphp_Common::adjustLon($p->x + $this->longZero); /* adjust longitude to CM */
 
         return $p;
     }
 
 }
 
-Proj4php::$proj['sterea'] = new Proj4php_ProjSterea();
+ProjFourphp::$proj['sterea'] = new ProjFourphp_ProjSterea();

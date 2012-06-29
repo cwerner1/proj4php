@@ -3,7 +3,7 @@
 /**
  * Author : Julien Moquet
  * 
- * Inspired by Proj4js from Mike Adair madairATdmsolutions.ca
+ * Inspired by ProjFourjs from Mike Adair madairATdmsolutions.ca
  *                      and Richard Greenwood rich@greenwoodmap.com 
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
@@ -14,7 +14,7 @@
  * Other point classes may be used as long as they have
  * x and y properties, which will get modified in the transform method.
  */
-class Proj4php_Point
+class ProjFourphp_Point
 {
 
     public $x;
@@ -22,7 +22,7 @@ class Proj4php_Point
     public $z;
 
     /**
-     * Constructor: Proj4js.Point
+     * Constructor: ProjFourjs.Point
      *
      * Parameters:
      * - x {float} or {Array} either the first coordinates component or
@@ -51,16 +51,16 @@ class Proj4php_Point
 
     /**
      * APIMethod: clone
-     * Build a copy of a Proj4js.Point object.
+     * Build a copy of a ProjFourjs.Point object.
      *
      * renamed because of PHP keyword.
      * 
      * Return:
-     * {Proj4js}.Point the cloned point.
+     * {ProjFourjs}.Point the cloned point.
      */
     public function _clone()
     {
-        return new Proj4phpPoint($this->x, $this->y, $this->z);
+        return new ProjFourphpPoint($this->x, $this->y, $this->z);
     }
 
     /**
@@ -68,7 +68,7 @@ class Proj4php_Point
      * Return a readable string version of the point
      *
      * Return:
-     * {String} String representation of Proj4js.Point object. 
+     * {String} String representation of ProjFourjs.Point object. 
      *           (ex. <i>"x=5,y=42"</i>)
      */
     public function toString()
@@ -81,7 +81,7 @@ class Proj4php_Point
      * Return a short string version of the point.
      *
      * Return:
-     * {String} Shortened String representation of Proj4js.Point object. 
+     * {String} Shortened String representation of ProjFourjs.Point object. 
      *         (ex. <i>"5, 42"</i>)
      */
     public function toShortString()

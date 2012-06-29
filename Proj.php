@@ -3,11 +3,11 @@
 /**
  * Author : Julien Moquet
  * 
- * Inspired by Proj4js from Mike Adair madairATdmsolutions.ca
+ * Inspired by ProjFourjs from Mike Adair madairATdmsolutions.ca
  *                      and Richard Greenwood rich@greenwoodmap.com 
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
-class Proj4php_Proj
+class ProjFourphp_Proj
 {
 
     /**
@@ -25,7 +25,7 @@ class Proj4php_Proj
     /**
      * Property: projName
      * The projection class for $this projection, e.g. lcc (lambert conformal conic,
-     * or merc for mercator).  These are exactly equivalent to their Proj4 
+     * or merc for mercator).  These are exactly equivalent to their ProjFour 
      * counterparts.
      */
     public $projName = null;
@@ -74,7 +74,7 @@ class Proj4php_Proj
 
     /**
      * Constructor: initialize
-     * Constructor for Proj4php::Proj objects
+     * Constructor for ProjFourphp::Proj objects
      *
      * Parameters:
      * $srsCode - a code for map projection definition parameters.  These are usually
@@ -152,7 +152,7 @@ class Proj4php_Proj
     {
 
         //check in memory
-        if (array_key_exists($this->srsCode, Proj4php::$defs)) {
+        if (array_key_exists($this->srsCode, ProjFourphp::$defs)) {
             $this->defsLoaded();
             return;
         }
@@ -161,7 +161,7 @@ class Proj4php_Proj
 
         try
         {
-            Proj4php::loadScript($filename);
+            ProjFourphp::loadScript($filename);
             $this->defsLoaded(); // succes
         } catch (Exception $e)
         {
@@ -181,10 +181,10 @@ class Proj4php_Proj
     {
 
         //else load from web service
-        $url = Proj4php::$defsLookupService . '/' . $this->srsAuth . '/' . $this->srsProjNumber . '/proj4/';
+        $url = ProjFourphp::$defsLookupService . '/' . $this->srsAuth . '/' . $this->srsProjNumber . '/projFour/';
         try
         {
-            Proj4php::$defs[strtoupper($this->srsAuth) . ":" . $this->srsProjNumber] = Proj4php::loadScript($url);
+            ProjFourphp::$defs[strtoupper($this->srsAuth) . ":" . $this->srsProjNumber] = ProjFourphp::loadScript($url);
         } catch (Exception $e)
         {
             $this->defsFailed();
@@ -210,7 +210,7 @@ class Proj4php_Proj
      */
     public function checkDefsLoaded()
     {
-        return isset(Proj4php::$defs[$this->srsCode]) && !empty(Proj4php::$defs[$this->srsCode]);
+        return isset(ProjFourphp::$defs[$this->srsCode]) && !empty(ProjFourphp::$defs[$this->srsCode]);
     }
 
     /**
@@ -220,8 +220,8 @@ class Proj4php_Proj
      */
     public function defsFailed()
     {
-        Proj4php::reportError('failed to load projection definition for: ' . $this->srsCode);
-        Proj4php::$defs[$this->srsCode] = Proj4php::$defs['WGS84'];  //set it to something so it can at least continue
+        ProjFourphp::reportError('failed to load projection definition for: ' . $this->srsCode);
+        ProjFourphp::$defs[$this->srsCode] = ProjFourphp::$defs['WGS84'];  //set it to something so it can at least continue
         $this->defsLoaded();
     }
 
@@ -229,14 +229,14 @@ class Proj4php_Proj
      * Function: loadProjCode
      *    Loads projection class code dynamically if required.
      *     Projection code may be included either through a script tag or in
-     *     a built version of proj4php
+     *     a built version of projFourphp
      *
      * An exception occurs if the projection is not found.
      */
     public function loadProjCode($projName)
     {
 
-        if (array_key_exists($projName, Proj4php::$proj)) {
+        if (array_key_exists($projName, ProjFourphp::$proj)) {
             $this->initTransforms();
             return;
         }
@@ -245,7 +245,7 @@ class Proj4php_Proj
 
         try
         {
-            Proj4php::loadScript($filename);
+            ProjFourphp::loadScript($filename);
             $this->loadProjCodeSuccess($projName);
         } catch (Exception $e)
         {
@@ -261,8 +261,8 @@ class Proj4php_Proj
     public function loadProjCodeSuccess($projName)
     {
 
-        if (isset(Proj4php::$proj[$projName]->dependsOn) && !empty(Proj4php::$proj[$projName]->dependsOn)) {
-            $this->loadProjCode(Proj4php::$proj[$projName]->dependsOn);
+        if (isset(ProjFourphp::$proj[$projName]->dependsOn) && !empty(ProjFourphp::$proj[$projName]->dependsOn)) {
+            $this->loadProjCode(ProjFourphp::$proj[$projName]->dependsOn);
         } else {
             $this->initTransforms();
         }
@@ -276,7 +276,7 @@ class Proj4php_Proj
      */
     public function loadProjCodeFailure($projName)
     {
-        Proj4php::reportError("failed to find projection file for: " . $projName);
+        ProjFourphp::reportError("failed to find projection file for: " . $projName);
         //TBD initialize with identity transforms so proj will still work?
     }
 
@@ -288,7 +288,7 @@ class Proj4php_Proj
     public function checkCodeLoaded($projName)
     {
 
-        return isset(Proj4php::$proj[$projName]) && !empty(Proj4php::$proj[$projName]);
+        return isset(ProjFourphp::$proj[$projName]) && !empty(ProjFourphp::$proj[$projName]);
     }
 
     /**
@@ -299,15 +299,15 @@ class Proj4php_Proj
     public function initTransforms()
     {
 
-        $this->projection = clone(Proj4php::$proj[$this->projName]);
-        Proj4php::extend($this->projection, $this);
+        $this->projection = clone(ProjFourphp::$proj[$this->projName]);
+        ProjFourphp::extend($this->projection, $this);
         $this->init();
 
         // initiate depending class
         if (false !== ($dependsOn = isset($this->projection->dependsOn) && !empty($this->projection->dependsOn) ? $this->projection->dependsOn : false)) {
-            Proj4php::extend(Proj4php::$proj[$dependsOn], $this->projection) &&
-                    Proj4php::$proj[$dependsOn]->init() &&
-                    Proj4php::extend($this->projection, Proj4php::$proj[$dependsOn]);
+            ProjFourphp::extend(ProjFourphp::$proj[$dependsOn], $this->projection) &&
+                    ProjFourphp::$proj[$dependsOn]->init() &&
+                    ProjFourphp::extend($this->projection, ProjFourphp::$proj[$dependsOn]);
         }
 
         $this->readyToUse = true;
@@ -406,7 +406,7 @@ class Proj4php_Proj
             case 'GEOCCS':
                 break;
             case 'PROJECTION':
-                $this->projName = Proj4php::$wktProjections[$wktName];
+                $this->projName = ProjFourphp::$wktProjections[$wktName];
                 break;
             case 'DATUM':
                 $this->datumName = $wktName;
@@ -442,10 +442,10 @@ class Proj4php_Proj
                         $this->kZero = $value;
                         break;
                     case 'central_meridian':
-                        $this->longZero = $value * Proj4php_Common::$dToR;
+                        $this->longZero = $value * ProjFourphp_Common::$dToR;
                         break;
                     case 'latitude_of_origin':
-                        $this->latZero = $value * Proj4php_Common::$dToR;
+                        $this->latZero = $value * ProjFourphp_Common::$dToR;
                         break;
                     case 'more_here':
                         break;
@@ -507,7 +507,7 @@ class Proj4php_Proj
     public function parseDefs()
     {
 
-        $this->defData = Proj4php::$defs[$this->srsCode];
+        $this->defData = ProjFourphp::$defs[$this->srsCode];
         #$paramName;
         #$paramVal;
         if (!$this->defData) {
@@ -544,19 +544,19 @@ class Proj4php_Proj
                 // DGR 2007-11-20
                 case "rf": $this->rf = floatval(paramVal);
                     break; // inverse flattening rf= a/(a-b)
-                case "lat_0": $this->latZero = $paramVal * Proj4php_Common::$dToR;
+                case "lat_0": $this->latZero = $paramVal * ProjFourphp_Common::$dToR;
                     break;        // phiZero, central latitude
-                case "lat_1": $this->latOne = $paramVal * Proj4php_Common::$dToR;
+                case "lat_1": $this->latOne = $paramVal * ProjFourphp_Common::$dToR;
                     break;        //standard parallel 1
-                case "lat_2": $this->latTwo = $paramVal * Proj4php_Common::$dToR;
+                case "lat_2": $this->latTwo = $paramVal * ProjFourphp_Common::$dToR;
                     break;        //standard parallel 2
-                case "latTs": $this->latTs = $paramVal * Proj4php_Common::$dToR;
+                case "latTs": $this->latTs = $paramVal * ProjFourphp_Common::$dToR;
                     break;      // used in merc and eqc
-                case "lon_0": $this->longZero = $paramVal * Proj4php_Common::$dToR;
+                case "lon_0": $this->longZero = $paramVal * ProjFourphp_Common::$dToR;
                     break;       // lamZero, central longitude
-                case "alpha": $this->alpha = floatval($paramVal) * Proj4php_Common::$dToR;
+                case "alpha": $this->alpha = floatval($paramVal) * ProjFourphp_Common::$dToR;
                     break;  //for somerc projection
-                case "lonc": $this->longc = paramVal * Proj4php_Common::$dToR;
+                case "lonc": $this->longc = paramVal * ProjFourphp_Common::$dToR;
                     break;       //for somerc projection
                 case "x_0": $this->xZero = floatval($paramVal);
                     break;  // false easting
@@ -576,13 +576,13 @@ class Proj4php_Proj
                     break;
                 case "to_meter": $this->to_meter = floatval($paramVal);
                     break; // cartesian scaling
-                case "from_greenwich": $this->from_greenwich = $paramVal * Proj4php_Common::$dToR;
+                case "from_greenwich": $this->from_greenwich = $paramVal * ProjFourphp_Common::$dToR;
                     break;
                 // DGR 2008-07-09 : if pm is not a well-known prime meridian take
                 // the value instead of 0.0, then convert to radians
                 case "pm": $paramVal = trim($paramVal);
-                    $this->from_greenwich = Proj4php::$primeMeridian[$paramVal] ? Proj4php::$primeMeridian[$paramVal] : floatval($paramVal);
-                    $this->from_greenwich *= Proj4php_Common::$dToR;
+                    $this->from_greenwich = ProjFourphp::$primeMeridian[$paramVal] ? ProjFourphp::$primeMeridian[$paramVal] : floatval($paramVal);
+                    $this->from_greenwich *= ProjFourphp_Common::$dToR;
                     break;
                 // DGR 2010-11-12: axis
                 case "axis": $paramVal = trim($paramVal);
@@ -614,7 +614,7 @@ class Proj4php_Proj
 
         if (isset($this->datumCode) && $this->datumCode != 'none') {
 
-            $datumDef = Proj4php::$datum[$this->datumCode];
+            $datumDef = ProjFourphp::$datum[$this->datumCode];
 
             if (is_array($datumDef)) {
                 $this->datum_params = array_key_exists('towgs84', $datumDef) ? explode(',', $datumDef['towgs84']) : null;
@@ -623,19 +623,19 @@ class Proj4php_Proj
             }
         }
         if (!isset($this->a)) {    // do we have an ellipsoid?
-            if (!isset($this->ellps) || strlen($this->ellps) == 0 || !array_key_exists($this->ellps, Proj4php::$ellipsoid))
-                $ellipse = Proj4php::$ellipsoid['WGS84'];
+            if (!isset($this->ellps) || strlen($this->ellps) == 0 || !array_key_exists($this->ellps, ProjFourphp::$ellipsoid))
+                $ellipse = ProjFourphp::$ellipsoid['WGS84'];
             else {
-                $ellipse = Proj4php::$ellipsoid[$this->ellps];
+                $ellipse = ProjFourphp::$ellipsoid[$this->ellps];
             }
 
-            Proj4php::extend($this, $ellipse);
+            ProjFourphp::extend($this, $ellipse);
         }
 
         if (isset($this->rf) && !isset($this->b))
             $this->b = (1.0 - 1.0 / $this->rf) * $this->a;
 
-        if ((isset($this->rf) && $this->rf === 0) || abs($this->a - $this->b) < Proj4php_Common::$epsln) {
+        if ((isset($this->rf) && $this->rf === 0) || abs($this->a - $this->b) < ProjFourphp_Common::$epsln) {
             $this->sphere = true;
             $this->b = $this->a;
         }
@@ -644,7 +644,7 @@ class Proj4php_Proj
         $this->es = ($this->aTwo - $this->b2) / $this->aTwo;  // e ^ 2
         $this->e = sqrt($this->es);        // eccentricity
         if (isset($this->R_A)) {
-            $this->a *= 1. - $this->es * ( Proj4php_Common::$sixth + $this->es * ( Proj4php_Common::$ra4 + $this->es * Proj4php_Common::$ra6));
+            $this->a *= 1. - $this->es * ( ProjFourphp_Common::$sixth + $this->es * ( ProjFourphp_Common::$ra4 + $this->es * ProjFourphp_Common::$ra6));
             $this->aTwo = $this->a * $this->a;
             $this->b2 = $this->b * $this->b;
             $this->es = 0.0;
@@ -660,7 +660,7 @@ class Proj4php_Proj
             $this->axis = "enu";
         }
 
-        $this->datum = new Proj4php_Datum($this);
+        $this->datum = new ProjFourphp_Datum($this);
     }
 
 }

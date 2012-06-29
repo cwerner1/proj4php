@@ -15,13 +15,13 @@
   R. Marsden              August 2009
   Winwaed Software Tech LLC, http://www.winwaed.com
 
-  This function was adapted from the Miller Cylindrical Projection in the Proj4php
+  This function was adapted from the Miller Cylindrical Projection in the ProjFourphp
   library.
 
   Note: This implementation assumes a Spherical Earth. The (commented) code
   has been included for the ellipsoidal forward transform, but derivation of
   the ellispoidal inverse transform is beyond me. Note that most of the
-  Proj4php implementations do NOT currently support ellipsoidal figures.
+  ProjFourphp implementations do NOT currently support ellipsoidal figures.
   Therefore this is not seen as a problem - especially this lack of support
   is explicitly stated here.
 
@@ -38,11 +38,11 @@
 /**
  * Author : Julien Moquet
  * 
- * Inspired by Proj4php from Mike Adair madairATdmsolutions.ca
+ * Inspired by ProjFourphp from Mike Adair madairATdmsolutions.ca
  *                      and Richard Greenwood rich@greenwoodma$p->com 
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
-class Proj4php_ProjCea
+class ProjFourphp_ProjCea
 {
     /* Initialize the Cylindrical Equal Area projection
       ------------------------------------------- */
@@ -63,7 +63,7 @@ class Proj4php_ProjCea
 
         /* Forward equations
           ----------------- */
-        $dlon =  Proj4php_Common::adjustLon($lon - $this->longZero);
+        $dlon =  ProjFourphp_Common::adjustLon($lon - $this->longZero);
         $x = $this->xZero + $this->a * $dlon * cos($this->latTs);
         $y = $this->yZero + $this->a * sin($lat) / cos($this->latTs);
         /* Elliptical Forward Transform
@@ -93,7 +93,7 @@ class Proj4php_ProjCea
         $p->x -= $this->xZero;
         $p->y -= $this->yZero;
 
-        $p->x =  Proj4php_Common::adjustLon($this->longZero + ($p->x / $this->a) / cos($this->latTs));
+        $p->x =  ProjFourphp_Common::adjustLon($this->longZero + ($p->x / $this->a) / cos($this->latTs));
         $p->y = asin(($p->y / $this->a) * cos($this->latTs));
 
         return $p;
@@ -101,4 +101,4 @@ class Proj4php_ProjCea
 
 }
 
-Proj4php::$proj['cea'] = new Proj4php_ProjCea();
+ProjFourphp::$proj['cea'] = new ProjFourphp_ProjCea();

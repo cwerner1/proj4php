@@ -3,11 +3,11 @@
 /**
  * Author : Julien Moquet
  * 
- * Inspired by Proj4js from Mike Adair madairATdmsolutions.ca
+ * Inspired by ProjFourjs from Mike Adair madairATdmsolutions.ca
  *                      and Richard Greenwood rich@greenwoodmap.com 
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
-class Proj4php_LongLat
+class ProjFourphp_LongLat
 {
 
     public function init()

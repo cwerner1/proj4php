@@ -3,12 +3,12 @@
 /**
  * Author : Julien Moquet
  * 
- * Inspired by Proj4php from Mike Adair madairATdmsolutions.ca
+ * Inspired by ProjFourphp from Mike Adair madairATdmsolutions.ca
  *                      and Richard Greenwood rich@greenwoodma$p->com 
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
-/* similar to equi.js FIXME proj4 uses eqc */
-class Proj4php_ProjEqc
+/* similar to equi.js FIXME projFour uses eqc */
+class ProjFourphp_ProjEqc
 {
 
     public function init()
@@ -38,8 +38,8 @@ class Proj4php_ProjEqc
         $lon = $p->x;
         $lat = $p->y;
 
-        $dlon =  Proj4php_Common::adjustLon($lon - $this->longZero);
-        $dlat = Proj4php::$common . adjust_lat($lat - $this->latZero);
+        $dlon =  ProjFourphp_Common::adjustLon($lon - $this->longZero);
+        $dlat = ProjFourphp::$common . adjust_lat($lat - $this->latZero);
         $p->x = $this->xZero + ($this->a * $dlon * $this->rc);
         $p->y = $this->yZero + ($this->a * $dlat );
         return $p;
@@ -53,11 +53,11 @@ class Proj4php_ProjEqc
         $x = $p->x;
         $y = $p->y;
 
-        $p->x =  Proj4php_Common::adjustLon($this->longZero + (($x - $this->xZero) / ($this->a * $this->rc)));
-        $p->y = Proj4php::$common->adjustLat($this->latZero + (($y - $this->yZero) / ($this->a )));
+        $p->x =  ProjFourphp_Common::adjustLon($this->longZero + (($x - $this->xZero) / ($this->a * $this->rc)));
+        $p->y = ProjFourphp::$common->adjustLat($this->latZero + (($y - $this->yZero) / ($this->a )));
         return $p;
     }
 
 }
 
-Proj4php::$proj['eqc'] = new Proj4php_ProjEqc();
+ProjFourphp::$proj['eqc'] = new ProjFourphp_ProjEqc();

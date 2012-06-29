@@ -3,7 +3,7 @@
 /**
  * Author : Julien Moquet
  * 
- * Simple conversion from javascript to PHP of Proj4php by Mike Adair madairATdmsolutions.ca and Richard Greenwood rich@greenwoodmap.com 
+ * Simple conversion from javascript to PHP of ProjFourphp by Mike Adair madairATdmsolutions.ca and Richard Greenwood rich@greenwoodmap.com 
  *                     
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
@@ -15,7 +15,7 @@ require_once($dir . "/Datum.php");
 require_once($dir . "/LongLat.php");
 require_once($dir . "/Point.php");
 
-class Proj4php
+class ProjFourphp
 {
 
     protected $defaultDatum = 'WGS84';
@@ -35,7 +35,7 @@ class Proj4php
     public static $defsLookupService = 'http://spatialreference.org/ref';
 
     /**
-      Proj4php.defs is a collection of coordinate system definition objects in the
+      ProjFourphp.defs is a collection of coordinate system definition objects in the
       PROJ.4 command line format.
       Generally a def is added by means of a separate .js file for example:
 
@@ -62,7 +62,7 @@ class Proj4php
         self::$defs['EPSG:102113'] = self::$defs['EPSG:3875'];
     }
 
-    //lookup table to go from the projection name in WKT to the Proj4php projection name
+    //lookup table to go from the projection name in WKT to the ProjFourphp projection name
     //build this out as required
     protected function initWKTProjections()
     {
@@ -138,15 +138,15 @@ class Proj4php
     protected function initPrimeMeridian()
     {
         self::$primeMeridian["greenwich"] = '0.0';               //"0dE",
-        self::$primeMeridian["lisbon"] = -9.131906111111;   //"9d07'54.862\"W",
-        self::$primeMeridian["paris"] = 2.337229166667;   //"2d20'14.025\"E",
-        self::$primeMeridian["bogota"] = -74.080916666667;  //"74d04'51.3\"W",
+        self::$primeMeridian["lisbon"] = -9.131906111111;   //"9dZero7'54.862\"W",
+        self::$primeMeridian["paris"] = 2.337229166667;   //"2dTwo0'14.025\"E",
+        self::$primeMeridian["bogota"] = -74.080916666667;  //"74dZero4'51.3\"W",
         self::$primeMeridian["madrid"] = -3.687938888889;  //"3d41'16.58\"W",
-        self::$primeMeridian["rome"] = 12.452333333333;  //"12d27'8.4\"E",
-        self::$primeMeridian["bern"] = 7.439583333333;  //"7d26'22.5\"E",
+        self::$primeMeridian["rome"] = 12.452333333333;  //"12dTwo7'8.4\"E",
+        self::$primeMeridian["bern"] = 7.439583333333;  //"7dTwo6'22.5\"E",
         self::$primeMeridian["jakarta"] = 106.807719444444;  //"106d48'27.79\"E",
         self::$primeMeridian["ferro"] = -17.666666666667;  //"17d40'W",
-        self::$primeMeridian["brussels"] = 4.367975;        //"4d22'4.71\"E",
+        self::$primeMeridian["brussels"] = 4.367975;        //"4dTwo2'4.71\"E",
         self::$primeMeridian["stockholm"] = 18.058277777778;  //"18d3'29.8\"E",
         self::$primeMeridian["athens"] = 23.7163375;       //"23d42'58.815\"E",
         self::$primeMeridian["oslo"] = 10.722916666667;  //"10d43'22.5\"E"
@@ -164,10 +164,10 @@ class Proj4php
         $this->initEllipsoid();
         $this->initPrimeMeridian();
 
-        self::$proj['longlat'] = new Proj4php_LongLat();
-        self::$proj['identity'] = new Proj4php_LongLat();
-        self::$common = new proj4php_Common();
-        self::$wgs84 = new Proj4php_Proj('WGS84');
+        self::$proj['longlat'] = new ProjFourphp_LongLat();
+        self::$proj['identity'] = new ProjFourphp_LongLat();
+        self::$common = new projFourphp_Common();
+        self::$wgs84 = new ProjFourphp_Proj('WGS84');
     }
 
     /**
@@ -176,8 +176,8 @@ class Proj4php
      * really the only public method you should need to use.
      *
      * Parameters:
-     * source - {Proj4phpProj} source map projection for the transformation
-     * dest - {Proj4phpProj} destination map projection for the transformation
+     * source - {ProjFourphpProj} source map projection for the transformation
+     * dest - {ProjFourphpProj} destination map projection for the transformation
      * point - {Object} point to transform, may be geodetic (long, lat) or
      *     projected Cartesian (x,y), but should always have x,y properties.
      */
@@ -185,29 +185,29 @@ class Proj4php
     {
 
         if (!$source->readyToUse) {
-            self::reportError("Proj4php initialization for:" . $source->srsCode . " not yet complete");
+            self::reportError("ProjFourphp initialization for:" . $source->srsCode . " not yet complete");
             return $point;
         }
         if (!$dest->readyToUse) {
-            self::reportError("Proj4php initialization for:" . $dest->srsCode . " not yet complete");
+            self::reportError("ProjFourphp initialization for:" . $dest->srsCode . " not yet complete");
             return $point;
         }
 
         // Workaround for datum shifts towgs84, if either source or destination projection is not wgs84
         if (isset($source->datum) && isset($dest->datum) && (
-                (($source->datum->datumType == Proj4php_Common::$pjdThreeParam || $source->datum->datumType == Proj4php_Common::$pjd7Param) && (isset($dest->datumCode) && $dest->datumCode != "WGS84")) ||
-                (($dest->datum->datumType == Proj4php_Common::$pjdThreeParam || $dest->datum->datumType == Proj4php_Common::$pjd7Param) && (isset($source->datumCode) && $source->datumCode != "WGS84")))) {
-            $wgs84 = Proj4php::$wgs84;
+                (($source->datum->datumType == ProjFourphp_Common::$pjdThreeParam || $source->datum->datumType == ProjFourphp_Common::$pjd7Param) && (isset($dest->datumCode) && $dest->datumCode != "WGS84")) ||
+                (($dest->datum->datumType == ProjFourphp_Common::$pjdThreeParam || $dest->datum->datumType == ProjFourphp_Common::$pjd7Param) && (isset($source->datumCode) && $source->datumCode != "WGS84")))) {
+            $wgs84 = ProjFourphp::$wgs84;
             $this->transform($source, $wgs84, $point);
             $source = $wgs84;
         }
 
-        // Workaround for Spherical Mercator => skipped in proj4js 1.1.0
+        // Workaround for Spherical Mercator => skipped in projFourjs 1.1.0
         /*
           if( ($source->srsProjNumber == "900913" && $dest->datumCode != "WGS84") ||
           ($dest->srsProjNumber == "900913" && $source->datumCode != "WGS84") ) {
           #dbg('Workaround for Spherical Mercator', false);
-          $wgs84 = Proj4php::$wgs84; // DONT KNOW WHAT YET
+          $wgs84 = ProjFourphp::$wgs84; // DONT KNOW WHAT YET
           $this->transform( $source, $wgs84, $point );
           $source = $wgs84;
           }
@@ -220,8 +220,8 @@ class Proj4php
 
         // Transform source points to long/lat, if they aren't already.
         if ($source->projName == "longlat") {
-            $point->x *= Proj4php_Common::$dToR;  // convert degrees to radians
-            $point->y *= Proj4php_Common::$dToR;
+            $point->x *= ProjFourphp_Common::$dToR;  // convert degrees to radians
+            $point->y *= ProjFourphp_Common::$dToR;
         } else {
             if (isset($source->to_meter)) {
                 $point->x *= $source->to_meter;
@@ -245,8 +245,8 @@ class Proj4php
 
         if ($dest->projName == "longlat") {
             // convert radians to decimal degrees
-            $point->x *= Proj4php_Common::$rToD;
-            $point->y *= Proj4php_Common::$rToD;
+            $point->x *= ProjFourphp_Common::$rToD;
+            $point->y *= ProjFourphp_Common::$rToD;
         } else {               // else project
             $dest->forward($point);
             if (isset($dest->to_meter)) {
@@ -279,39 +279,39 @@ class Proj4php
         }
 
         // Explicitly skip datum transform by setting 'datum=none' as parameter for either source or dest
-        if ($source->datumType == Proj4php_Common::$pjdNodatum
-                || $dest->datumType == Proj4php_Common::$pjdNodatum) {
+        if ($source->datumType == ProjFourphp_Common::$pjdNodatum
+                || $dest->datumType == ProjFourphp_Common::$pjdNodatum) {
             return $point;
         }
 
         /*
           // If this datum requires grid shifts, then apply it to geodetic coordinates.
-          if( $source->datum_type ==  Proj4php_Common::$PJD_GRIDSHIFT ) {
+          if( $source->datum_type ==  ProjFourphp_Common::$PJD_GRIDSHIFT ) {
           throw(new Exception( "ERROR: Grid shift transformations are not implemented yet." ));
           }
 
-          if( $dest->datum_type ==  Proj4php_Common::$PJD_GRIDSHIFT ) {
+          if( $dest->datum_type ==  ProjFourphp_Common::$PJD_GRIDSHIFT ) {
           throw(new Exception( "ERROR: Grid shift transformations are not implemented yet." ));
           }
          */
 
         // Do we need to go through geocentric coordinates?
         if ($source->es != $dest->es || $source->a != $dest->a
-                || $source->datumType == Proj4php_Common::$pjdThreeParam
-                || $source->datumType == Proj4php_Common::$pjd7Param
-                || $dest->datumType == Proj4php_Common::$pjdThreeParam
-                || $dest->datumType == Proj4php_Common::$pjd7Param) {
+                || $source->datumType == ProjFourphp_Common::$pjdThreeParam
+                || $source->datumType == ProjFourphp_Common::$pjd7Param
+                || $dest->datumType == ProjFourphp_Common::$pjdThreeParam
+                || $dest->datumType == ProjFourphp_Common::$pjd7Param) {
 
             // Convert to geocentric coordinates.
             $source->GeodeticToGeocentric($point);
             // CHECK_RETURN;
             // Convert between datums
-            if ($source->datumType == Proj4php_Common::$pjdThreeParam || $source->datumType == Proj4php_Common::$pjd7Param) {
+            if ($source->datumType == ProjFourphp_Common::$pjdThreeParam || $source->datumType == ProjFourphp_Common::$pjd7Param) {
                 $source->geocentricToWgs84($point);
                 // CHECK_RETURN;
             }
 
-            if ($dest->datumType == Proj4php_Common::$pjdThreeParam || $dest->datumType == Proj4php_Common::$pjd7Param) {
+            if ($dest->datumType == ProjFourphp_Common::$pjdThreeParam || $dest->datumType == ProjFourphp_Common::$pjd7Param) {
                 $dest->geocentric_from_wgs84($point);
                 // CHECK_RETURN;
             }
@@ -323,7 +323,7 @@ class Proj4php
 
         // Apply grid shift to destination if required
         /*
-          if( $dest->datum_type ==  Proj4php_Common::$PJD_GRIDSHIFT ) {
+          if( $dest->datum_type ==  ProjFourphp_Common::$PJD_GRIDSHIFT ) {
           throw(new Exception( "ERROR: Grid shift transformations are not implemented yet." ));
           // pj_apply_gridshift( pj_param(dest.params,"snadgrids").s, 1, point);
           // CHECK_RETURN;
@@ -337,7 +337,7 @@ class Proj4php
      * Normalize or de-normalized the x/y/z axes.  The normal form is "enu"
      * (easting, northing, up).
      * Parameters:
-     * crs {Proj4php.Proj} the coordinate reference system
+     * crs {ProjFourphp.Proj} the coordinate reference system
      * denorm {Boolean} when false, normalize
      * point {Object} the coordinates to adjust
      */

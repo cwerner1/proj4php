@@ -3,7 +3,7 @@
 /**
  * Author : Julien Moquet
  * 
- * Inspired by Proj4php from Mike Adair madairATdmsolutions.ca
+ * Inspired by ProjFourphp from Mike Adair madairATdmsolutions.ca
  *                      and Richard Greenwood rich@greenwoodma$p->com 
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
@@ -30,8 +30,8 @@
 //<2104> +proj=lcc +lat_1=10.16666666666667 +lat_0=10.16666666666667 +lon_0=-71.60561777777777 +k_0=1 +xZero=-17044 +xZero=-23139.97 +ellps=intl +units=m +no_defs  no_defs
 // Initialize the Lambert Conformal conic projection
 // -----------------------------------------------------------------
-//class Proj4phpProjlcc = Class.create();
-class Proj4php_ProjLcc
+//class ProjFourphpProjlcc = Class.create();
+class ProjFourphp_ProjLcc
 {
 
     public function init()
@@ -55,8 +55,8 @@ class Proj4php_ProjLcc
             $this->kZero = 1.0;
 
         // Standard Parallels cannot be equal and on opposite sides of the equator
-        if (abs($this->latOne + $this->latTwo) < Proj4php_Common::$epsln) {
-            Proj4php::reportError("lcc:init: Equal Latitudes");
+        if (abs($this->latOne + $this->latTwo) < ProjFourphp_Common::$epsln) {
+            ProjFourphp::reportError("lcc:init: Equal Latitudes");
             return;
         }
 
@@ -65,17 +65,17 @@ class Proj4php_ProjLcc
 
         $sin1 = sin($this->latOne);
         $cos1 = cos($this->latOne);
-        $msOne = Proj4php::$common->msfnz($this->e, $sin1, $cos1);
-        $ts1 = Proj4php::$common->tsfnz($this->e, $this->latOne, $sin1);
+        $msOne = ProjFourphp::$common->msfnz($this->e, $sin1, $cos1);
+        $ts1 = ProjFourphp::$common->tsfnz($this->e, $this->latOne, $sin1);
 
         $sin2 = sin($this->latTwo);
         $cos2 = cos($this->latTwo);
-        $msTwo = Proj4php::$common->msfnz($this->e, $sin2, $cos2);
-        $ts2 = Proj4php::$common->tsfnz($this->e, $this->latTwo, $sin2);
+        $msTwo = ProjFourphp::$common->msfnz($this->e, $sin2, $cos2);
+        $ts2 = ProjFourphp::$common->tsfnz($this->e, $this->latTwo, $sin2);
 
-        $tsZero = Proj4php::$common->tsfnz($this->e, $this->latZero, sin($this->latZero));
+        $tsZero = ProjFourphp::$common->tsfnz($this->e, $this->latZero, sin($this->latZero));
 
-        if (abs($this->latOne - $this->latTwo) > Proj4php_Common::$epsln) {
+        if (abs($this->latOne - $this->latTwo) > ProjFourphp_Common::$epsln) {
             $this->ns = log($msOne / $msTwo) / log($ts1 / $ts2);
         } else {
             $this->ns = $sin1;
@@ -97,28 +97,28 @@ class Proj4php_ProjLcc
 
         // convert to radians
         if ($lat <= 90.0 && $lat >= -90.0 && $lon <= 180.0 && $lon >= -180.0) {
-            //lon = lon * Proj4php::$common.D2R;
-            //lat = lat * Proj4php::$common.D2R;
+            //lon = lon * ProjFourphp::$common.D2R;
+            //lat = lat * ProjFourphp::$common.D2R;
         } else {
-            Proj4php::reportError("lcc:forward: llInputOutOfRange: " . $lon . " : " . $lat);
+            ProjFourphp::reportError("lcc:forward: llInputOutOfRange: " . $lon . " : " . $lat);
             return null;
         }
 
-        $con = abs(abs($lat) - Proj4php_Common::$halfPi);
+        $con = abs(abs($lat) - ProjFourphp_Common::$halfPi);
 
-        if ($con > Proj4php_Common::$epsln) {
-            $ts = Proj4php::$common->tsfnz($this->e, $lat, sin($lat));
+        if ($con > ProjFourphp_Common::$epsln) {
+            $ts = ProjFourphp::$common->tsfnz($this->e, $lat, sin($lat));
             $rhOne = $this->a * $this->f0 * pow($ts, $this->ns);
         } else {
             $con = $lat * $this->ns;
             if ($con <= 0) {
-                Proj4php::reportError("lcc:forward: No Projection");
+                ProjFourphp::reportError("lcc:forward: No Projection");
                 return null;
             }
             $rhOne = 0;
         }
 
-        $theta = $this->ns * Proj4php_Common::adjustLon($lon - $this->longZero);
+        $theta = $this->ns * ProjFourphp_Common::adjustLon($lon - $this->longZero);
         $p->x = $this->kZero * ($rhOne * sin($theta)) + $this->xZero;
         $p->y = $this->kZero * ($this->rh - $rhOne * cos($theta)) + $this->yZero;
 
@@ -150,13 +150,13 @@ class Proj4php_ProjLcc
         if (($rhOne != 0) || ($this->ns > 0.0)) {
             $con = 1.0 / $this->ns;
             $ts = pow(($rhOne / ($this->a * $this->f0)), $con);
-            $lat = Proj4php::$common->phi2z($this->e, $ts);
+            $lat = ProjFourphp::$common->phi2z($this->e, $ts);
             if ($lat == -9999)
                 return null;
         } else {
-            $lat = -Proj4php_Common::$halfPi;
+            $lat = -ProjFourphp_Common::$halfPi;
         }
-        $lon = Proj4php_Common::adjustLon($theta / $this->ns + $this->longZero);
+        $lon = ProjFourphp_Common::adjustLon($theta / $this->ns + $this->longZero);
 
         $p->x = $lon;
         $p->y = $lat;
@@ -166,6 +166,6 @@ class Proj4php_ProjLcc
 
 }
 
-Proj4php::$proj['lcc'] = new Proj4php_ProjLcc();
+ProjFourphp::$proj['lcc'] = new ProjFourphp_ProjLcc();
 
 

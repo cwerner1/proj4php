@@ -3,11 +3,11 @@
 /**
  * Author : Julien Moquet
  * 
- * Inspired by Proj4php from Mike Adair madairATdmsolutions.ca
+ * Inspired by ProjFourphp from Mike Adair madairATdmsolutions.ca
  *                      and Richard Greenwood rich@greenwoodma$p->com 
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
-class Proj4php_ProjGauss
+class ProjFourphp_ProjGauss
 {
 
     /**
@@ -23,7 +23,7 @@ class Proj4php_ProjGauss
         $this->C = sqrt(1.0 + $this->es * $cphi * $cphi / (1.0 - $this->es));
         $this->phic0 = asin($sphi / $this->C);
         $this->ratexp = 0.5 * $this->C * $this->e;
-        $this->K = tan(0.5 * $this->phic0 + Proj4php::$common->fortPi) / (pow(tan(0.5 * $this->latZero + Proj4php::$common->fortPi), $this->C) * Proj4php::$common->srat($this->e * $sphi, $this->ratexp));
+        $this->K = tan(0.5 * $this->phic0 + ProjFourphp::$common->fortPi) / (pow(tan(0.5 * $this->latZero + ProjFourphp::$common->fortPi), $this->C) * ProjFourphp::$common->srat($this->e * $sphi, $this->ratexp));
     }
 
     /**
@@ -36,7 +36,7 @@ class Proj4php_ProjGauss
         $lon = $p->x;
         $lat = $p->y;
 
-        $p->y = 2.0 * atan($this->K * pow(tan(0.5 * $lat + Proj4php::$common->fortPi), $this->C) * Proj4php::$common->srat($this->e * sin($lat), $this->ratexp)) - Proj4php_Common::$halfPi;
+        $p->y = 2.0 * atan($this->K * pow(tan(0.5 * $lat + ProjFourphp::$common->fortPi), $this->C) * ProjFourphp::$common->srat($this->e * sin($lat), $this->ratexp)) - ProjFourphp_Common::$halfPi;
         $p->x = $this->C * $lon;
 
         return $p;
@@ -53,10 +53,10 @@ class Proj4php_ProjGauss
         $DEL_TOL = 1e-14;
         $lon = $p->x / $this->C;
         $lat = $p->y;
-        $num = pow(tan(0.5 * $lat + Proj4php::$common . FORTPI) / $this->K, 1. / $this->C);
+        $num = pow(tan(0.5 * $lat + ProjFourphp::$common . FORTPI) / $this->K, 1. / $this->C);
 
-        for ($i = Proj4php::$common . MAX_ITER; $i > 0; --$i) {
-            $lat = 2.0 * atan($num * Proj4php::$common->srat($this->e * sin($p->y), -0.5 * $this->e)) - Proj4php_Common::$halfPi;
+        for ($i = ProjFourphp::$common . MAX_ITER; $i > 0; --$i) {
+            $lat = 2.0 * atan($num * ProjFourphp::$common->srat($this->e * sin($p->y), -0.5 * $this->e)) - ProjFourphp_Common::$halfPi;
             if (abs($lat - $p->y) < $DEL_TOL)
                 break;
             $p->y = $lat;
@@ -64,7 +64,7 @@ class Proj4php_ProjGauss
 
         /* convergence failed */
         if (!$i) {
-            Proj4php::reportError("gauss:inverse:convergence failed");
+            ProjFourphp::reportError("gauss:inverse:convergence failed");
             return null;
         }
 
@@ -76,4 +76,4 @@ class Proj4php_ProjGauss
 
 }
 
-Proj4php::$proj['gauss'] = new Proj4php_ProjGauss();
+ProjFourphp::$proj['gauss'] = new ProjFourphp_ProjGauss();

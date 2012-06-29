@@ -22,7 +22,7 @@
   y_0 = False Northing of the centre of the projection at the apex of the cone
 
  * */
-class Proj4php_ProjKrovak
+class ProjFourphp_ProjKrovak
 {
 
     /**
@@ -79,7 +79,7 @@ class Proj4php_ProjKrovak
 
         $lon = $p->x;
         $lat = $p->y;
-        $deltaLon = Proj4php_Common::adjustLon($lon - $this->longZero); // Delta longitude
+        $deltaLon = ProjFourphp_Common::adjustLon($lon - $this->longZero); // Delta longitude
 
         /* Transformation */
         $gfi = pow(((1. + $this->e * sin($lat)) / (1. - $this->e * sin($lat))), ($this->alfa * $this->e / 2.));
@@ -147,7 +147,7 @@ class Proj4php_ProjKrovak
         } while ($ok == 0 && $iter < 15);
 
         if ($iter >= 15) {
-            Proj4php::reportError("PHI3Z-CONV:Latitude failed to converge after 15 iterations");
+            ProjFourphp::reportError("PHI3Z-CONV:Latitude failed to converge after 15 iterations");
             //console.log('iter:', iter);
             return null;
         }
@@ -157,4 +157,4 @@ class Proj4php_ProjKrovak
 
 }
 
-Proj4php::$proj['krovak'] = new Proj4php_ProjKrovak();
+ProjFourphp::$proj['krovak'] = new ProjFourphp_ProjKrovak();

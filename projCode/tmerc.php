@@ -3,7 +3,7 @@
 /**
  * Author : Julien Moquet
  * 
- * Inspired by Proj4php from Mike Adair madairATdmsolutions.ca
+ * Inspired by ProjFourphp from Mike Adair madairATdmsolutions.ca
  *                      and Richard Greenwood rich@greenwoodma$p->com 
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
@@ -29,7 +29,7 @@
 /**
   Initialize Transverse Mercator projection
  */
-class Proj4php_ProjTmerc
+class ProjFourphp_ProjTmerc
 {
 
     private $e0, $e1, $e2, $e3, $mlZero;
@@ -40,11 +40,11 @@ class Proj4php_ProjTmerc
     public function init()
     {
 
-        $this->e0 = Proj4php::$common->e0fn($this->es);
-        $this->e1 = Proj4php::$common->e1fn($this->es);
-        $this->e2 = Proj4php::$common->e2fn($this->es);
-        $this->e3 = Proj4php::$common->e3fn($this->es);
-        $this->mlZero = $this->a * Proj4php::$common->mlfn($this->e0, $this->e1, $this->e2, $this->e3, $this->latZero);
+        $this->e0 = ProjFourphp::$common->e0fn($this->es);
+        $this->e1 = ProjFourphp::$common->e1fn($this->es);
+        $this->e2 = ProjFourphp::$common->e2fn($this->es);
+        $this->e3 = ProjFourphp::$common->e3fn($this->es);
+        $this->mlZero = $this->a * ProjFourphp::$common->mlfn($this->e0, $this->e1, $this->e2, $this->e3, $this->latZero);
     }
 
     /**
@@ -57,7 +57,7 @@ class Proj4php_ProjTmerc
         $lon = $p->x;
         $lat = $p->y;
 
-        $deltaLon = Proj4php_Common::adjustLon($lon - $this->longZero); // Delta longitude
+        $deltaLon = ProjFourphp_Common::adjustLon($lon - $this->longZero); // Delta longitude
         #$con = 0;    // cone constant
         #$x = 0;
         #$y = 0;
@@ -67,7 +67,7 @@ class Proj4php_ProjTmerc
         if (isset($this->sphere) && $this->sphere === true) { /* spherical form */
             $b = $cosPhi * sin($deltaLon);
             if ((abs(abs($b) - 1.0)) < .0000000001) {
-                Proj4php::reportError("tmerc:forward: Point projects into infinity");
+                ProjFourphp::reportError("tmerc:forward: Point projects into infinity");
                 return(93);
             } else {
                 $x = .5 * $this->a * $this->kZero * log((1.0 + $b) / (1.0 - $b));
@@ -85,7 +85,7 @@ class Proj4php_ProjTmerc
             $con = 1.0 - $this->es * pow($sinPhi, 2);
             $n = $this->a / sqrt($con);
 
-            $ml = $this->a * Proj4php::$common->mlfn($this->e0, $this->e1, $this->e2, $this->e3, $lat);
+            $ml = $this->a * ProjFourphp::$common->mlfn($this->e0, $this->e1, $this->e2, $this->e3, $lat);
 
             $x = $this->kZero * $n * $al * (1.0 + $als / 6.0 * (1.0 - $t + $c + $als / 20.0 * (5.0 - 18.0 * $t + pow($t, 2) + 72.0 * $c - 58.0 * $this->ep2))) + $this->xZero;
             $y = $this->kZero * ($ml - $this->mlZero + $n * $tq * ($als * (0.5 + $als / 24.0 * (5.0 - $t + 9.0 * $c + 4.0 * pow($c, 2) + $als / 30.0 * (61.0 - 58.0 * $t + pow($t, 2) + 600.0 * $c - 330.0 * $this->ep2))))) + $this->yZero;
@@ -113,13 +113,13 @@ class Proj4php_ProjTmerc
             $temp = $this->latZero + $p->y / ($this->a * $this->kZero);
             $h = cos($temp);
             $con = sqrt((1.0 - $h * $h) / (1.0 + $g * $g));
-            $lat = Proj4php_Common::asinz($con);
+            $lat = ProjFourphp_Common::asinz($con);
             if ($temp < 0)
                 $lat = -$lat;
             if (($g == 0) && ($h == 0)) {
                 $lon = $this->longZero;
             } else {
-                $lon = Proj4php_Common::adjustLon(atan2($g, $h) + $this->longZero);
+                $lon = ProjFourphp_Common::adjustLon(atan2($g, $h) + $this->longZero);
             }
         } else {    // ellipsoidal form
             $x = $p->x - $this->xZero;
@@ -131,14 +131,14 @@ class Proj4php_ProjTmerc
             for ($i = 0; true; $i++) {
                 $deltaPhi = (($con + $this->e1 * sin(2.0 * $phi) - $this->e2 * sin(4.0 * $phi) + $this->e3 * sin(6.0 * $phi)) / $this->e0) - $phi;
                 $phi += $deltaPhi;
-                if (abs($deltaPhi) <= Proj4php_Common::$epsln)
+                if (abs($deltaPhi) <= ProjFourphp_Common::$epsln)
                     break;
                 if ($i >= $maxIter) {
-                    Proj4php::reportError("tmerc:inverse: Latitude failed to converge");
+                    ProjFourphp::reportError("tmerc:inverse: Latitude failed to converge");
                     return(95);
                 }
             } // for()
-            if (abs($phi) < Proj4php_Common::$halfPi) {
+            if (abs($phi) < ProjFourphp_Common::$halfPi) {
                 // sincos(phi, &sin_phi, &cos_phi);
                 $sinPhi = sin($phi);
                 $cosPhi = cos($phi);
@@ -153,9 +153,9 @@ class Proj4php_ProjTmerc
                 $d = $x / ($n * $this->kZero);
                 $ds = pow($d, 2);
                 $lat = $phi - ($n * $tanPhi * $ds / $r) * (0.5 - $ds / 24.0 * (5.0 + 3.0 * $t + 10.0 * $c - 4.0 * $cs - 9.0 * $this->ep2 - $ds / 30.0 * (61.0 + 90.0 * $t + 298.0 * $c + 45.0 * $ts - 252.0 * $this->ep2 - 3.0 * $cs)));
-                $lon = Proj4php_Common::adjustLon($this->longZero + ($d * (1.0 - $ds / 6.0 * (1.0 + 2.0 * $t + $c - $ds / 20.0 * (5.0 - 2.0 * $c + 28.0 * $t - 3.0 * $cs + 8.0 * $this->ep2 + 24.0 * $ts))) / $cosPhi));
+                $lon = ProjFourphp_Common::adjustLon($this->longZero + ($d * (1.0 - $ds / 6.0 * (1.0 + 2.0 * $t + $c - $ds / 20.0 * (5.0 - 2.0 * $c + 28.0 * $t - 3.0 * $cs + 8.0 * $this->ep2 + 24.0 * $ts))) / $cosPhi));
             } else {
-                $lat = Proj4php_Common::$halfPi * Proj4php::$common->sign($y);
+                $lat = ProjFourphp_Common::$halfPi * ProjFourphp::$common->sign($y);
                 $lon = $this->longZero;
             }
         }
@@ -168,4 +168,4 @@ class Proj4php_ProjTmerc
 
 }
 
-Proj4php::$proj['tmerc'] = new Proj4php_ProjTmerc();
+ProjFourphp::$proj['tmerc'] = new ProjFourphp_ProjTmerc();
