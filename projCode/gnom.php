@@ -79,7 +79,7 @@ class Proj4php_ProjGnom
         $g = $this->sin_p14 * $sinphi + $this->cos_p14 * $cosphi * $coslon;
         $ksp = 1.0;
 
-        if ((g > 0) || (abs(g) <= Proj4php::$common->epsln)) {
+        if ((g > 0) || (abs(g) <= Proj4php_common::$epsln)) {
             $x = $this->x0 + $this->a * $ksp * $cosphi * sin($dlon) / $g;
             $y = $this->y0 + $this->a * $ksp * ($this->cos_p14 * $sinphi - $this->sin_p14 * $cosphi * $coslon) / $g;
         } else {
@@ -133,7 +133,7 @@ class Proj4php_ProjGnom
             $sinc = sin($c);
             $cosc = cos($c);
 
-            $lat = Proj4php::$common->asinz($cosc * $this->sin_p14 + ($p->y * $sinc * $this->cos_p14) / $rh);
+            $lat = Proj4php_common::asinz($cosc * $this->sin_p14 + ($p->y * $sinc * $this->cos_p14) / $rh);
             $lon = atan2($p->x * sinc, rh * $this->cos_p14 * $cosc - $p->y * $this->sin_p14 * $sinc);
             $lon =  Proj4php_common::adjustLon($this->long0 + $lon);
         } else {

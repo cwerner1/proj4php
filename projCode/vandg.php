@@ -63,12 +63,12 @@ class Proj4php_ProjVandg
         $x;
         $y;
 
-        if (abs($lat) <= Proj4php::$common->epsln) {
+        if (abs($lat) <= Proj4php_common::$epsln) {
             $x = $this->x0 + $this->R * $dlon;
             $y = $this->y0;
         }
         $theta = Proj4php::$common . asinz(2.0 * abs($lat / Proj4php::$common->pi));
-        if ((abs($dlon) <= Proj4php::$common->epsln) || (abs(abs($lat) - Proj4php::$common->halfPi) <= Proj4php::$common->epsln)) {
+        if ((abs($dlon) <= Proj4php_common::$epsln) || (abs(abs($lat) - Proj4php_common::$halfPi) <= Proj4php_common::$epsln)) {
             $x = $this->x0;
             if ($lat >= 0) {
                 $y = $this->y0 + Proj4php::$common->pi * $this->R * tan(.5 * $theta);
@@ -156,7 +156,7 @@ class Proj4php_ProjVandg
             $lat = -(-m1 * cos($th1 + Proj4php::$common->pi / 3.0) - $c2 / 3.0 / $c3) * Proj4php::$common->pi;
         }
 
-        if (abs($xx) < Proj4php::$common->epsln) {
+        if (abs($xx) < Proj4php_common::$epsln) {
             $lon = $this->$long0;
         }
         $lon = Proj4php_common::adjustLon($this->long0 + Proj4php::$common->pi * ($xys - 1.0 + sqrt(1.0 + 2.0 * ($xx * $xx - $yy * $yy) + $xys * $xys)) / 2.0 / $xx);

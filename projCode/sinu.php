@@ -77,7 +77,7 @@ class Proj4php_ProjSinu
                 for ($i = Proj4php::$common->maxIter; $i; --$i) {
                     $V = ($this->m * $lat + sin($lat) - $k) / ($this->m + cos($lat));
                     $lat -= $V;
-                    if (abs($V) < Proj4php::$common->epsln)
+                    if (abs($V) < Proj4php_common::$epsln)
                         break;
                 }
             }
@@ -123,12 +123,12 @@ class Proj4php_ProjSinu
             $lat = Proj4php::$common->pjInvMlfn($p->y / $this->a, $this->es, $this->en);
             $s = abs($lat);
 
-            if ($s < Proj4php::$common->halfPi) {
+            if ($s < Proj4php_common::$halfPi) {
                 $s = sin($lat);
                 $temp = $this->long0 + $p->x * sqrt(1. - $this->es * $s * $s) / ($this->a * cos($lat));
                 //temp = $this->long0 + $p->x / ($this->a * cos($lat));
                 $lon = Proj4php_common::adjustLon($temp);
-            } else if (($s - Proj4php::$common->epsln) < Proj4php::$common->halfPi) {
+            } else if (($s - Proj4php_common::$epsln) < Proj4php_common::$halfPi) {
                 $lon = $this->long0;
             }
         }

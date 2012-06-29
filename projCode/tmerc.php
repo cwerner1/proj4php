@@ -113,7 +113,7 @@ class Proj4php_ProjTmerc
             $temp = $this->lat0 + $p->y / ($this->a * $this->k0);
             $h = cos($temp);
             $con = sqrt((1.0 - $h * $h) / (1.0 + $g * $g));
-            $lat = Proj4php::$common->asinz($con);
+            $lat = Proj4php_common::asinz($con);
             if ($temp < 0)
                 $lat = -$lat;
             if (($g == 0) && ($h == 0)) {
@@ -131,14 +131,14 @@ class Proj4php_ProjTmerc
             for ($i = 0; true; $i++) {
                 $deltaPhi = (($con + $this->e1 * sin(2.0 * $phi) - $this->e2 * sin(4.0 * $phi) + $this->e3 * sin(6.0 * $phi)) / $this->e0) - $phi;
                 $phi += $deltaPhi;
-                if (abs($deltaPhi) <= Proj4php::$common->epsln)
+                if (abs($deltaPhi) <= Proj4php_common::$epsln)
                     break;
                 if ($i >= $maxIter) {
                     Proj4php::reportError("tmerc:inverse: Latitude failed to converge");
                     return(95);
                 }
             } // for()
-            if (abs($phi) < Proj4php::$common->halfPi) {
+            if (abs($phi) < Proj4php_common::$halfPi) {
                 // sincos(phi, &sin_phi, &cos_phi);
                 $sinPhi = sin($phi);
                 $cosPhi = cos($phi);
@@ -155,7 +155,7 @@ class Proj4php_ProjTmerc
                 $lat = $phi - ($n * $tanPhi * $ds / $r) * (0.5 - $ds / 24.0 * (5.0 + 3.0 * $t + 10.0 * $c - 4.0 * $cs - 9.0 * $this->ep2 - $ds / 30.0 * (61.0 + 90.0 * $t + 298.0 * $c + 45.0 * $ts - 252.0 * $this->ep2 - 3.0 * $cs)));
                 $lon = Proj4php_common::adjustLon($this->long0 + ($d * (1.0 - $ds / 6.0 * (1.0 + 2.0 * $t + $c - $ds / 20.0 * (5.0 - 2.0 * $c + 28.0 * $t - 3.0 * $cs + 8.0 * $this->ep2 + 24.0 * $ts))) / $cosPhi));
             } else {
-                $lat = Proj4php::$common->halfPi * Proj4php::$common->sign($y);
+                $lat = Proj4php_common::$halfPi * Proj4php::$common->sign($y);
                 $lon = $this->long0;
             }
         }

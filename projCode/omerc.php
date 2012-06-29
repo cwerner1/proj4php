@@ -64,7 +64,7 @@ class Proj4php_ProjOmerc
         $this->com = sqrt(1.0 - $es);
         $this->bl = sqrt(1.0 + $this->es * pow($this->cosP20, 4.0) / (1.0 - $es));
         $this->al = $this->a * $this->bl * $this->k0 * $this->com / $this->con;
-        if (abs($this->lat0) < Proj4php::$common->epsln) {
+        if (abs($this->lat0) < Proj4php_common::$epsln) {
             $this->ts = 1.0;
             $this->d = 1.0;
             $this->el = 1.0;
@@ -88,8 +88,8 @@ class Proj4php_ProjOmerc
 
         if ($this->mode != 0) {
             $this->g = .5 * ($this->f - 1.0 / $this->f);
-            $this->gama = Proj4php::$common->asinz(sin($this->alpha) / $this->d);
-            $this->longc = $this->longc - Proj4php::$common->asinz($this->g * tan($this->gama)) / $this->bl;
+            $this->gama = Proj4php_common::asinz(sin($this->alpha) / $this->d);
+            $this->longc = $this->longc - Proj4php_common::asinz($this->g * tan($this->gama)) / $this->bl;
 
             /* Report parameters common to format B
               ------------------------------------- */
@@ -98,7 +98,7 @@ class Proj4php_ProjOmerc
             // cenlat(lat_origin);
 
             $this->con = abs($this->lat0);
-            if (($this->con > Proj4php::$common->epsln) && (abs($this->con - Proj4php::$common->halfPi) > Proj4php::$common->epsln)) {
+            if (($this->con > Proj4php_common::$epsln) && (abs($this->con - Proj4php_common::$halfPi) > Proj4php_common::$epsln)) {
                 $this->singam = sin($this->gama);
                 $this->cosgam = cos($this->gama);
 
@@ -133,21 +133,21 @@ class Proj4php_ProjOmerc
             $this->longc = .5 * ($this->lon1 + $this->lon2) - atan($this->j * tan(.5 * $this->bl * $this->dlon) / $this->p) / $this->bl;
             $this->dlon = Proj4php_common::adjustLon($this->lon1 - $this->longc);
             $this->gama = atan(sin($this->bl * $this->dlon) / $this->g);
-            $this->alpha = Proj4php::$common->asinz($this->d * sin($this->gama));
+            $this->alpha = Proj4php_common::asinz($this->d * sin($this->gama));
 
             /* Report parameters common to format A
               ------------------------------------- */
-            if (abs($this->lat1 - $this->lat2) <= Proj4php::$common->epsln) {
+            if (abs($this->lat1 - $this->lat2) <= Proj4php_common::$epsln) {
                 Proj4php::reportError("omercInitDataError");
                 //return(202);
             } else {
                 $this->con = abs($this->lat1);
             }
-            if (($this->con <= Proj4php::$common->epsln) || (abs($this->con - Proj4php::$common->halfPi) <= Proj4php::$common->epsln)) {
+            if (($this->con <= Proj4php_common::$epsln) || (abs($this->con - Proj4php_common::$halfPi) <= Proj4php_common::$epsln)) {
                 Proj4php::reportError("omercInitDataError");
                 //return(202);
             } else {
-                if (abs(abs($this->lat0) - Proj4php::$common->halfPi) <= Proj4php::$common->epsln) {
+                if (abs(abs($this->lat0) - Proj4php_common::$halfPi) <= Proj4php_common::$epsln) {
                     Proj4php::reportError("omercInitDataError");
                     //return(202);
                 }
@@ -203,7 +203,7 @@ class Proj4php_ProjOmerc
         $sin_phi = sin($lat);
         $dlon = Proj4php_common::adjustLon($lon - $this->longc);
         $vl = sin($this->bl * $dlon);
-        if (abs(abs($lat) - Proj4php::$common->halfPi) > Proj4php::$common->epsln) {
+        if (abs(abs($lat) - Proj4php_common::$halfPi) > Proj4php_common::$epsln) {
             $ts1 = Proj4php::$common->tsfnz($this->e, $lat, $sin_phi);
             $q = $this->el / (pow($ts1, $this->bl));
             $s = .5 * ($q - 1.0 / $q);
@@ -225,7 +225,7 @@ class Proj4php_ProjOmerc
             }
             $us = $this->al * $lat / $this->bl;
         }
-        if (abs(abs($ul) - 1.0) <= Proj4php::$common->epsln) {
+        if (abs(abs($ul) - 1.0) <= Proj4php_common::$epsln) {
             //alert("Point projects into infinity","omer-for");
             Proj4php::reportError("omercFwdInfinity");
             //return(205);
@@ -283,12 +283,12 @@ class Proj4php_ProjOmerc
         $t = .5 * ($q + 1.0 / $q);
         $vl = sin($this->bl * $us / $this->al);
         $ul = ($vl * $this->cosgam + $s * $this->singam) / $t;
-        if (abs(abs($ul) - 1.0) <= Proj4php::$common->epsln) {
+        if (abs(abs($ul) - 1.0) <= Proj4php_common::$epsln) {
             $lon = $this->longc;
             if (ul >= 0.0) {
-                $lat = Proj4php::$common->halfPi;
+                $lat = Proj4php_common::$halfPi;
             } else {
-                $lat = -Proj4php::$common->halfPi;
+                $lat = -Proj4php_common::$halfPi;
             }
         } else {
             $con = 1.0 / $this->bl;

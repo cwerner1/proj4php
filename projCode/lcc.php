@@ -55,7 +55,7 @@ class Proj4php_ProjLcc
             $this->k0 = 1.0;
 
         // Standard Parallels cannot be equal and on opposite sides of the equator
-        if (abs($this->lat1 + $this->lat2) < Proj4php::$common->epsln) {
+        if (abs($this->lat1 + $this->lat2) < Proj4php_common::$epsln) {
             Proj4php::reportError("lcc:init: Equal Latitudes");
             return;
         }
@@ -75,7 +75,7 @@ class Proj4php_ProjLcc
 
         $ts0 = Proj4php::$common->tsfnz($this->e, $this->lat0, sin($this->lat0));
 
-        if (abs($this->lat1 - $this->lat2) > Proj4php::$common->epsln) {
+        if (abs($this->lat1 - $this->lat2) > Proj4php_common::$epsln) {
             $this->ns = log($ms1 / $ms2) / log($ts1 / $ts2);
         } else {
             $this->ns = $sin1;
@@ -104,9 +104,9 @@ class Proj4php_ProjLcc
             return null;
         }
 
-        $con = abs(abs($lat) - Proj4php::$common->halfPi);
+        $con = abs(abs($lat) - Proj4php_common::$halfPi);
 
-        if ($con > Proj4php::$common->epsln) {
+        if ($con > Proj4php_common::$epsln) {
             $ts = Proj4php::$common->tsfnz($this->e, $lat, sin($lat));
             $rh1 = $this->a * $this->f0 * pow($ts, $this->ns);
         } else {
@@ -154,7 +154,7 @@ class Proj4php_ProjLcc
             if ($lat == -9999)
                 return null;
         } else {
-            $lat = -Proj4php::$common->halfPi;
+            $lat = -Proj4php_common::$halfPi;
         }
         $lon = Proj4php_common::adjustLon($theta / $this->ns + $this->long0);
 

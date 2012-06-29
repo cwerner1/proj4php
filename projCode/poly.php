@@ -187,7 +187,7 @@ class Proj4php_ProjPoly
             $iflg = phi4z($this->es, $this->e0, $this->e1, $this->e2, $this->e3, $this->al, $b, $c, $lat);
             if ($iflg != 1)
                 return($iflg);
-            $lon = Proj4php_common::adjustLon((Proj4php::$common->asinz($p->x * $c / $this->a) / sin($lat)) + $this->long0);
+            $lon = Proj4php_common::adjustLon((Proj4php_common::asinz($p->x * $c / $this->a) / sin($lat)) + $this->long0);
         }
 
         $p->x = $lon;
