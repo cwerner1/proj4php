@@ -63,16 +63,16 @@ class Proj4php_ProjCea
 
         /* Forward equations
           ----------------- */
-        $dlon =  Proj4php_Common::adjustLon($lon - $this->long0);
-        $x = $this->x0 + $this->a * $dlon * cos($this->lat_ts);
-        $y = $this->y0 + $this->a * sin($lat) / cos($this->lat_ts);
+        $dlon =  Proj4php_Common::adjustLon($lon - $this->longZero);
+        $x = $this->xZero + $this->a * $dlon * cos($this->latTs);
+        $y = $this->yZero + $this->a * sin($lat) / cos($this->latTs);
         /* Elliptical Forward Transform
           Not implemented due to a lack of a matchign inverse function
           {
           $Sin_Lat = sin(lat);
           $Rn = $this->a * (sqrt(1.0e0 - $this->es * Sin_Lat * Sin_Lat ));
-          x = $this->x0 + $this->a * dlon * cos($this->lat_ts);
-          y = $this->y0 + Rn * sin(lat) / cos($this->lat_ts);
+          x = $this->xZero + $this->a * dlon * cos($this->latTs);
+          y = $this->yZero + Rn * sin(lat) / cos($this->latTs);
           }
          */
 
@@ -90,11 +90,11 @@ class Proj4php_ProjCea
      */
     public function inverse($p)
     {
-        $p->x -= $this->x0;
-        $p->y -= $this->y0;
+        $p->x -= $this->xZero;
+        $p->y -= $this->yZero;
 
-        $p->x =  Proj4php_Common::adjustLon($this->long0 + ($p->x / $this->a) / cos($this->lat_ts));
-        $p->y = asin(($p->y / $this->a) * cos($this->lat_ts));
+        $p->x =  Proj4php_Common::adjustLon($this->longZero + ($p->x / $this->a) / cos($this->latTs));
+        $p->y = asin(($p->y / $this->a) * cos($this->latTs));
 
         return $p;
     }

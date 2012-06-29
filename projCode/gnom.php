@@ -43,8 +43,8 @@ class Proj4php_ProjGnom
 
         /* Place parameters in static storage for common use
           ------------------------------------------------- */
-        $this->sin_p14 = sin($this->lat0);
-        $this->cos_p14 = cos($this->lat0);
+        $this->sin_p14 = sin($this->latZero);
+        $this->cos_p14 = cos($this->latZero);
 
         // Approximation for projecting points to the horizon (infinity)
         $this->infinity_dist = 1000 * $this->a;
@@ -70,7 +70,7 @@ class Proj4php_ProjGnom
         $lat = $p->y;
         /* Forward equations
           ----------------- */
-        $dlon =  Proj4php_Common::adjustLon($lon - $this->long0);
+        $dlon =  Proj4php_Common::adjustLon($lon - $this->longZero);
 
         $sinphi = sin($lat);
         $cosphi = cos($lat);
@@ -80,8 +80,8 @@ class Proj4php_ProjGnom
         $ksp = 1.0;
 
         if ((g > 0) || (abs(g) <= Proj4php_Common::$epsln)) {
-            $x = $this->x0 + $this->a * $ksp * $cosphi * sin($dlon) / $g;
-            $y = $this->y0 + $this->a * $ksp * ($this->cos_p14 * $sinphi - $this->sin_p14 * $cosphi * $coslon) / $g;
+            $x = $this->xZero + $this->a * $ksp * $cosphi * sin($dlon) / $g;
+            $y = $this->yZero + $this->a * $ksp * ($this->cos_p14 * $sinphi - $this->sin_p14 * $cosphi * $coslon) / $g;
         } else {
             Proj4php::reportError("orthoFwdPointError");
 
@@ -92,8 +92,8 @@ class Proj4php_ProjGnom
             // This is a reasonable approximation for short shapes and lines that 
             // straddle the horizon.
 
-            $x = $this->x0 + $this->infinity_dist * $cosphi * sin($dlon);
-            $y = $this->y0 + $this->infinity_dist * ($this->cos_p14 * $sinphi - $this->sin_p14 * $cosphi * $coslon);
+            $x = $this->xZero + $this->infinity_dist * $cosphi * sin($dlon);
+            $y = $this->yZero + $this->infinity_dist * ($this->cos_p14 * $sinphi - $this->sin_p14 * $cosphi * $coslon);
         }
 
         $p->x = $x;
@@ -122,11 +122,11 @@ class Proj4php_ProjGnom
 
         /* Inverse equations
           ----------------- */
-        $p->x = ($p->x - $this->x0) / $this->a;
-        $p->y = ($p->y - $this->y0) / $this->a;
+        $p->x = ($p->x - $this->xZero) / $this->a;
+        $p->y = ($p->y - $this->yZero) / $this->a;
 
-        $p->x /= $this->k0;
-        $p->y /= $this->k0;
+        $p->x /= $this->kZero;
+        $p->y /= $this->kZero;
 
         if (($rh = sqrt($p->x * $p->x + $p->y * $p->y))) {
             $c = atan2($rh, $this->rc);
@@ -135,7 +135,7 @@ class Proj4php_ProjGnom
 
             $lat = Proj4php_Common::asinz($cosc * $this->sin_p14 + ($p->y * $sinc * $this->cos_p14) / $rh);
             $lon = atan2($p->x * sinc, rh * $this->cos_p14 * $cosc - $p->y * $this->sin_p14 * $sinc);
-            $lon =  Proj4php_Common::adjustLon($this->long0 + $lon);
+            $lon =  Proj4php_Common::adjustLon($this->longZero + $lon);
         } else {
             $lat = $this->phic0;
             $lon = 0.0;

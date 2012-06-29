@@ -16,14 +16,14 @@ class Proj4php_ProjGauss
     public function init()
     {
 
-        $sphi = sin($this->lat0);
-        $cphi = cos($this->lat0);
+        $sphi = sin($this->latZero);
+        $cphi = cos($this->latZero);
         $cphi *= $cphi;
         $this->rc = sqrt(1.0 - $this->es) / (1.0 - $this->es * $sphi * $sphi);
         $this->C = sqrt(1.0 + $this->es * $cphi * $cphi / (1.0 - $this->es));
         $this->phic0 = asin($sphi / $this->C);
         $this->ratexp = 0.5 * $this->C * $this->e;
-        $this->K = tan(0.5 * $this->phic0 + Proj4php::$common->fortPi) / (pow(tan(0.5 * $this->lat0 + Proj4php::$common->fortPi), $this->C) * Proj4php::$common->srat($this->e * $sphi, $this->ratexp));
+        $this->K = tan(0.5 * $this->phic0 + Proj4php::$common->fortPi) / (pow(tan(0.5 * $this->latZero + Proj4php::$common->fortPi), $this->C) * Proj4php::$common->srat($this->e * $sphi, $this->ratexp));
     }
 
     /**

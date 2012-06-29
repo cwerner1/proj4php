@@ -80,7 +80,7 @@ class Proj4php_ProjEqdc
             $this->ns = $this->sinphi;
         }
         $this->g = $this->ml1 + $this->ms1 / $this->ns;
-        $this->ml0 = Proj4php::$common->mlfn($this->e0, $this->e1, $this->e2, $this->e3, $this->lat0);
+        $this->ml0 = Proj4php::$common->mlfn($this->e0, $this->e1, $this->e2, $this->e3, $this->latZero);
         $this->rh = $this->a * ($this->g - $this->ml0);
     }
 
@@ -96,10 +96,10 @@ class Proj4php_ProjEqdc
           ----------------- */
         $ml = Proj4php::$common->mlfn($this->e0, $this->e1, $this->e2, $this->e3, $lat);
         $rh1 = $this->a * ($this->g - $ml);
-        $theta = $this->ns *  Proj4php_Common::adjustLon($lon - $this->long0);
+        $theta = $this->ns *  Proj4php_Common::adjustLon($lon - $this->longZero);
 
-        $x = $this->x0 + $rh1 * sin($theta);
-        $y = $this->y0 + $this->rh - $rh1 * cos($theta);
+        $x = $this->xZero + $rh1 * sin($theta);
+        $y = $this->yZero + $this->rh - $rh1 * cos($theta);
         $p->x = $x;
         $p->y = $y;
 
@@ -112,8 +112,8 @@ class Proj4php_ProjEqdc
     public function inverse($p)
     {
 
-        $p->x -= $this->x0;
-        $p->y = $this->rh - $p->y + $this->y0;
+        $p->x -= $this->xZero;
+        $p->y = $this->rh - $p->y + $this->yZero;
 
         if ($this->ns >= 0) {
             $rh1 = sqrt($p->x * $p->x + $p->y * $p->y);
@@ -127,7 +127,7 @@ class Proj4php_ProjEqdc
             $theta = atan2($con * $p->x, $con * $p->y);
         $ml = $this->g - $rh1 / $this->a;
         $lat = $this->phi3z($ml, $this->e0, $this->e1, $this->e2, $this->e3);
-        $lon =  Proj4php_Common::adjustLon($this->long0 + $theta / $this->ns);
+        $lon =  Proj4php_Common::adjustLon($this->longZero + $theta / $this->ns);
 
         $p->x = $lon;
         $p->y = $lat;

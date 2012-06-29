@@ -48,16 +48,16 @@ class Proj4php_Proj
     public $datum = null;
 
     /**
-     * Property: x0
+     * Property: xZero
      * The x coordinate origin
      */
-    public $x0 = 0;
+    public $xZero = 0;
 
     /**
-     * Property: y0
+     * Property: yZero
      * The y coordinate origin
      */
-    public $y0 = 0;
+    public $yZero = 0;
 
     /**
      * Property: localCS
@@ -70,7 +70,7 @@ class Proj4php_Proj
      *
      * @var type 
      */
-    protected $wktRE = '/^(\w+)\[(.*)\]$/';
+    protected $_wktRE = '/^(\w+)\[(.*)\]$/';
 
     /**
      * Constructor: initialize
@@ -349,7 +349,7 @@ class Proj4php_Proj
     public function parseWKT($wkt)
     {
 
-        if (false === ($match = preg_match($this->wktRE, $wkt, $wktMatch)))
+        if (false === ($match = preg_match($this->_wktRE, $wkt, $wktMatch)))
             return;
 
         $wktObject = $wktMatch[1];
@@ -433,19 +433,19 @@ class Proj4php_Proj
                 //statements as required
                 switch ($name) {
                     case 'false_easting':
-                        $this->x0 = $value;
+                        $this->xZero = $value;
                         break;
                     case 'false_northing':
-                        $this->y0 = $value;
+                        $this->yZero = $value;
                         break;
                     case 'scale_factor':
-                        $this->k0 = $value;
+                        $this->kZero = $value;
                         break;
                     case 'central_meridian':
-                        $this->long0 = $value * Proj4php_Common::$dToR;
+                        $this->longZero = $value * Proj4php_Common::$dToR;
                         break;
                     case 'latitude_of_origin':
-                        $this->lat0 = $value * Proj4php_Common::$dToR;
+                        $this->latZero = $value * Proj4php_Common::$dToR;
                         break;
                     case 'more_here':
                         break;
@@ -544,27 +544,27 @@ class Proj4php_Proj
                 // DGR 2007-11-20
                 case "rf": $this->rf = floatval(paramVal);
                     break; // inverse flattening rf= a/(a-b)
-                case "lat_0": $this->lat0 = $paramVal * Proj4php_Common::$dToR;
+                case "lat_0": $this->latZero = $paramVal * Proj4php_Common::$dToR;
                     break;        // phi0, central latitude
                 case "lat_1": $this->lat1 = $paramVal * Proj4php_Common::$dToR;
                     break;        //standard parallel 1
                 case "lat_2": $this->lat2 = $paramVal * Proj4php_Common::$dToR;
                     break;        //standard parallel 2
-                case "lat_ts": $this->lat_ts = $paramVal * Proj4php_Common::$dToR;
+                case "latTs": $this->latTs = $paramVal * Proj4php_Common::$dToR;
                     break;      // used in merc and eqc
-                case "lon_0": $this->long0 = $paramVal * Proj4php_Common::$dToR;
+                case "lon_0": $this->longZero = $paramVal * Proj4php_Common::$dToR;
                     break;       // lam0, central longitude
                 case "alpha": $this->alpha = floatval($paramVal) * Proj4php_Common::$dToR;
                     break;  //for somerc projection
                 case "lonc": $this->longc = paramVal * Proj4php_Common::$dToR;
                     break;       //for somerc projection
-                case "x_0": $this->x0 = floatval($paramVal);
+                case "x_0": $this->xZero = floatval($paramVal);
                     break;  // false easting
-                case "y_0": $this->y0 = floatval($paramVal);
+                case "y_0": $this->yZero = floatval($paramVal);
                     break;  // false northing
-                case "k_0": $this->k0 = floatval($paramVal);
+                case "k_0": $this->kZero = floatval($paramVal);
                     break;  // projection scale factor
-                case "k": $this->k0 = floatval($paramVal);
+                case "k": $this->kZero = floatval($paramVal);
                     break;  // both forms returned
                 case "r_a": $this->R_A = true;
                     break;                 // sphere--area of ellipsoid
@@ -650,8 +650,8 @@ class Proj4php_Proj
             $this->es = 0.0;
         }
         $this->ep2 = ($this->a2 - $this->b2) / $this->b2; // used in geocentric
-        if (!isset($this->k0))
-            $this->k0 = 1.0;    //default value
+        if (!isset($this->kZero))
+            $this->kZero = 1.0;    //default value
 
 
             

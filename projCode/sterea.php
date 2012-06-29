@@ -40,18 +40,18 @@ class Proj4php_ProjSterea
     public function forward($p)
     {
 
-        $p->x = Proj4php_Common::adjustLon($p->x - $this->long0); /* adjust del longitude */
+        $p->x = Proj4php_Common::adjustLon($p->x - $this->longZero); /* adjust del longitude */
         $p = Proj4php::$proj['gauss']->forward($p);
         $sinc = sin($p->y);
         $cosc = cos($p->y);
         $cosl = cos($p->x);
-        $k = $this->k0 * $this->R2 / (1.0 + $this->sinc0 * $sinc + $this->cosc0 * $cosc * $cosl);
+        $k = $this->kZero * $this->R2 / (1.0 + $this->sinc0 * $sinc + $this->cosc0 * $cosc * $cosl);
 
         $p->x = $k * $cosc * sin($p->x);
         $p->y = $k * ($this->cosc0 * sinc - $this->sinc0 * $cosc * $cosl);
 
-        $p->x = $this->a * $p->x + $this->x0;
-        $p->y = $this->a * $p->y + $this->y0;
+        $p->x = $this->a * $p->x + $this->xZero;
+        $p->y = $this->a * $p->y + $this->yZero;
 
         return $p;
     }
@@ -66,11 +66,11 @@ class Proj4php_ProjSterea
 
         #$lon;
         #$lat;
-        $p->x = ($p->x - $this->x0) / $this->a; /* descale and de-offset */
-        $p->y = ($p->y - $this->y0) / $this->a;
+        $p->x = ($p->x - $this->xZero) / $this->a; /* descale and de-offset */
+        $p->y = ($p->y - $this->yZero) / $this->a;
 
-        $p->x /= $this->k0;
-        $p->y /= $this->k0;
+        $p->x /= $this->kZero;
+        $p->y /= $this->kZero;
 
         if (($rho = sqrt($p->x * $p->x + $p->y * $p->y))) {
             $c = 2.0 * atan2($rho, $this->R2);
@@ -86,7 +86,7 @@ class Proj4php_ProjSterea
         $p->x = $lon;
         $p->y = $lat;
         $p = Proj4php::$proj['gauss']->inverse($p);
-        $p->x = Proj4php_Common::adjustLon($p->x + $this->long0); /* adjust longitude to CM */
+        $p->x = Proj4php_Common::adjustLon($p->x + $this->longZero); /* adjust longitude to CM */
 
         return $p;
     }

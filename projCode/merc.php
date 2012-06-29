@@ -34,12 +34,12 @@
 //static double r_major = a;		   /* major axis 				*/
 //static double r_minor = b;		   /* minor axis 				*/
 //static double lon_center = long0;	   /* Center longitude (projection center) */
-//static double lat_origin =  lat0;	   /* center latitude			*/
+//static double lat_origin =  latZero;	   /* center latitude			*/
 //static double e,es;		           /* eccentricity constants		*/
 //static double m1;		               /* small value m			*/
-//static double false_northing = y0;   /* y offset in meters			*/
-//static double false_easting = x0;	   /* x offset in meters			*/
-//scale_fact = k0 
+//static double false_northing = yZero;   /* y offset in meters			*/
+//static double false_easting = xZero;	   /* x offset in meters			*/
+//scale_fact = kZero 
 
 class Proj4php_ProjMerc
 {
@@ -52,11 +52,11 @@ class Proj4php_ProjMerc
         //$this->e = sqrt( $this->es );
         //?$this->m1 = cos($this->lat_origin) / (sqrt( 1.0 - $this->es * sin($this->lat_origin) * sin($this->lat_origin)));
         //$this->m1 = cos(0.0) / (sqrt( 1.0 - $this->es * sin(0.0) * sin(0.0)));
-        if ($this->lat_ts) {
+        if ($this->latTs) {
             if ($this->sphere) {
-                $this->k0 = cos($this->lat_ts);
+                $this->kZero = cos($this->latTs);
             } else {
-                $this->k0 = Proj4php::$common->msfnz($this->es, sin($this->lat_ts), cos($this->lat_ts));
+                $this->kZero = Proj4php::$common->msfnz($this->es, sin($this->latTs), cos($this->latTs));
             }
         }
     }
@@ -84,13 +84,13 @@ class Proj4php_ProjMerc
             return null;
         } else {
             if ($this->sphere) {
-                $x = $this->x0 + $this->a * $this->k0 * Proj4php_Common::adjustLon($lon - $this->long0);
-                $y = $this->y0 + $this->a * $this->k0 * log(tan(Proj4php::$common->fortPi + 0.5 * $lat));
+                $x = $this->xZero + $this->a * $this->kZero * Proj4php_Common::adjustLon($lon - $this->longZero);
+                $y = $this->yZero + $this->a * $this->kZero * log(tan(Proj4php::$common->fortPi + 0.5 * $lat));
             } else {
                 $sinphi = sin(lat);
                 $ts = Proj4php::$common . tsfnz($this->e, $lat, $sinphi);
-                $x = $this->x0 + $this->a * $this->k0 * Proj4php_Common::adjustLon($lon - $this->long0);
-                $y = $this->y0 - $this->a * $this->k0 * log($ts);
+                $x = $this->xZero + $this->a * $this->kZero * Proj4php_Common::adjustLon($lon - $this->longZero);
+                $y = $this->yZero - $this->a * $this->kZero * log($ts);
             }
 
             $p->x = $x;
@@ -106,20 +106,20 @@ class Proj4php_ProjMerc
     public function inverse($p)
     {
 
-        $x = $p->x - $this->x0;
-        $y = $p->y - $this->y0;
+        $x = $p->x - $this->xZero;
+        $y = $p->y - $this->yZero;
 
         if ($this->sphere) {
-            $lat = Proj4php_Common::$halfPi - 2.0 * atan(exp(-$y / $this->a * $this->k0));
+            $lat = Proj4php_Common::$halfPi - 2.0 * atan(exp(-$y / $this->a * $this->kZero));
         } else {
-            $ts = exp(-$y / ($this->a * $this->k0));
+            $ts = exp(-$y / ($this->a * $this->kZero));
             $lat = Proj4php::$common->phi2z($this->e, $ts);
             if ($lat == -9999) {
                 Proj4php::reportError("merc:inverse: lat = -9999");
                 return null;
             }
         }
-        $lon = Proj4php_Common::adjustLon($this->long0 + $x / ($this->a * $this->k0));
+        $lon = Proj4php_Common::adjustLon($this->longZero + $x / ($this->a * $this->kZero));
 
         $p->x = $lon;
         $p->y = $lat;

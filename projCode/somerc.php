@@ -30,24 +30,24 @@ class Proj4php_ProjSomerc
      */
     public function init()
     {
-        $phy0 = $this->lat0;
-        $this->lambda0 = $this->long0;
-        $sinPhy0 = sin($phy0);
+        $phyZero = $this->latZero;
+        $this->lambda0 = $this->longZero;
+        $sinPhyZero = sin($phyZero);
         $semiMajorAxis = $this->a;
         $invF = $this->rf;
         $flattening = 1 / $invF;
         $e2 = 2 * $flattening - pow($flattening, 2);
         $e = $this->e = sqrt($e2);
-        $this->R = $this->k0 * $semiMajorAxis * sqrt(1 - $e2) / (1 - $e2 * pow($sinPhy0, 2.0));
-        $this->alpha = sqrt(1 + $e2 / (1 - $e2) * pow(cos($phy0), 4.0));
-        $this->b0 = asin($sinPhy0 / $this->alpha);
+        $this->R = $this->kZero * $semiMajorAxis * sqrt(1 - $e2) / (1 - $e2 * pow($sinPhyZero, 2.0));
+        $this->alpha = sqrt(1 + $e2 / (1 - $e2) * pow(cos($phyZero), 4.0));
+        $this->b0 = asin($sinPhyZero / $this->alpha);
         $this->K = log(tan($PI / 4.0 + $this->b0 / 2.0))
                 - $this->alpha
-                * log(tan($PI / 4.0 + $phy0 / 2.0))
+                * log(tan($PI / 4.0 + $phyZero / 2.0))
                 + $this->alpha
                 * $e / 2
-                * log((1 + $e * $sinPhy0)
-                        / (1 - $e * $sinPhy0));
+                * log((1 + $e * $sinPhyZero)
+                        / (1 - $e * $sinPhyZero));
     }
 
     /**
@@ -79,9 +79,9 @@ class Proj4php_ProjSomerc
 
         $p->y = $this->R / 2.0
                 * log((1 + sin($rotB)) / (1 - sin($rotB)))
-                + $this->y0;
+                + $this->yZero;
 
-        $p->x = $this->R * $rotI + $this->x0;
+        $p->x = $this->R * $rotI + $this->xZero;
 
         return $p;
     }
@@ -94,8 +94,8 @@ class Proj4php_ProjSomerc
     public function inverse($p)
     {
 
-        $Y = $p->x - $this->x0;
-        $X = $p->y - $this->y0;
+        $Y = $p->x - $this->xZero;
+        $X = $p->y - $this->yZero;
 
         $rotI = $Y / $this->R;
         $rotB = 2 * (atan(exp($X / $this->R)) - $PI / 4.0);

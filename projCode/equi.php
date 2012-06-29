@@ -34,14 +34,14 @@ class Proj4php_ProjEqui
 
     public function init()
     {
-        if (!$this->x0)
-            $this->x0 = 0;
-        if (!$this->y0)
-            $this->y0 = 0;
-        if (!$this->lat0)
-            $this->lat0 = 0;
-        if (!$this->long0)
-            $this->long0 = 0;
+        if (!$this->xZero)
+            $this->xZero = 0;
+        if (!$this->yZero)
+            $this->yZero = 0;
+        if (!$this->latZero)
+            $this->latZero = 0;
+        if (!$this->longZero)
+            $this->longZero = 0;
         ///$this->t2;
     }
 
@@ -54,12 +54,12 @@ class Proj4php_ProjEqui
         $lon = $p->x;
         $lat = $p->y;
 
-        $dlon =  Proj4php_Common::adjustLon($lon - $this->long0);
-        $x = $this->x0 + $this->a * $dlon * cos($this->lat0);
-        $y = $this->y0 + $this->a * $lat;
+        $dlon =  Proj4php_Common::adjustLon($lon - $this->longZero);
+        $x = $this->xZero + $this->a * $dlon * cos($this->latZero);
+        $y = $this->yZero + $this->a * $lat;
 
         $this->t1 = $x;
-        $this->t2 = cos($this->lat0);
+        $this->t2 = cos($this->latZero);
         $p->x = $x;
         $p->y = $y;
         return $p;
@@ -71,14 +71,14 @@ class Proj4php_ProjEqui
     public function inverse($p)
     {
 
-        $p->x -= $this->x0;
-        $p->y -= $this->y0;
+        $p->x -= $this->xZero;
+        $p->y -= $this->yZero;
         $lat = $p->y / $this->a;
 
         if (abs($lat) > Proj4php_Common::$halfPi) {
             Proj4php::reportError("equi:Inv:DataError");
         }
-        $lon =  Proj4php_Common::adjustLon($this->long0 + $p->x / ($this->a * cos($this->lat0)));
+        $lon =  Proj4php_Common::adjustLon($this->longZero + $p->x / ($this->a * cos($this->latZero)));
         $p->x = $lon;
         $p->y = $lat;
     }

@@ -61,19 +61,19 @@ class Proj4php_ProjAea
         $this->ms2 = Proj4php_Common::msfnz($this->e3, $this->sinPo, $this->cosPo);
         $this->qs2 = Proj4php_Common::qsfnz($this->e3, $this->sinPo, $this->cosPo);
 
-        $this->sinPo = sin($this->lat0);
-        $this->cosPo = cos($this->lat0);
+        $this->sinPo = sin($this->latZero);
+        $this->cosPo = cos($this->latZero);
         $this->t3 = $this->sinPo;
-        $this->qs0 = Proj4php_Common::qsfnz($this->e3, $this->sinPo, $this->cosPo);
+        $this->qsZero = Proj4php_Common::qsfnz($this->e3, $this->sinPo, $this->cosPo);
 
         if (abs($this->lat1 - $this->lat2) > Proj4php_Common::$epsln) {
-            $this->ns0 = ($this->ms1 * $this->ms1 - $this->ms2 * $this->ms2) / ($this->qs2 - $this->qs1);
+            $this->nsZero = ($this->ms1 * $this->ms1 - $this->ms2 * $this->ms2) / ($this->qs2 - $this->qs1);
         } else {
-            $this->ns0 = $this->con;
+            $this->nsZero = $this->con;
         }
 
-        $this->c = $this->ms1 * $this->ms1 + $this->ns0 * $this->qs1;
-        $this->rh = $this->a * sqrt($this->c - $this->ns0 * $this->qs0) / $this->ns0;
+        $this->c = $this->ms1 * $this->ms1 + $this->nsZero * $this->qs1;
+        $this->rh = $this->a * sqrt($this->c - $this->nsZero * $this->qsZero) / $this->nsZero;
     }
 
     /**
@@ -92,10 +92,10 @@ class Proj4php_ProjAea
         $this->cosPhi = cos($lat);
 
         $qs = Proj4php_Common::qsfnz($this->e3, $this->sinPhi, $this->cosPhi);
-        $rh1 = $this->a * sqrt($this->c - $this->ns0 * $qs) / $this->ns0;
-        $theta = $this->ns0 * Proj4php_Common::adjustLon($lon - $this->long0);
-        $x = rh1 * sin($theta) + $this->x0;
-        $y = $this->rh - $rh1 * cos($theta) + $this->y0;
+        $rh1 = $this->a * sqrt($this->c - $this->nsZero * $qs) / $this->nsZero;
+        $theta = $this->nsZero * Proj4php_Common::adjustLon($lon - $this->longZero);
+        $x = rh1 * sin($theta) + $this->xZero;
+        $y = $this->rh - $rh1 * cos($theta) + $this->yZero;
 
         $p->x = $x;
         $p->y = $y;
@@ -111,10 +111,10 @@ class Proj4php_ProjAea
     public function inverse($p)
     {
 
-        $p->x -= $this->x0;
-        $p->y = $this->rh - $p->y + $this->y0;
+        $p->x -= $this->xZero;
+        $p->y = $this->rh - $p->y + $this->yZero;
 
-        if ($this->ns0 >= 0) {
+        if ($this->nsZero >= 0) {
             $rh1 = sqrt($p->x * $p->x + $p->y * $p->y);
             $con = 1.0;
         } else {
@@ -127,8 +127,8 @@ class Proj4php_ProjAea
             $theta = atan2($con * $p->x, $con * $p->y);
         }
 
-        $con = $rh1 * $this->ns0 / $this->a;
-        $qs = ($this->c - $con * $con) / $this->ns0;
+        $con = $rh1 * $this->nsZero / $this->a;
+        $qs = ($this->c - $con * $con) / $this->nsZero;
 
         if ($this->e3 >= 1e-10) {
             $con = 1 - .5 * (1.0 - $this->es) * log((1.0 - $this->e3) / (1.0 + $this->e3)) / $this->e3;
@@ -145,7 +145,7 @@ class Proj4php_ProjAea
             $lat = $this->phi1z($this->e3, $qs);
         }
 
-        $lon = Proj4php_Common::adjustLon($theta / $this->ns0 + $this->long0);
+        $lon = Proj4php_Common::adjustLon($theta / $this->nsZero + $this->longZero);
 
         $p->x = $lon;
         $p->y = $lat;

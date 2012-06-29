@@ -36,7 +36,7 @@ class Proj4php_Datum
             }
 
             if ($proj->datumParams[0] != 0 || $proj->datumParams[1] != 0 || $proj->datumParams[2] != 0) {
-                $this->datumType = Proj4php_Common::$pjd3Param;
+                $this->datumType = Proj4php_Common::$pjdThreeParam;
             }
 
             if (sizeof($proj->datumParams) > 3) {
@@ -77,7 +77,7 @@ class Proj4php_Datum
             // the tolerence for es is to ensure that GRS80 and WGS84
             // are considered identical
             return false;
-        } else if ($this->datumType == Proj4php_Common::$pjd3Param) {
+        } else if ($this->datumType == Proj4php_Common::$pjdThreeParam) {
             return ($this->datumParams[0] == $dest->datumParams[0]
                     && $this->datumParams[1] == $dest->datumParams[1]
                     && $this->datumParams[2] == $dest->datumParams[2]);
@@ -117,7 +117,7 @@ class Proj4php_Datum
 
         $longitude = $p->x;
         $latitude = $p->y;
-        $Height = isset($p->z) ? $p->z : 0;   //Z value not always supplied
+        $height = isset($p->z) ? $p->z : 0;   //Z value not always supplied
         $errorCode = 0;  //  GEOCENT_NO_ERROR;
 
         /*
@@ -142,9 +142,9 @@ class Proj4php_Datum
         $cosLat = cos($latitude); /*  cos(Latitude)  */
         $sinTwoLat = $sinLat * $sinLat; /*  Square of sin(Latitude)  */
         $rn = $this->a / (sqrt(1.0e0 - $this->es * $sinTwoLat)); /*  Earth radius at location  */
-        $p->x = ($rn + $Height) * $cosLat * cos($longitude);
-        $p->y = ($rn + $Height) * $cosLat * sin($longitude);
-        $p->z = (($rn * (1 - $this->es)) + $Height) * $sinLat;
+        $p->x = ($rn + $height) * $cosLat * cos($longitude);
+        $p->y = ($rn + $height) * $cosLat * sin($longitude);
+        $p->z = (($rn * (1 - $this->es)) + $height) * $sinLat;
 
         return $errorCode;
     }
@@ -184,7 +184,7 @@ class Proj4php_Datum
           $iter;        // of continous iteration, max. 30 is always enough (s.a.)
           $Longitude;
           $Latitude;
-          $Height;
+          $height;
          */
 
         $atPole = false;
@@ -269,7 +269,7 @@ class Proj4php_Datum
         /*
           $Longitude;
           $Latitude;
-          $Height;
+          $height;
 
           $W;        // distance from Z axis
           $W2;       // square of distance from Z axis
@@ -351,7 +351,7 @@ class Proj4php_Datum
     public function geocentricToWgs84($p)
     {
 
-        if ($this->datumType == Proj4php_Common::$pjd3Param) {
+        if ($this->datumType == Proj4php_Common::$pjdThreeParam) {
             // if( x[io] == HUGE_VAL )
             //    continue;
             $p->x += $this->datumParams[0];
@@ -381,7 +381,7 @@ class Proj4php_Datum
     public function geocentric_from_wgs84($p)
     {
 
-        if ($this->datumType == Proj4php_Common::$pjd3Param) {
+        if ($this->datumType == Proj4php_Common::$pjdThreeParam) {
             //if( x[io] == HUGE_VAL )
             //    continue;
             $p->x -= $this->datumParams[0];

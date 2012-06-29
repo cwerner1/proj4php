@@ -24,7 +24,7 @@ class Proj4php
     public static $datum = array();
     public static $defs = array();
     public static $wktProjections = array();
-    public static $WGS84 = null;
+    public static $wgs84 = null;
     public static $primeMeridian = array();
     public static $proj = array();
 
@@ -45,7 +45,7 @@ class Proj4php
       +proj="tmerc"   //longlat, etc.
       +a=majorRadius
       +b=minorRadius
-      +lat0=somenumber
+      +latZero=somenumber
       +long=somenumber
      */
     protected function initDefs()
@@ -55,7 +55,7 @@ class Proj4php
         self::$defs['WGS84'] = "+title=long/lat:WGS84 +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees";
         self::$defs['EPSG:4326'] = "+title=long/lat:WGS84 +proj=longlat +a=6378137.0 +b=6356752.31424518 +ellps=WGS84 +datum=WGS84 +units=degrees";
         self::$defs['EPSG:4269'] = "+title=long/lat:NAD83 +proj=longlat +a=6378137.0 +b=6356752.31414036 +ellps=GRS80 +datum=NAD83 +units=degrees";
-        self::$defs['EPSG:3875'] = "+title= Google Mercator +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs";
+        self::$defs['EPSG:3875'] = "+title= Google Mercator +proj=merc +a=6378137 +b=6378137 +latTs=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs";
         self::$defs['EPSG:3785'] = self::$defs['EPSG:3875'];
         self::$defs['GOOGLE'] = self::$defs['EPSG:3875'];
         self::$defs['EPSG:900913'] = self::$defs['EPSG:3875'];
@@ -167,7 +167,7 @@ class Proj4php
         self::$proj['longlat'] = new Proj4php_LongLat();
         self::$proj['identity'] = new Proj4php_LongLat();
         self::$common = new proj4php_Common();
-        self::$WGS84 = new Proj4php_Proj('WGS84');
+        self::$wgs84 = new Proj4php_Proj('WGS84');
     }
 
     /**
@@ -195,9 +195,9 @@ class Proj4php
 
         // Workaround for datum shifts towgs84, if either source or destination projection is not wgs84
         if (isset($source->datum) && isset($dest->datum) && (
-                (($source->datum->datumType == Proj4php_Common::$pjd3Param || $source->datum->datumType == Proj4php_Common::$pjd7Param) && (isset($dest->datumCode) && $dest->datumCode != "WGS84")) ||
-                (($dest->datum->datumType == Proj4php_Common::$pjd3Param || $dest->datum->datumType == Proj4php_Common::$pjd7Param) && (isset($source->datumCode) && $source->datumCode != "WGS84")))) {
-            $wgs84 = Proj4php::$WGS84;
+                (($source->datum->datumType == Proj4php_Common::$pjdThreeParam || $source->datum->datumType == Proj4php_Common::$pjd7Param) && (isset($dest->datumCode) && $dest->datumCode != "WGS84")) ||
+                (($dest->datum->datumType == Proj4php_Common::$pjdThreeParam || $dest->datum->datumType == Proj4php_Common::$pjd7Param) && (isset($source->datumCode) && $source->datumCode != "WGS84")))) {
+            $wgs84 = Proj4php::$wgs84;
             $this->transform($source, $wgs84, $point);
             $source = $wgs84;
         }
@@ -207,7 +207,7 @@ class Proj4php
           if( ($source->srsProjNumber == "900913" && $dest->datumCode != "WGS84") ||
           ($dest->srsProjNumber == "900913" && $source->datumCode != "WGS84") ) {
           #dbg('Workaround for Spherical Mercator', false);
-          $wgs84 = Proj4php::$WGS84; // DONT KNOW WHAT YET
+          $wgs84 = Proj4php::$wgs84; // DONT KNOW WHAT YET
           $this->transform( $source, $wgs84, $point );
           $source = $wgs84;
           }
@@ -297,21 +297,21 @@ class Proj4php
 
         // Do we need to go through geocentric coordinates?
         if ($source->es != $dest->es || $source->a != $dest->a
-                || $source->datumType == Proj4php_Common::$pjd3Param
+                || $source->datumType == Proj4php_Common::$pjdThreeParam
                 || $source->datumType == Proj4php_Common::$pjd7Param
-                || $dest->datumType == Proj4php_Common::$pjd3Param
+                || $dest->datumType == Proj4php_Common::$pjdThreeParam
                 || $dest->datumType == Proj4php_Common::$pjd7Param) {
 
             // Convert to geocentric coordinates.
             $source->GeodeticToGeocentric($point);
             // CHECK_RETURN;
             // Convert between datums
-            if ($source->datumType == Proj4php_Common::$pjd3Param || $source->datumType == Proj4php_Common::$pjd7Param) {
+            if ($source->datumType == Proj4php_Common::$pjdThreeParam || $source->datumType == Proj4php_Common::$pjd7Param) {
                 $source->geocentricToWgs84($point);
                 // CHECK_RETURN;
             }
 
-            if ($dest->datumType == Proj4php_Common::$pjd3Param || $dest->datumType == Proj4php_Common::$pjd7Param) {
+            if ($dest->datumType == Proj4php_Common::$pjdThreeParam || $dest->datumType == Proj4php_Common::$pjd7Param) {
                 $dest->geocentric_from_wgs84($point);
                 // CHECK_RETURN;
             }

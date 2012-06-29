@@ -96,8 +96,8 @@ class Proj4php_ProjPoly
     public function init()
     {
         #$temp;   /* temporary variable		 */
-        if ($this->lat0 == 0)
-            $this->lat0 = 90; //$this->lat0 ca
+        if ($this->latZero == 0)
+            $this->latZero = 90; //$this->latZero ca
 
         /* Place parameters in static storage for common use
           ------------------------------------------------- */
@@ -108,7 +108,7 @@ class Proj4php_ProjPoly
         $this->e1 = Proj4php::$common->e1fn($this->es);
         $this->e2 = Proj4php::$common->e2fn($this->es);
         $this->e3 = Proj4php::$common->e3fn($this->es);
-        $this->ml0 = Proj4php::$common->mlfn($this->e0, $this->e1, $this->e2, $this->e3, $this->lat0); //si que des zeros le calcul ne se fait pas
+        $this->ml0 = Proj4php::$common->mlfn($this->e0, $this->e1, $this->e2, $this->e3, $this->latZero); //si que des zeros le calcul ne se fait pas
         //if (!$this->ml0) {$this->ml0=0;}
     }
 
@@ -133,11 +133,11 @@ class Proj4php_ProjPoly
         $lon = $p->x;
         $lat = $p->y;
 
-        $con = Proj4php_Common::adjustLon($lon - $this->long0);
+        $con = Proj4php_Common::adjustLon($lon - $this->longZero);
 
         if (abs($lat) <= .0000001) {
-            $x = $this->x0 + $this->a * $con;
-            $y = $this->y0 - $this->a * $this->ml0;
+            $x = $this->xZero + $this->a * $con;
+            $y = $this->yZero - $this->a * $this->ml0;
         } else {
             $sinphi = sin($lat);
             $cosphi = cos($lat);
@@ -145,8 +145,8 @@ class Proj4php_ProjPoly
             $ml = Proj4php::$common->mlfn($this->e0, $this->e1, $this->e2, $this->e3, $lat);
             $ms = Proj4php::$common->msfnz($this->e, $sinphi, $cosphi);
 
-            $x = $this->x0 + $this->a * $ms * sin($sinphi) / $sinphi;
-            $y = $this->y0 + $this->a * ($ml - $this->ml0 + $ms * (1.0 - cos($sinphi)) / $sinphi);
+            $x = $this->xZero + $this->a * $ms * sin($sinphi) / $sinphi;
+            $y = $this->yZero + $this->a * ($ml - $this->ml0 + $ms * (1.0 - cos($sinphi)) / $sinphi);
         }
 
         $p->x = $x;
@@ -174,20 +174,20 @@ class Proj4php_ProjPoly
           $lat;
          */
 
-        $p->x -= $this->x0;
-        $p->y -= $this->y0;
+        $p->x -= $this->xZero;
+        $p->y -= $this->yZero;
         $al = $this->ml0 + $p->y / $this->a;
         $iflg = 0;
 
         if (abs($al) <= .0000001) {
-            $lon = $p->x / $this->a + $this->long0;
+            $lon = $p->x / $this->a + $this->longZero;
             $lat = 0.0;
         } else {
             $b = $al * $al + ($p->x / $this->a) * ($p->x / $this->a);
             $iflg = phi4z($this->es, $this->e0, $this->e1, $this->e2, $this->e3, $this->al, $b, $c, $lat);
             if ($iflg != 1)
                 return($iflg);
-            $lon = Proj4php_Common::adjustLon((Proj4php_Common::asinz($p->x * $c / $this->a) / sin($lat)) + $this->long0);
+            $lon = Proj4php_Common::adjustLon((Proj4php_Common::asinz($p->x * $c / $this->a) / sin($lat)) + $this->longZero);
         }
 
         $p->x = $lon;
