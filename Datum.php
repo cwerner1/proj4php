@@ -154,7 +154,7 @@ class Proj4php_Datum
      * @param object $p
      * @return type 
      */
-    public function geocentricToGeodetic($p)
+    public function geocentricToGeodetic($pC)
     {
 
         /* local defintions and variables */
@@ -162,9 +162,9 @@ class Proj4php_Datum
         $genau = 1.E-12;
         $genau2 = ($genau * $genau);
         $maxiter = 30;
-        $x = $p->x;
-        $y = $p->y;
-        $z = $p->z ? $p->z : 0.0;   //Z value not always supplied
+        $x = $pC->x;
+        $y = $pC->y;
+        $z = $pC->z ? $pC->z : 0.0;   //Z value not always supplied
 
         /*
           $P;        // distance between semi-minor axis and location
@@ -248,11 +248,11 @@ class Proj4php_Datum
         /*      ellipsoidal (geodetic) latitude */
         $latitude = atan($sphi / abs($cphi));
 
-        $p->x = $longitude;
-        $p->y = $latitude;
-        $p->z = $height;
+        $pC->x = $longitude;
+        $pC->y = $latitude;
+        $pC->z = $height;
 
-        return $p;
+        return $pC;
     }
 
     /**
@@ -263,7 +263,7 @@ class Proj4php_Datum
      * @param object Point $p
      * @return object Point $p
      */
-    public function geocentricToGeodetic_noniter($p)
+    public function geocentricToGeodeticNoniter($p)
     {
 
         /*
@@ -388,22 +388,22 @@ class Proj4php_Datum
             $p->y -= $this->datumParams[1];
             $p->z -= $this->datumParams[2];
         } else if ($this->datumType == Proj4php_Common::$pjd7Param) {
-            $Dx_BF = $this->datumParams[0];
-            $Dy_BF = $this->datumParams[1];
-            $Dz_BF = $this->datumParams[2];
-            $Rx_BF = $this->datumParams[3];
-            $Ry_BF = $this->datumParams[4];
-            $Rz_BF = $this->datumParams[5];
-            $M_BF = $this->datumParams[6];
-            $x_tmp = ($p->x - $Dx_BF) / $M_BF;
-            $y_tmp = ($p->y - $Dy_BF) / $M_BF;
-            $z_tmp = ($p->z - $Dz_BF) / $M_BF;
+            $dxBf = $this->datumParams[0];
+            $dyBf = $this->datumParams[1];
+            $dzBf = $this->datumParams[2];
+            $rxBf = $this->datumParams[3];
+            $ryBf = $this->datumParams[4];
+            $rzBf = $this->datumParams[5];
+            $mBf = $this->datumParams[6];
+            $xTmp = ($p->x - $dxBf) / $mBf;
+            $yTmp = ($p->y - $dyBf) / $mBf;
+            $zTmp = ($p->z - $dzBf) / $mBf;
             //if( x[io] == HUGE_VAL )
             //    continue;
 
-            $p->x = $x_tmp + $Rz_BF * $y_tmp - $Ry_BF * $z_tmp;
-            $p->y = -$Rz_BF * $x_tmp + $y_tmp + $Rx_BF * $z_tmp;
-            $p->z = $Ry_BF * $x_tmp - $Rx_BF * $y_tmp + $z_tmp;
+            $p->x = $xTmp + $rzBf * $yTmp - $ryBf * $zTmp;
+            $p->y = -$rzBf * $xTmp + $yTmp + $rxBf * $zTmp;
+            $p->z = $ryBf * $xTmp - $rxBf * $yTmp + $zTmp;
         } //cs_geocentric_from_wgs84()
     }
 

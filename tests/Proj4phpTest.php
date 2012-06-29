@@ -2,6 +2,9 @@
 
 require_once 'Proj4php/proj4php.php';
 
+/**
+ * @group Proj4 
+ */
 class Proj4phpTest extends PHPUnit_Framework_TestCase
 {
 
@@ -24,23 +27,24 @@ class Proj4phpTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('2.3557811127971 48.831938054369', $pointDest->toShortString());
 
         $pointDest = $proj4->transform($projWGS84, $projL72, $pointSrc);
-        $this->assertEquals('2354.4969810662 -51359.251012595', $pointDest->toShortString());
+        $this->assertEquals('2266.955994725 -51381.924173856', $pointDest->toShortString());
 
         $pointDest = $proj4->transform($projL72, $projWGS84, $pointSrc);
-        $this->assertEquals('2.3557810993491 48.831938051733', $pointDest->toShortString());
+        $this->assertEquals('2.3557811127971 48.831938054355', $pointDest->toShortString());
 
         $pointDest = $proj4->transform($projWGS84, $projLSud, $pointSrc);
-        $this->assertEquals('601419.93647681 726554.08663424', $pointDest->toShortString());
+        $this->assertEquals('601366.63728352 726894.08105472', $pointDest->toShortString());
 
         $pointDest = $proj4->transform($projLSud, $projWGS84, $pointSrc);
-        $this->assertEquals('2.3557810993491 48.831938051718', $pointDest->toShortString());
+        $this->assertEquals('2.3557811127971 48.83193805434', $pointDest->toShortString());
 
         $pointDest = $proj4->transform($projWGS84, $projLI, $pointSrc);
+
+        $this->assertEquals('601361.94628612 1126056.8581154', $pointDest->toShortString());
         
-        $this->assertEquals('601415.06988072 1125718.0309796', $pointDest->toShortString());
         $pointDest = $proj4->transform($projLI, $projL93, $pointSrc);
 
-        $this->assertEquals('652709.40001126 6859290.9458141', $pointDest->toShortString());
+        $this->assertEquals('652709.4010008 6859290.9460975', $pointDest->toShortString());
     }
 
 }
