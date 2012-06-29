@@ -136,7 +136,7 @@ class ProjFourphp_Common
         return(1.0 - 0.25 * $x * (1.0 + $x / 16.0 * (3.0 + 1.25 * $x)));
     }
 
-    public static function e1fn($x)
+    public static function eOnefn($x)
     {
         return(0.375 * $x * (1.0 + 0.25 * $x * (1.0 + 0.46875 * $x)));
     }
@@ -146,14 +146,14 @@ class ProjFourphp_Common
         return(0.05859375 * $x * $x * (1.0 + 0.75 * $x));
     }
 
-    public static function e3fn($x)
+    public static function eThreefn($x)
     {
         return($x * $x * $x * (35.0 / 3072.0));
     }
 
-    public static function mlfn($e0, $e1, $e2, $e3, $phi)
+    public static function mlfn($e0, $eOne, $e2, $eThree, $phi)
     {
-        return($e0 * $phi - $e1 * sin(2.0 * $phi) + $e2 * sin(4.0 * $phi) - $e3 * sin(6.0 * $phi));
+        return($e0 * $phi - $eOne * sin(2.0 * $phi) + $e2 * sin(4.0 * $phi) - $eThree * sin(6.0 * $phi));
     }
 
     public static function srat($esinp, $exp)
@@ -205,7 +205,7 @@ class ProjFourphp_Common
         return 2.0 * atan($x * exp($l)) - self::$halfPi;
     }
 
-// Inverse Latitude Isometrique - close to ph2z
+// Inverse Latitude Isometrique - close to phTwoz
     public static function invlatiso($eccent, $ts)
     {
         $phi = self::$fL(1.0, $ts);

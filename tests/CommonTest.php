@@ -1,6 +1,6 @@
 <?php
 
-require_once 'ProjFourphp/projFourphp.php';
+
 
 class ProjFourphp_CommonTest extends PHPUnit_Framework_TestCase
 {

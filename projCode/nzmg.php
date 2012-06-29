@@ -223,15 +223,15 @@ class ProjFourphp_ProjNzmg
         // 3. Calculate z
         $thNRe = 1;
         $thNIm = 0;  // theta^0
-        #$th_n_re1;
+        #$th_n_reOne;
         #$th_n_im1;
 
         $zRe = 0;
         $zIm = 0;
         for ($n = 1; $n <= 6; $n++) {
-            $thNRe1 = $thNRe * $thRe - $thNIm * $thIm;
+            $thNReOne = $thNRe * $thRe - $thNIm * $thIm;
             $thNIm1 = $thNIm * $thRe + $thNRe * $thIm;
-            $thNRe = $thNRe1;
+            $thNRe = $thNReOne;
             $thNIm = $thNIm1;
             $zRe = $zRe + $this->bRe[$n] * $thNRe - $this->bIm[$n] * $thNIm;
             $zIm = $zIm + $this->bIm[$n] * $thNRe + $this->bRe[$n] * $thNIm;
@@ -263,15 +263,15 @@ class ProjFourphp_ProjNzmg
         // 2a. Calculate theta - first approximation gives km accuracy
         $zNRe = 1;
         $zNIm = 0;  // z^0
-        $zNRe1;
+        $zNReOne;
         $zNIm1;
 
         $thRe = 0;
         $thIm = 0;
         for ($n = 1; $n <= 6; $n++) {
-            $zNRe1 = $zNRe * $zRe - $zNIm * $zIm;
+            $zNReOne = $zNRe * $zRe - $zNIm * $zIm;
             $zNIm1 = $zNIm * $zRe + $zNRe * $zIm;
-            $zNRe = $zNRe1;
+            $zNRe = $zNReOne;
             $zNIm = $zNIm1;
             $thRe = $thRe + $this->cRe[$n] * $zNRe - $this->cIm[$n] * $zNIm;
             $thIm = $thIm + $this->cIm[$n] * $zNRe + $this->cRe[$n] * $zNIm;
@@ -284,15 +284,15 @@ class ProjFourphp_ProjNzmg
         for ($i = 0; $i < $this->iterations; $i++) {
             $thNRe = $thRe;
             $thNIm = $thIm;
-            $thNRe1;
+            $thNReOne;
             $thNIm1;
 
             $numRe = $zRe;
             $numIm = $zIm;
             for ($n = 2; $n <= 6; $n++) {
-                $thNRe1 = $thNRe * th_re - $thNIm * $thIm;
+                $thNReOne = $thNRe * th_re - $thNIm * $thIm;
                 $thNIm1 = $thNIm * $thRe + $thNRe * $thIm;
-                $thNRe = $thNRe1;
+                $thNRe = $thNReOne;
                 $thNIm = $thNIm1;
                 $numRe = $numRe + ($n - 1) * ($this->bRe[$n] * $thNRe - $this->bIm[$n] * $thNIm);
                 $numIm = $numIm + (n - 1) * ($this->bIm[$n] * $thNRe + $this->bRe[$n] * $thNIm);
@@ -303,9 +303,9 @@ class ProjFourphp_ProjNzmg
             $denRe = $this->bRe[1];
             $denIm = $this->bIm[1];
             for ($n = 2; $n <= 6; $n++) {
-                $thNRe1 = $thNRe * $thRe - $thNIm * $thIm;
+                $thNReOne = $thNRe * $thRe - $thNIm * $thIm;
                 $thNIm1 = $thNIm * $thRe + $thNRe * $thIm;
-                $thNRe = $thNRe1;
+                $thNRe = $thNReOne;
                 $thNIm = $thNIm1;
                 $denRe = $denRe + $n * ($this->bRe[$n] * $thNRe - $this->bIm[$n] * $thNIm);
                 $denIm = $denIm + $n * ($this->bIm[n] * $thNRe + $this->bRe[$n] * $thNIm);
