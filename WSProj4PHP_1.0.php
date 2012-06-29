@@ -1,8 +1,7 @@
 <?php
 
 include_once("Proj4php/proj4php.php");
-
-exit();
+return;
 
 $error = false;
 
@@ -82,7 +81,7 @@ if ($error === true) {
         echo "    <message>Wrong parameters</message>";
         echo "  </erreur>";
         echo "</reponse>";
-        exit;
+        
     }
 }
 
@@ -93,7 +92,7 @@ $tgtProjection = str_replace(':', '::', $tgtProjection);
 
 if ($format == 'json') {
     echo "{\"status\" :\"success\", \"point\" : {\"x\":" . $pointDest->x . ", \"y\":" . $pointDest->y . ",\"projection\" :\"" . $tgtProjection . "\"}}";
-    exit;
+   
 } else {
     header("Content-Type:text/xml");
     echo "<reponse>";
