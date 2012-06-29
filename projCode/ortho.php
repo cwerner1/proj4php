@@ -41,8 +41,8 @@ class Proj4php_ProjOrtho
 
         /* Place parameters in static storage for common use
           ------------------------------------------------- */;
-        $this->sin_p14 = sin($this->latZero);
-        $this->cos_p14 = cos($this->latZero);
+        $this->sinPOneFour = sin($this->latZero);
+        $this->cosPOneFour = cos($this->latZero);
     }
 
     /* Orthographic forward equations--mapping lat,long to x,y
@@ -71,12 +71,12 @@ class Proj4php_ProjOrtho
         $cosphi = cos($lat);
 
         $coslon = cos($dlon);
-        $g = $this->sin_p14 * sinphi + $this->cos_p14 * $cosphi * $coslon;
+        $g = $this->sinPOneFour * sinphi + $this->cosPOneFour * $cosphi * $coslon;
         $ksp = 1.0;
 
         if (($g > 0) || (abs($g) <= Proj4php_Common::$epsln)) {
             $x = $this->a * $ksp * $cosphi * sin($dlon);
-            $y = $this->yZero + $this->a * $ksp * ($this->cos_p14 * $sinphi - $this->sin_p14 * $cosphi * $coslon);
+            $y = $this->yZero + $this->a * $ksp * ($this->cosPOneFour * $sinphi - $this->sinPOneFour * $cosphi * $coslon);
         } else {
             Proj4php::reportError("orthoFwdPointError");
         }
@@ -123,7 +123,7 @@ class Proj4php_ProjOrtho
         if (abs($rh) <= Proj4php_Common::$epsln) {
             $lat = $this->latZero;
         }
-        $lat = Proj4php::$common . asinz($cosz * $this->sin_p14 + ($p->y * $sinz * $this->cos_p14) / $rh);
+        $lat = Proj4php::$common . asinz($cosz * $this->sinPOneFour + ($p->y * $sinz * $this->cosPOneFour) / $rh);
         $con = abs($this->latZero) - Proj4php_Common::$halfPi;
         if (abs(con) <= Proj4php_Common::$epsln) {
             if ($this->latZero >= 0) {
@@ -132,7 +132,7 @@ class Proj4php_ProjOrtho
                 $lon = Proj4php_Common::adjustLon($this->longZero - atan2(-$p->x, $p->y));
             }
         }
-        $con = $cosz - $this->sin_p14 * sin($lat);
+        $con = $cosz - $this->sinPOneFour * sin($lat);
 
         $p->x = $lon;
         $p->y = $lat;

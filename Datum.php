@@ -141,7 +141,7 @@ class Proj4php_Datum
         $sinLat = sin($latitude); /*  sin(Latitude)  */
         $cosLat = cos($latitude); /*  cos(Latitude)  */
         $sinTwoLat = $sinLat * $sinLat; /*  Square of sin(Latitude)  */
-        $rn = $this->a / (sqrt(1.0eZero - $this->es * $sinTwoLat)); /*  Earth radius at location  */
+        $rn = $this->a / (sqrt(1.0e0 - $this->es * $sinTwoLat)); /*  Earth radius at location  */
         $p->x = ($rn + $height) * $cosLat * cos($longitude);
         $p->y = ($rn + $height) * $cosLat * sin($longitude);
         $p->z = (($rn * (1 - $this->es)) + $height) * $sinLat;
