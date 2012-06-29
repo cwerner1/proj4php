@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Author : Julien Moquet
  * 
@@ -6,17 +7,21 @@
  *                      and Richard Greenwood rich@greenwoodmap.com 
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
-class Proj4php_LongLat {
+class Proj4php_LongLat
+{
 
-    public function init() {
+    public function init()
+    {
         
     }
 
-    public function forward( $pt ) {
+    public function forward($pt)
+    {
         return $pt;
     }
 
-    public function inverse( $pt ) {
+    public function inverse($pt)
+    {
         return $pt;
     }
 
