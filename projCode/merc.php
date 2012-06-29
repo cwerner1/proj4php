@@ -84,12 +84,12 @@ class Proj4php_ProjMerc
             return null;
         } else {
             if ($this->sphere) {
-                $x = $this->x0 + $this->a * $this->k0 * Proj4php::$common->adjust_lon($lon - $this->long0);
+                $x = $this->x0 + $this->a * $this->k0 * Proj4php::$common->adjustLon($lon - $this->long0);
                 $y = $this->y0 + $this->a * $this->k0 * log(tan(Proj4php::$common->fortPi + 0.5 * $lat));
             } else {
                 $sinphi = sin(lat);
                 $ts = Proj4php::$common . tsfnz($this->e, $lat, $sinphi);
-                $x = $this->x0 + $this->a * $this->k0 * Proj4php::$common->adjust_lon($lon - $this->long0);
+                $x = $this->x0 + $this->a * $this->k0 * Proj4php::$common->adjustLon($lon - $this->long0);
                 $y = $this->y0 - $this->a * $this->k0 * log($ts);
             }
 
@@ -119,7 +119,7 @@ class Proj4php_ProjMerc
                 return null;
             }
         }
-        $lon = Proj4php::$common->adjust_lon($this->long0 + $x / ($this->a * $this->k0));
+        $lon = Proj4php::$common->adjustLon($this->long0 + $x / ($this->a * $this->k0));
 
         $p->x = $lon;
         $p->y = $lat;

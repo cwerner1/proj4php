@@ -110,7 +110,7 @@ class Proj4php_ProjLaea
         #$y;
         $lam = $p->x;
         $phi = $p->y;
-        $lam = Proj4php::$common->adjust_lon($lam - $this->long0);
+        $lam = Proj4php::$common->adjustLon($lam - $this->long0);
 
         if ($this->sphere) {
             /*
@@ -363,7 +363,7 @@ class Proj4php_ProjLaea
           }
          */
         //return(OK);
-        $p->x = Proj4php::$common->adjust_lon($this->long0 + $lam);
+        $p->x = Proj4php::$common->adjustLon($this->long0 + $lam);
         $p->y = $phi;
         return $p;
     }

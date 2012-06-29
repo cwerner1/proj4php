@@ -118,7 +118,7 @@ class Proj4php_ProjLcc
             $rh1 = 0;
         }
 
-        $theta = $this->ns * Proj4php::$common->adjust_lon($lon - $this->long0);
+        $theta = $this->ns * Proj4php::$common->adjustLon($lon - $this->long0);
         $p->x = $this->k0 * ($rh1 * sin($theta)) + $this->x0;
         $p->y = $this->k0 * ($this->rh - $rh1 * cos($theta)) + $this->y0;
 
@@ -156,7 +156,7 @@ class Proj4php_ProjLcc
         } else {
             $lat = -Proj4php::$common->halfPi;
         }
-        $lon = Proj4php::$common->adjust_lon($theta / $this->ns + $this->long0);
+        $lon = Proj4php::$common->adjustLon($theta / $this->ns + $this->long0);
 
         $p->x = $lon;
         $p->y = $lat;

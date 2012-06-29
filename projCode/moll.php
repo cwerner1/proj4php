@@ -53,7 +53,7 @@ class Proj4php_ProjMoll
         $lon = $p->x;
         $lat = $p->y;
 
-        $delta_lon = Proj4php::$common->adjust_lon($lon - $this->long0);
+        $delta_lon = Proj4php::$common->adjustLon($lon - $this->long0);
         $theta = $lat;
         $con = Proj4php::$common->pi * sin($lat);
 
@@ -106,7 +106,7 @@ class Proj4php_ProjMoll
         if (abs($arg) > 0.999999999999)
             $arg = 0.999999999999;
         $theta = asin($arg);
-        $lon = Proj4php::$common->adjust_lon($this->long0 + ($p->x / (0.900316316158 * $this->a * cos($theta))));
+        $lon = Proj4php::$common->adjustLon($this->long0 + ($p->x / (0.900316316158 * $this->a * cos($theta))));
         if ($lon < (-Proj4php::$common->pi))
             $lon = -Proj4php::$common->pi;
         if ($lon > Proj4php::$common->pi)

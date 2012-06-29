@@ -70,7 +70,7 @@ class Proj4php_ProjGnom
         $lat = $p->y;
         /* Forward equations
           ----------------- */
-        $dlon = Proj4php::$common->adjust_lon($lon - $this->long0);
+        $dlon =  Proj4php_common::adjustLon($lon - $this->long0);
 
         $sinphi = sin($lat);
         $cosphi = cos($lat);
@@ -135,7 +135,7 @@ class Proj4php_ProjGnom
 
             $lat = Proj4php::$common->asinz($cosc * $this->sin_p14 + ($p->y * $sinc * $this->cos_p14) / $rh);
             $lon = atan2($p->x * sinc, rh * $this->cos_p14 * $cosc - $p->y * $this->sin_p14 * $sinc);
-            $lon = Proj4php::$common->adjust_lon($this->long0 + $lon);
+            $lon =  Proj4php_common::adjustLon($this->long0 + $lon);
         } else {
             $lat = $this->phic0;
             $lon = 0.0;

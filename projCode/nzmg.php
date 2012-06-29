@@ -7,7 +7,8 @@
  *                      and Richard Greenwood rich@greenwoodma$p->com 
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
-/* * *****************************************************************************
+/*
+ * *****************************************************************************
   NAME                            NEW ZEALAND MAP GRID
 
   PURPOSE:	Transforms input longitude and latitude to Easting and
@@ -148,35 +149,35 @@ class Proj4php_ProjNzmg
         $this->A[9] = +0.00067;
         $this->A[10] = -0.00034;
 
-        $this->B_re = array();
-        $this->B_im = array();
-        $this->B_re[1] = +0.7557853228;
-        $this->B_im[1] = 0.0;
-        $this->B_re[2] = +0.249204646;
-        $this->B_im[2] = +0.003371507;
-        $this->B_re[3] = -0.001541739;
-        $this->B_im[3] = +0.041058560;
-        $this->B_re[4] = -0.10162907;
-        $this->B_im[4] = +0.01727609;
-        $this->B_re[5] = -0.26623489;
-        $this->B_im[5] = -0.36249218;
-        $this->B_re[6] = -0.6870983;
-        $this->B_im[6] = -1.1651967;
+        $this->bRe = array();
+        $this->bIm = array();
+        $this->bRe[1] = +0.7557853228;
+        $this->bIm[1] = 0.0;
+        $this->bRe[2] = +0.249204646;
+        $this->bIm[2] = +0.003371507;
+        $this->bRe[3] = -0.001541739;
+        $this->bIm[3] = +0.041058560;
+        $this->bRe[4] = -0.10162907;
+        $this->bIm[4] = +0.01727609;
+        $this->bRe[5] = -0.26623489;
+        $this->bIm[5] = -0.36249218;
+        $this->bRe[6] = -0.6870983;
+        $this->bIm[6] = -1.1651967;
 
-        $this->C_re = array();
-        $this->C_im = array();
-        $this->C_re[1] = +1.3231270439;
-        $this->C_im[1] = 0.0;
-        $this->C_re[2] = -0.577245789;
-        $this->C_im[2] = -0.007809598;
-        $this->C_re[3] = +0.508307513;
-        $this->C_im[3] = -0.112208952;
-        $this->C_re[4] = -0.15094762;
-        $this->C_im[4] = +0.18200602;
-        $this->C_re[5] = +1.01418179;
-        $this->C_im[5] = +1.64497696;
-        $this->C_re[6] = +1.9660549;
-        $this->C_im[6] = +2.5127645;
+        $this->cRe = array();
+        $this->cIm = array();
+        $this->cRe[1] = +1.3231270439;
+        $this->cIm[1] = 0.0;
+        $this->cRe[2] = -0.577245789;
+        $this->cIm[2] = -0.007809598;
+        $this->cRe[3] = +0.508307513;
+        $this->cIm[3] = -0.112208952;
+        $this->cRe[4] = -0.15094762;
+        $this->cIm[4] = +0.18200602;
+        $this->cRe[5] = +1.01418179;
+        $this->cIm[5] = +1.64497696;
+        $this->cRe[6] = +1.9660549;
+        $this->cIm[6] = +2.5127645;
 
         $this->D = array();
         $this->D[1] = +1.5627014243;
@@ -200,45 +201,45 @@ class Proj4php_ProjNzmg
         $lon = $p->x;
         $lat = $p->y;
 
-        $delta_lat = $lat - $this->lat0;
-        $delta_lon = $lon - $this->long0;
+        $deltaLat = $lat - $this->lat0;
+        $deltaLon = $lon - $this->long0;
 
         // 1. Calculate d_phi and d_psi    ...                          // and d_lambda
         // For this algorithm, delta_latitude is in seconds of arc x 10-5, so we need to scale to those units. Longitude is radians.
-        $d_phi = $delta_lat / Proj4php::$common->secToRad * 1E-5;
-        $d_lambda = $delta_lon;
-        $d_phi_n = 1;  // d_phi^0
+        $dPhi = $deltaLat / Proj4php::$common->secToRad * 1E-5;
+        $dLambda = $deltaLon;
+        $dPhiN = 1;  // d_phi^0
 
-        $d_psi = 0;
+        $dPsi = 0;
         for ($n = 1; $n <= 10; $n++) {
-            $d_phi_n = $d_phi_n * $d_phi;
-            $d_psi = $d_psi + $this->A[$n] * $d_phi_n;
+            $dPhiN = $dPhiN * $dPhi;
+            $dPsi = $dPsi + $this->A[$n] * $dPhiN;
         }
 
         // 2. Calculate theta
-        $th_re = $d_psi;
-        $th_im = $d_lambda;
+        $thRe = $dPsi;
+        $thIm = $dLambda;
 
         // 3. Calculate z
-        $th_n_re = 1;
-        $th_n_im = 0;  // theta^0
+        $thNRe = 1;
+        $thNIm = 0;  // theta^0
         #$th_n_re1;
         #$th_n_im1;
 
-        $z_re = 0;
-        $z_im = 0;
+        $zRe = 0;
+        $zIm = 0;
         for ($n = 1; $n <= 6; $n++) {
-            $th_n_re1 = $th_n_re * $th_re - $th_n_im * $th_im;
-            $th_n_im1 = $th_n_im * $th_re + $th_n_re * $th_im;
-            $th_n_re = $th_n_re1;
-            $th_n_im = $th_n_im1;
-            $z_re = $z_re + $this->B_re[$n] * $th_n_re - $this->B_im[$n] * $th_n_im;
-            $z_im = $z_im + $this->B_im[$n] * $th_n_re + $this->B_re[$n] * $th_n_im;
+            $thNRe1 = $thNRe * $thRe - $thNIm * $thIm;
+            $thNIm1 = $thNIm * $thRe + $thNRe * $thIm;
+            $thNRe = $thNRe1;
+            $thNIm = $thNIm1;
+            $zRe = $zRe + $this->bRe[$n] * $thNRe - $this->bIm[$n] * $thNIm;
+            $zIm = $zIm + $this->bIm[$n] * $thNRe + $this->bRe[$n] * $thNIm;
         }
 
         // 4. Calculate easting and northing
-        $p->x = ($z_im * $this->a) + $this->x0;
-        $p->y = ($z_re * $this->a) + $this->y0;
+        $p->x = ($zIm * $this->a) + $this->x0;
+        $p->y = ($zRe * $this->a) + $this->y0;
 
         return $p;
     }
@@ -252,28 +253,28 @@ class Proj4php_ProjNzmg
         $x = $p->x;
         $y = $p->y;
 
-        $delta_x = $x - $this->x0;
-        $delta_y = $y - $this->y0;
+        $deltaX = $x - $this->x0;
+        $deltaY = $y - $this->y0;
 
         // 1. Calculate z
-        $z_re = $delta_y / $this->a;
-        $z_im = $delta_x / $this->a;
+        $zRe = $deltaY / $this->a;
+        $zIm = $deltaX / $this->a;
 
         // 2a. Calculate theta - first approximation gives km accuracy
-        $z_n_re = 1;
-        $z_n_im = 0;  // z^0
-        $z_n_re1;
-        $z_n_im1;
+        $zNRe = 1;
+        $zNIm = 0;  // z^0
+        $zNRe1;
+        $zNIm1;
 
-        $th_re = 0;
-        $th_im = 0;
+        $thRe = 0;
+        $thIm = 0;
         for ($n = 1; $n <= 6; $n++) {
-            $z_n_re1 = $z_n_re * $z_re - $z_n_im * $z_im;
-            $z_n_im1 = $z_n_im * $z_re + $z_n_re * $z_im;
-            $z_n_re = $z_n_re1;
-            $z_n_im = $z_n_im1;
-            $th_re = $th_re + $this->C_re[$n] * $z_n_re - $this->C_im[$n] * $z_n_im;
-            $th_im = $th_im + $this->C_im[$n] * $z_n_re + $this->C_re[$n] * $z_n_im;
+            $zNRe1 = $zNRe * $zRe - $zNIm * $zIm;
+            $zNIm1 = $zNIm * $zRe + $zNRe * $zIm;
+            $zNRe = $zNRe1;
+            $zNIm = $zNIm1;
+            $thRe = $thRe + $this->cRe[$n] * $zNRe - $this->cIm[$n] * $zNIm;
+            $thIm = $thIm + $this->cIm[$n] * $zNRe + $this->cRe[$n] * $zNIm;
         }
 
         // 2b. Iterate to refine the accuracy of the calculation
@@ -281,56 +282,56 @@ class Proj4php_ProjNzmg
         //        1 iteration gives m accuracy -- good enough for most mapping applications
         //        2 iterations bives mm accuracy
         for ($i = 0; $i < $this->iterations; $i++) {
-            $th_n_re = $th_re;
-            $th_n_im = $th_im;
-            $th_n_re1;
-            $th_n_im1;
+            $thNRe = $thRe;
+            $thNIm = $thIm;
+            $thNRe1;
+            $thNIm1;
 
-            $num_re = $z_re;
-            $num_im = $z_im;
+            $numRe = $zRe;
+            $numIm = $zIm;
             for ($n = 2; $n <= 6; $n++) {
-                $th_n_re1 = $th_n_re * th_re - $th_n_im * $th_im;
-                $th_n_im1 = $th_n_im * $th_re + $th_n_re * $th_im;
-                $th_n_re = $th_n_re1;
-                $th_n_im = $th_n_im1;
-                $num_re = $num_re + ($n - 1) * ($this->B_re[$n] * $th_n_re - $this->B_im[$n] * $th_n_im);
-                $num_im = $num_im + (n - 1) * ($this->B_im[$n] * $th_n_re + $this->B_re[$n] * $th_n_im);
+                $thNRe1 = $thNRe * th_re - $thNIm * $thIm;
+                $thNIm1 = $thNIm * $thRe + $thNRe * $thIm;
+                $thNRe = $thNRe1;
+                $thNIm = $thNIm1;
+                $numRe = $numRe + ($n - 1) * ($this->bRe[$n] * $thNRe - $this->bIm[$n] * $thNIm);
+                $numIm = $numIm + (n - 1) * ($this->bIm[$n] * $thNRe + $this->bRe[$n] * $thNIm);
             }
 
-            $th_n_re = 1;
-            $th_n_im = 0;
-            $den_re = $this->B_re[1];
-            $den_im = $this->B_im[1];
+            $thNRe = 1;
+            $thNIm = 0;
+            $denRe = $this->bRe[1];
+            $denIm = $this->bIm[1];
             for ($n = 2; $n <= 6; $n++) {
-                $th_n_re1 = $th_n_re * $th_re - $th_n_im * $th_im;
-                $th_n_im1 = $th_n_im * $th_re + $th_n_re * $th_im;
-                $th_n_re = $th_n_re1;
-                $th_n_im = $th_n_im1;
-                $den_re = $den_re + $n * ($this->B_re[$n] * $th_n_re - $this->B_im[$n] * $th_n_im);
-                $den_im = $den_im + $n * ($this->B_im[n] * $th_n_re + $this->B_re[$n] * $th_n_im);
+                $thNRe1 = $thNRe * $thRe - $thNIm * $thIm;
+                $thNIm1 = $thNIm * $thRe + $thNRe * $thIm;
+                $thNRe = $thNRe1;
+                $thNIm = $thNIm1;
+                $denRe = $denRe + $n * ($this->bRe[$n] * $thNRe - $this->bIm[$n] * $thNIm);
+                $denIm = $denIm + $n * ($this->bIm[n] * $thNRe + $this->bRe[$n] * $thNIm);
             }
 
             // Complex division
-            $den2 = $den_re * $den_re + $den_im * $den_im;
-            $th_re = ($num_re * $den_re + $num_im * $den_im) / $den2;
-            $th_im = ($num_im * $den_re - $num_re * $den_im) / $den2;
+            $den2 = $denRe * $denRe + $denIm * $denIm;
+            $thRe = ($numRe * $denRe + $numIm * $denIm) / $den2;
+            $thIm = ($numIm * $denRe - $numRe * $denIm) / $den2;
         }
 
         // 3. Calculate d_phi              ...                                    // and d_lambda
-        $d_psi = $th_re;
-        $d_lambda = $th_im;
-        $d_psi_n = 1;  // d_psi^0
+        $dPsi = $thRe;
+        $dLambda = $thIm;
+        $dPsiN = 1;  // d_psi^0
 
-        $d_phi = 0;
+        $dPhi = 0;
         for ($n = 1; $n <= 9; $n++) {
-            $d_psi_n = $d_psi_n * $d_psi;
-            $d_phi = $d_phi + $this->D[$n] * $d_psi_n;
+            $dPsiN = $dPsiN * $dPsi;
+            $dPhi = $dPhi + $this->D[$n] * $dPsiN;
         }
 
         // 4. Calculate latitude and longitude
         // d_phi is calcuated in second of arc * 10^-5, so we need to scale back to radians. d_lambda is in radians.
-        $lat = $this->lat0 + ($d_phi * Proj4php::$common->secToRad * 1E5);
-        $lon = $this->long0 + $d_lambda;
+        $lat = $this->lat0 + ($dPhi * Proj4php::$common->secToRad * 1E5);
+        $lon = $this->long0 + $dLambda;
 
         $p->x = $lon;
         $p->y = $lat;

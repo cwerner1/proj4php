@@ -45,7 +45,7 @@ class Proj4php_ProjSinu
         #$this->R = 6370997.0; //Radius of earth
 
         if (!$this->sphere) {
-            $this->en = Proj4php::$common->pj_enfn($this->es);
+            $this->en = Proj4php::$common->pjEnfn($this->es);
         } else {
             $this->n = 1.;
             $this->m = 0.;
@@ -67,7 +67,7 @@ class Proj4php_ProjSinu
 
         /* Forward equations
           ----------------- */
-        $lon = Proj4php::$common->adjust_lon($lon - $this->long0);
+        $lon = Proj4php::$common->adjustLon($lon - $this->long0);
 
         if (isset($this->sphere)) {
             if (!$this->m) {
@@ -87,7 +87,7 @@ class Proj4php_ProjSinu
 
             $s = sin($lat);
             $c = cos($lat);
-            $y = $this->a * Proj4php::$common->pj_mlfn($lat, $s, $c, $this->en);
+            $y = $this->a * Proj4php::$common->pjMlfn($lat, $s, $c, $this->en);
             $x = $this->a * $lon * $c / sqrt(1. - $this->es * $s * $s);
         }
 
@@ -120,14 +120,14 @@ class Proj4php_ProjSinu
             $lat = $this->m ? asin(($this->m * $p->y + sin($p->y)) / $this->n) : ( $this->n != 1. ? asin(sin($p->y) / $this->n) : $p->y );
             $lon = $p->x / ($this->C_x * ($this->m + cos($p->y)));
         } else {
-            $lat = Proj4php::$common->pj_inv_mlfn($p->y / $this->a, $this->es, $this->en);
+            $lat = Proj4php::$common->pjInvMlfn($p->y / $this->a, $this->es, $this->en);
             $s = abs($lat);
 
             if ($s < Proj4php::$common->halfPi) {
                 $s = sin($lat);
                 $temp = $this->long0 + $p->x * sqrt(1. - $this->es * $s * $s) / ($this->a * cos($lat));
                 //temp = $this->long0 + $p->x / ($this->a * cos($lat));
-                $lon = Proj4php::$common->adjust_lon($temp);
+                $lon = Proj4php::$common->adjustLon($temp);
             } else if (($s - Proj4php::$common->epsln) < Proj4php::$common->halfPi) {
                 $lon = $this->long0;
             }

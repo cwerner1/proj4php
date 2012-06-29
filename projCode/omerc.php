@@ -37,16 +37,19 @@ class Proj4php_ProjOmerc
 
     public function init()
     {
-        if (!$this->mode)
+        if (!$this->mode) {
             $this->mode = 0;
+        }
         if (!$this->lon1) {
             $this->lon1 = 0;
             $this->mode = 1;
         }
-        if (!$this->lon2)
+        if (!$this->lon2) {
             $this->lon2 = 0;
-        if (!$this->lat2)
+        }
+        if (!$this->lat2) {
             $this->lat2 = 0;
+        }
 
         /* Place parameters in static storage for common use
           ------------------------------------------------- */
@@ -54,21 +57,21 @@ class Proj4php_ProjOmerc
         $es = 1.0 - pow($temp, 2);
         $e = sqrt($es);
 
-        $this->sin_p20 = sin($this->lat0);
-        $this->cos_p20 = cos($this->lat0);
+        $this->sinP20 = sin($this->lat0);
+        $this->cosP20 = cos($this->lat0);
 
-        $this->con = 1.0 - $this->es * $this->sin_p20 * $this->sin_p20;
+        $this->con = 1.0 - $this->es * $this->sinP20 * $this->sinP20;
         $this->com = sqrt(1.0 - $es);
-        $this->bl = sqrt(1.0 + $this->es * pow($this->cos_p20, 4.0) / (1.0 - $es));
+        $this->bl = sqrt(1.0 + $this->es * pow($this->cosP20, 4.0) / (1.0 - $es));
         $this->al = $this->a * $this->bl * $this->k0 * $this->com / $this->con;
         if (abs($this->lat0) < Proj4php::$common->epsln) {
             $this->ts = 1.0;
             $this->d = 1.0;
             $this->el = 1.0;
         } else {
-            $this->ts = Proj4php::$common->tsfnz($this->e, $this->lat0, $this->sin_p20);
+            $this->ts = Proj4php::$common->tsfnz($this->e, $this->lat0, $this->sinP20);
             $this->con = sqrt($this->con);
-            $this->d = $this->bl * $this->com / ($this->cos_p20 * $this->con);
+            $this->d = $this->bl * $this->com / ($this->cosP20 * $this->con);
             if (($this->d * $this->d - 1.0) > 0.0) {
                 if ($this->lat0 >= 0.0) {
                     $this->f = $this->d + sqrt($this->d * $this->d - 1.0);
@@ -128,7 +131,7 @@ class Proj4php_ProjOmerc
                 $this->lon2 = $this->lon2 + 2.0 * Proj4php::$common->pi;
             $this->dlon = $this->lon1 - $this->lon2;
             $this->longc = .5 * ($this->lon1 + $this->lon2) - atan($this->j * tan(.5 * $this->bl * $this->dlon) / $this->p) / $this->bl;
-            $this->dlon = Proj4php::$common->adjust_lon($this->lon1 - $this->longc);
+            $this->dlon = Proj4php::$common->adjustLon($this->lon1 - $this->longc);
             $this->gama = atan(sin($this->bl * $this->dlon) / $this->g);
             $this->alpha = Proj4php::$common->asinz($this->d * sin($this->gama));
 
@@ -198,7 +201,7 @@ class Proj4php_ProjOmerc
         /* Forward equations
           ----------------- */
         $sin_phi = sin($lat);
-        $dlon = Proj4php::$common->adjust_lon($lon - $this->longc);
+        $dlon = Proj4php::$common->adjustLon($lon - $this->longc);
         $vl = sin($this->bl * $dlon);
         if (abs(abs($lat) - Proj4php::$common->halfPi) > Proj4php::$common->epsln) {
             $ts1 = Proj4php::$common->tsfnz($this->e, $lat, $sin_phi);
@@ -295,7 +298,7 @@ class Proj4php_ProjOmerc
             //return($flag);
             //~ con = cos($this->bl * us /al);
             $theta = $this->longc - atan2(($s * $this->cosgam - $vl * $this->singam), $con) / $this->bl;
-            $lon = Proj4php::$common->adjust_lon($theta);
+            $lon = Proj4php::$common->adjustLon($theta);
         }
         $p->x = $lon;
         $p->y = $lat;

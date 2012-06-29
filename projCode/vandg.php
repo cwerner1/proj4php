@@ -59,7 +59,7 @@ class Proj4php_ProjVandg
 
         /* Forward equations
           ----------------- */
-        $dlon = Proj4php::$common->adjust_lon($lon - $this->long0);
+        $dlon = Proj4php::$common->adjustLon($lon - $this->long0);
         $x;
         $y;
 
@@ -159,7 +159,7 @@ class Proj4php_ProjVandg
         if (abs($xx) < Proj4php::$common->epsln) {
             $lon = $this->$long0;
         }
-        $lon = Proj4php::$common->adjust_lon($this->long0 + Proj4php::$common->pi * ($xys - 1.0 + sqrt(1.0 + 2.0 * ($xx * $xx - $yy * $yy) + $xys * $xys)) / 2.0 / $xx);
+        $lon = Proj4php::$common->adjustLon($this->long0 + Proj4php::$common->pi * ($xys - 1.0 + sqrt(1.0 + 2.0 * ($xx * $xx - $yy * $yy) + $xys * $xys)) / 2.0 / $xx);
 
         $p->x = $lon;
         $p->y = $lat;
