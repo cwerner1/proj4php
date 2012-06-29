@@ -2,6 +2,8 @@
 
 include_once("Proj4php/proj4php.php");
 
+exit();
+
 $error = false;
 
 /**

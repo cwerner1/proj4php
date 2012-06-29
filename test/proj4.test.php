@@ -1,7 +1,7 @@
 <?php
-
-require_once 'Proj4php/proj4php.php';
 /*
+require_once 'Proj4php/proj4php.php';
+
 $proj4 = new Proj4php();
 $projL93 = new Proj4php_Proj('EPSG:2154', $proj4);
 $projWGS84 = new Proj4php_Proj('EPSG:4326', $proj4);
