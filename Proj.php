@@ -545,7 +545,7 @@ class Proj4php_Proj
                 case "rf": $this->rf = floatval(paramVal);
                     break; // inverse flattening rf= a/(a-b)
                 case "lat_0": $this->latZero = $paramVal * Proj4php_Common::$dToR;
-                    break;        // phi0, central latitude
+                    break;        // phiZero, central latitude
                 case "lat_1": $this->latOne = $paramVal * Proj4php_Common::$dToR;
                     break;        //standard parallel 1
                 case "lat_2": $this->latTwo = $paramVal * Proj4php_Common::$dToR;
@@ -553,7 +553,7 @@ class Proj4php_Proj
                 case "latTs": $this->latTs = $paramVal * Proj4php_Common::$dToR;
                     break;      // used in merc and eqc
                 case "lon_0": $this->longZero = $paramVal * Proj4php_Common::$dToR;
-                    break;       // lam0, central longitude
+                    break;       // lamZero, central longitude
                 case "alpha": $this->alpha = floatval($paramVal) * Proj4php_Common::$dToR;
                     break;  //for somerc projection
                 case "lonc": $this->longc = paramVal * Proj4php_Common::$dToR;
@@ -639,17 +639,17 @@ class Proj4php_Proj
             $this->sphere = true;
             $this->b = $this->a;
         }
-        $this->a2 = $this->a * $this->a;          // used in geocentric
+        $this->aTwo = $this->a * $this->a;          // used in geocentric
         $this->b2 = $this->b * $this->b;          // used in geocentric
-        $this->es = ($this->a2 - $this->b2) / $this->a2;  // e ^ 2
+        $this->es = ($this->aTwo - $this->b2) / $this->aTwo;  // e ^ 2
         $this->e = sqrt($this->es);        // eccentricity
         if (isset($this->R_A)) {
             $this->a *= 1. - $this->es * ( Proj4php_Common::$sixth + $this->es * ( Proj4php_Common::$ra4 + $this->es * Proj4php_Common::$ra6));
-            $this->a2 = $this->a * $this->a;
+            $this->aTwo = $this->a * $this->a;
             $this->b2 = $this->b * $this->b;
             $this->es = 0.0;
         }
-        $this->ep2 = ($this->a2 - $this->b2) / $this->b2; // used in geocentric
+        $this->ep2 = ($this->aTwo - $this->b2) / $this->b2; // used in geocentric
         if (!isset($this->kZero))
             $this->kZero = 1.0;    //default value
 

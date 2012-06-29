@@ -31,7 +31,7 @@ class Proj4php_ProjSomerc
     public function init()
     {
         $phyZero = $this->latZero;
-        $this->lambda0 = $this->longZero;
+        $this->lambdaZero = $this->longZero;
         $sinPhyZero = sin($phyZero);
         $semiMajorAxis = $this->a;
         $invF = $this->rf;
@@ -57,17 +57,17 @@ class Proj4php_ProjSomerc
      */
     public function forward($p)
     {
-        $Sa1 = log(tan($PI / 4.0 - $p->y / 2.0));
-        $Sa2 = $this->e / 2.0
+        $SaOne = log(tan($PI / 4.0 - $p->y / 2.0));
+        $SaTwo = $this->e / 2.0
                 * log((1 + $this->e * sin($p->y))
                         / (1 - $this->e * sin($p->y)));
-        $S = -$this->alpha * ($Sa1 + $Sa2) + $this->K;
+        $S = -$this->alpha * ($SaOne + $SaTwo) + $this->K;
 
         // spheric latitude
         $b = 2.0 * (atan(exp($S)) - proj4phpCommon::PI / 4.0);
 
         // spheric longitude
-        $I = $this->alpha * ($p->x - $this->lambda0);
+        $I = $this->alpha * ($p->x - $this->lambdaZero);
 
         // psoeudo equatorial rotation
         $rotI = atan(sin($I)
@@ -106,7 +106,7 @@ class Proj4php_ProjSomerc
                 / (cos($this->b0) * cos($rotI) - sin($this->b0)
                 * tan($rotB)));
 
-        $lambda = $this->lambda0 + $I / $this->alpha;
+        $lambda = $this->lambdaZero + $I / $this->alpha;
 
         $S = 0.0;
         $phy = $b;

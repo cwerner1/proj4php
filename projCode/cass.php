@@ -38,7 +38,7 @@ class Proj4php_ProjCass
     {
         if (!$this->sphere) {
             $this->en = Proj4php::$common->pjEnfn($this->es);
-            $this->m0 = Proj4php::$common->pjMlfn($this->latZero, sin($this->latZero), cos($this->latZero), $this->en);
+            $this->mZero = Proj4php::$common->pjMlfn($this->latZero, sin($this->latZero), cos($this->latZero), $this->en);
         }
     }
 
@@ -64,7 +64,7 @@ class Proj4php_ProjCass
 
         if ($this->sphere) {
             $x = asin(cos($phi) * sin($lam));
-            $y = atan2(tan($phi), cos($lam)) - $this->phi0;
+            $y = atan2(tan($phi), cos($lam)) - $this->phiZero;
         } else {
             //ellipsoid
             $this->n = sin($phi);
@@ -73,11 +73,11 @@ class Proj4php_ProjCass
             $this->n = 1. / sqrt(1. - $this->es * $this->n * $this->n);
             $this->tn = tan($phi);
             $this->t = $this->tn * $this->tn;
-            $this->a1 = $lam * $this->c;
+            $this->aOne = $lam * $this->c;
             $this->c *= $this->es * $this->c / (1 - $this->es);
-            $this->a2 = $this->a1 * $this->a1;
-            $x = $this->n * $this->a1 * (1. - $this->a2 * $this->t * ($this->C1 - (8. - $this->t + 8. * $this->c) * $this->a2 * $this->C2));
-            $y -= $this->m0 - $this->n * $this->tn * $this->a2 * (.5 + (5. - $this->t + 6. * $this->c) * $this->a2 * $this->C3);
+            $this->aTwo = $this->aOne * $this->aOne;
+            $x = $this->n * $this->aOne * (1. - $this->aTwo * $this->t * ($this->C1 - (8. - $this->t + 8. * $this->c) * $this->aTwo * $this->C2));
+            $y -= $this->mZero - $this->n * $this->tn * $this->aTwo * (.5 + (5. - $this->t + 6. * $this->c) * $this->aTwo * $this->C3);
         }
 
         $p->x = $this->a * $x + $this->xZero;
@@ -102,7 +102,7 @@ class Proj4php_ProjCass
             $lam = atan2(tan($x), cos($this->dd));
         } else {
             /* ellipsoid */
-            $ph1 = Proj4php::$common->pjInvMlfn($this->m0 + $y, $this->es, $this->en);
+            $ph1 = Proj4php::$common->pjInvMlfn($this->mZero + $y, $this->es, $this->en);
             $this->tn = tan($ph1);
             $this->t = $this->tn * $this->tn;
             $this->n = sin($ph1);

@@ -137,7 +137,7 @@ class Proj4php_ProjLaea
                 case self::$nPole:
                     $coslam = -$coslam;
                 case self::$sPole:
-                    if (abs($phi + $this->phi0) < Proj4php_Common::$epsln) {
+                    if (abs($phi + $this->phiZero) < Proj4php_Common::$epsln) {
                         Proj4php::reportError("laea:fwd:phi < eps");
                         return null;
                     }
@@ -265,7 +265,7 @@ class Proj4php_ProjLaea
                     $y = $cosz * $rh;
                     break;
                 case self::$obliq:
-                    $phi = (abs($rh) <= Proj4php_Common::$epsln) ? $this->phi0 : asin($cosz * $this->sinphZero + $y * $sinz * $this->cosphZero / $rh);
+                    $phi = (abs($rh) <= Proj4php_Common::$epsln) ? $this->phiZero : asin($cosz * $this->sinphZero + $y * $sinz * $this->cosphZero / $rh);
                     $x *= $sinz * $this->cosphZero;
                     $y = ($cosz - sin($phi) * $this->sinphZero) * $rh;
                     break;
@@ -295,7 +295,7 @@ class Proj4php_ProjLaea
                     $rho = sqrt($x * $x + $y * $y);
                     if ($rho < Proj4php_Common::$epsln) {
                         $p->x = 0.;
-                        $p->y = $this->phi0;
+                        $p->y = $this->phiZero;
                         return $p;
                     }
                     $sCe = 2. * asin(.5 * $rho / $this->rq);
@@ -317,7 +317,7 @@ class Proj4php_ProjLaea
                     $q = ($x * $x + $y * $y);
                     if (!$q) {
                         $p->x = 0.;
-                        $p->y = $this->phi0;
+                        $p->y = $this->phiZero;
                         return $p;
                     }
                     /*
