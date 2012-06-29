@@ -126,14 +126,14 @@ class Proj4phpProjTmerc {
             for( $i = 0; true; $i++ ) {
                 $delta_phi = (($con + $this->e1 * sin( 2.0 * $phi ) - $this->e2 * sin( 4.0 * $phi ) + $this->e3 * sin( 6.0 * $phi )) / $this->e0) - $phi;
                 $phi += $delta_phi;
-                if( abs( $delta_phi ) <= Proj4php::$common->EPSLN )
+                if( abs( $delta_phi ) <= Proj4php::$common->epsln )
                     break;
                 if( $i >= $max_iter ) {
                     Proj4php::reportError( "tmerc:inverse: Latitude failed to converge" );
                     return(95);
                 }
             } // for()
-            if( abs( $phi ) < Proj4php::$common->HALF_PI ) {
+            if( abs( $phi ) < Proj4php::$common->halfPi ) {
                 // sincos(phi, &sin_phi, &cos_phi);
                 $sin_phi = sin( $phi );
                 $cos_phi = cos( $phi );
@@ -150,7 +150,7 @@ class Proj4phpProjTmerc {
                 $lat = $phi - ($n * $tan_phi * $ds / $r) * (0.5 - $ds / 24.0 * (5.0 + 3.0 * $t + 10.0 * $c - 4.0 * $cs - 9.0 * $this->ep2 - $ds / 30.0 * (61.0 + 90.0 * $t + 298.0 * $c + 45.0 * $ts - 252.0 * $this->ep2 - 3.0 * $cs)));
                 $lon = Proj4php::$common->adjust_lon( $this->long0 + ($d * (1.0 - $ds / 6.0 * (1.0 + 2.0 * $t + $c - $ds / 20.0 * (5.0 - 2.0 * $c + 28.0 * $t - 3.0 * $cs + 8.0 * $this->ep2 + 24.0 * $ts))) / $cos_phi) );
             } else {
-                $lat = Proj4php::$common->HALF_PI * Proj4php::$common->sign( $y );
+                $lat = Proj4php::$common->halfPi * Proj4php::$common->sign( $y );
                 $lon = $this->long0;
             }
         }

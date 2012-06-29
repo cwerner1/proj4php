@@ -421,10 +421,10 @@ class Proj4php_Proj {
                         $this->k0 = $value;
                         break;
                     case 'central_meridian':
-                        $this->long0 = $value * Proj4php::$common->D2R;
+                        $this->long0 = $value * Proj4php::$common->dToR;
                         break;
                     case 'latitude_of_origin':
-                        $this->lat0 = $value * Proj4php::$common->D2R;
+                        $this->lat0 = $value * Proj4php::$common->dToR;
                         break;
                     case 'more_here':
                         break;
@@ -522,19 +522,19 @@ class Proj4php_Proj {
                 // DGR 2007-11-20
                 case "rf": $this->rf = floatval( paramVal );
                     break; // inverse flattening rf= a/(a-b)
-                case "lat_0": $this->lat0 = $paramVal * Proj4php::$common->D2R;
+                case "lat_0": $this->lat0 = $paramVal * Proj4php::$common->dToR;
                     break;        // phi0, central latitude
-                case "lat_1": $this->lat1 = $paramVal * Proj4php::$common->D2R;
+                case "lat_1": $this->lat1 = $paramVal * Proj4php::$common->dToR;
                     break;        //standard parallel 1
-                case "lat_2": $this->lat2 = $paramVal * Proj4php::$common->D2R;
+                case "lat_2": $this->lat2 = $paramVal * Proj4php::$common->dToR;
                     break;        //standard parallel 2
-                case "lat_ts": $this->lat_ts = $paramVal * Proj4php::$common->D2R;
+                case "lat_ts": $this->lat_ts = $paramVal * Proj4php::$common->dToR;
                     break;      // used in merc and eqc
-                case "lon_0": $this->long0 = $paramVal * Proj4php::$common->D2R;
+                case "lon_0": $this->long0 = $paramVal * Proj4php::$common->dToR;
                     break;       // lam0, central longitude
-                case "alpha": $this->alpha = floatval( $paramVal ) * Proj4php::$common->D2R;
+                case "alpha": $this->alpha = floatval( $paramVal ) * Proj4php::$common->dToR;
                     break;  //for somerc projection
-                case "lonc": $this->longc = paramVal * Proj4php::$common->D2R;
+                case "lonc": $this->longc = paramVal * Proj4php::$common->dToR;
                     break;       //for somerc projection
                 case "x_0": $this->x0 = floatval( $paramVal );
                     break;  // false easting
@@ -554,13 +554,13 @@ class Proj4php_Proj {
                     break;
                 case "to_meter": $this->to_meter = floatval( $paramVal );
                     break; // cartesian scaling
-                case "from_greenwich": $this->from_greenwich = $paramVal * Proj4php::$common->D2R;
+                case "from_greenwich": $this->from_greenwich = $paramVal * Proj4php::$common->dToR;
                     break;
                 // DGR 2008-07-09 : if pm is not a well-known prime meridian take
                 // the value instead of 0.0, then convert to radians
                 case "pm": $paramVal = trim( $paramVal );
                     $this->from_greenwich = Proj4php::$primeMeridian[$paramVal] ? Proj4php::$primeMeridian[$paramVal] : floatval( $paramVal );
-                    $this->from_greenwich *= Proj4php::$common->D2R;
+                    $this->from_greenwich *= Proj4php::$common->dToR;
                     break;
                 // DGR 2010-11-12: axis
                 case "axis": $paramVal = trim( $paramVal );
@@ -612,7 +612,7 @@ class Proj4php_Proj {
         if( isset( $this->rf ) && !isset( $this->b ) )
             $this->b = (1.0 - 1.0 / $this->rf) * $this->a;
         
-        if ( (isset($this->rf) && $this->rf === 0) || abs($this->a - $this->b) < Proj4php::$common->EPSLN) {
+        if ( (isset($this->rf) && $this->rf === 0) || abs($this->a - $this->b) < Proj4php::$common->epsln) {
             $this->sphere = true;
             $this->b = $this->a;
         }
@@ -621,7 +621,7 @@ class Proj4php_Proj {
         $this->es = ($this->a2 - $this->b2) / $this->a2;  // e ^ 2
         $this->e = sqrt( $this->es );        // eccentricity
         if( isset( $this->R_A ) ) {
-            $this->a *= 1. - $this->es * (Proj4php::$common->SIXTH + $this->es * (Proj4php::$common->RA4 + $this->es * Proj4php::$common->RA6));
+            $this->a *= 1. - $this->es * (Proj4php::$common->sixth + $this->es * (Proj4php::$common->ra4 + $this->es * Proj4php::$common->ra6));
             $this->a2 = $this->a * $this->a;
             $this->b2 = $this->b * $this->b;
             $this->es = 0.0;

@@ -201,7 +201,7 @@ class Proj4phpProjNzmg {
 
         // 1. Calculate d_phi and d_psi    ...                          // and d_lambda
         // For this algorithm, delta_latitude is in seconds of arc x 10-5, so we need to scale to those units. Longitude is radians.
-        $d_phi = $delta_lat / Proj4php::$common->SEC_TO_RAD * 1E-5;
+        $d_phi = $delta_lat / Proj4php::$common->secToRad * 1E-5;
         $d_lambda = $delta_lon;
         $d_phi_n = 1;  // d_phi^0
 
@@ -324,7 +324,7 @@ class Proj4phpProjNzmg {
 
         // 4. Calculate latitude and longitude
         // d_phi is calcuated in second of arc * 10^-5, so we need to scale back to radians. d_lambda is in radians.
-        $lat = $this->lat0 + ($d_phi * Proj4php::$common->SEC_TO_RAD * 1E5);
+        $lat = $this->lat0 + ($d_phi * Proj4php::$common->secToRad * 1E5);
         $lon = $this->long0 + $d_lambda;
 
         $p->x = $lon;

@@ -20,7 +20,7 @@ class Proj4phpProjGauss {
         $this->C = sqrt( 1.0 + $this->es * $cphi * $cphi / (1.0 - $this->es) );
         $this->phic0 = asin( $sphi / $this->C );
         $this->ratexp = 0.5 * $this->C * $this->e;
-        $this->K = tan( 0.5 * $this->phic0 + Proj4php::$common->FORTPI ) / (pow( tan( 0.5 * $this->lat0 + Proj4php::$common->FORTPI ), $this->C ) * Proj4php::$common->srat( $this->e * $sphi, $this->ratexp ));
+        $this->K = tan( 0.5 * $this->phic0 + Proj4php::$common->fortPi ) / (pow( tan( 0.5 * $this->lat0 + Proj4php::$common->fortPi ), $this->C ) * Proj4php::$common->srat( $this->e * $sphi, $this->ratexp ));
     }
 
     /**
@@ -32,7 +32,7 @@ class Proj4phpProjGauss {
         $lon = $p->x;
         $lat = $p->y;
 
-        $p->y = 2.0 * atan( $this->K * pow( tan( 0.5 * $lat + Proj4php::$common->FORTPI ), $this->C ) * Proj4php::$common->srat( $this->e * sin( $lat ), $this->ratexp ) ) - Proj4php::$common->HALF_PI;
+        $p->y = 2.0 * atan( $this->K * pow( tan( 0.5 * $lat + Proj4php::$common->fortPi ), $this->C ) * Proj4php::$common->srat( $this->e * sin( $lat ), $this->ratexp ) ) - Proj4php::$common->halfPi;
         $p->x = $this->C * $lon;
         
         return $p;
@@ -51,7 +51,7 @@ class Proj4phpProjGauss {
         $num = pow( tan( 0.5 * $lat + Proj4php::$common . FORTPI ) / $this->K, 1. / $this->C );
         
         for( $i = Proj4php::$common . MAX_ITER; $i > 0; --$i ) {
-            $lat = 2.0 * atan( $num * Proj4php::$common->srat( $this->e * sin( $p->y ), -0.5 * $this->e ) ) - Proj4php::$common->HALF_PI;
+            $lat = 2.0 * atan( $num * Proj4php::$common->srat( $this->e * sin( $p->y ), -0.5 * $this->e ) ) - Proj4php::$common->halfPi;
             if( abs( $lat - $p->y ) < $DEL_TOL )
                 break;
             $p->y = $lat;

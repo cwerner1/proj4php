@@ -46,7 +46,7 @@ class Proj4phpProjUtm {
         }
         
         $this->lat0 = 0.0;
-        $this->long0 = ((6 * abs( $this->zone )) - 183) * Proj4php::$common->D2R;
+        $this->long0 = ((6 * abs( $this->zone )) - 183) * Proj4php::$common->dToR;
         $this->x0 = 500000.0;
         $this->y0 = $this->utmSouth ? 10000000.0 : 0.0;
         $this->k0 = 0.9996;

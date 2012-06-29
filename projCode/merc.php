@@ -68,21 +68,21 @@ class Proj4phpProjMerc {
         $lon = $p->x;
         $lat = $p->y;
         // convert to radians
-        if( $lat * Proj4php::$common->R2D > 90.0 &&
-                  $lat * Proj4php::$common->R2D < -90.0 &&
-                  $lon * Proj4php::$common->R2D > 180.0 &&
-                  $lon * Proj4php::$common->R2D < -180.0 ) {
+        if( $lat * Proj4php::$common->rToD > 90.0 &&
+                  $lat * Proj4php::$common->rToD < -90.0 &&
+                  $lon * Proj4php::$common->rToD > 180.0 &&
+                  $lon * Proj4php::$common->rToD < -180.0 ) {
             Proj4php::reportError( "merc:forward: llInputOutOfRange: " . $lon . " : " . $lat );
             return null;
         }
         
-        if( abs( abs( $lat ) - Proj4php::$common->HALF_PI ) <= Proj4php::$common->EPSLN ) {
+        if( abs( abs( $lat ) - Proj4php::$common->halfPi ) <= Proj4php::$common->epsln ) {
             Proj4php::reportError( "merc:forward: ll2mAtPoles" );
             return null;
         } else {
             if( $this->sphere ) {
                 $x = $this->x0 + $this->a * $this->k0 * Proj4php::$common->adjust_lon( $lon - $this->long0 );
-                $y = $this->y0 + $this->a * $this->k0 * log( tan( Proj4php::$common->FORTPI + 0.5 * $lat ) );
+                $y = $this->y0 + $this->a * $this->k0 * log( tan( Proj4php::$common->fortPi + 0.5 * $lat ) );
             } else {
                 $sinphi = sin( lat );
                 $ts = Proj4php::$common . tsfnz( $this->e, $lat, $sinphi );
@@ -106,7 +106,7 @@ class Proj4phpProjMerc {
         $y = $p->y - $this->y0;
         
         if( $this->sphere ) {
-            $lat = Proj4php::$common->HALF_PI - 2.0 * atan( exp( -$y / $this->a * $this->k0 ) );
+            $lat = Proj4php::$common->halfPi - 2.0 * atan( exp( -$y / $this->a * $this->k0 ) );
         } else {
             $ts = exp( -$y / ($this->a * $this->k0) );
             $lat = Proj4php::$common->phi2z( $this->e, $ts );
