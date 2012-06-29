@@ -50,14 +50,14 @@ class Proj4phpProjMoll {
 
         $delta_lon = Proj4php::$common->adjust_lon( $lon - $this->long0 );
         $theta = $lat;
-        $con = Proj4php::$common->PI * sin( $lat );
+        $con = Proj4php::$common->pi * sin( $lat );
 
         /* Iterate using the Newton-Raphson method to find theta
           ----------------------------------------------------- */
         for( $i = 0; true; ++$i ) {
             $delta_theta = -($theta + sin( $theta ) - $con) / (1.0 + cos( $theta ));
             $theta += $delta_theta;
-            if( abs( $delta_theta ) < Proj4php::$common->EPSLN )
+            if( abs( $delta_theta ) < Proj4php::$common->epsln )
                 break;
             if( $i >= 50 ) {
                 Proj4php::reportError( "moll:Fwd:IterationError" );
@@ -69,7 +69,7 @@ class Proj4phpProjMoll {
         /* If the latitude is 90 deg, force the x coordinate to be "0 . false easting"
           this is done here because of precision problems with "cos(theta)"
           -------------------------------------------------------------------------- */
-        if( Proj4php::$common->PI / 2 - abs( $lat ) < Proj4php::$common->EPSLN )
+        if( Proj4php::$common->pi / 2 - abs( $lat ) < Proj4php::$common->epsln )
             $delta_lon = 0;
         $x = 0.900316316158 * $this->a * $delta_lon * cos( $theta ) + $this->x0;
         $y = 1.4142135623731 * $this->a * sin( $theta ) + $this->y0;
@@ -101,11 +101,11 @@ class Proj4phpProjMoll {
             $arg = 0.999999999999;
         $theta = asin( $arg );
         $lon = Proj4php::$common->adjust_lon( $this->long0 + ($p->x / (0.900316316158 * $this->a * cos( $theta ))) );
-        if( $lon < (-Proj4php::$common->PI) )
-            $lon = -Proj4php::$common->PI;
-        if( $lon > Proj4php::$common->PI )
-            $lon = Proj4php::$common->PI;
-        $arg = (2.0 * $theta + sin( 2.0 * $theta )) / Proj4php::$common->PI;
+        if( $lon < (-Proj4php::$common->pi) )
+            $lon = -Proj4php::$common->pi;
+        if( $lon > Proj4php::$common->pi )
+            $lon = Proj4php::$common->pi;
+        $arg = (2.0 * $theta + sin( 2.0 * $theta )) / Proj4php::$common->pi;
         if( abs( $arg ) > 1.0 )
             $arg = 1.0;
         $lat = asin( $arg );

@@ -195,8 +195,8 @@ class Proj4php
 
         // Workaround for datum shifts towgs84, if either source or destination projection is not wgs84
         if (isset($source->datum) && isset($dest->datum) && (
-                (($source->datum->datum_type == Proj4php::$common->PJD_3PARAM || $source->datum->datum_type == Proj4php::$common->PJD_7PARAM) && (isset($dest->datumCode) && $dest->datumCode != "WGS84")) ||
-                (($dest->datum->datum_type == Proj4php::$common->PJD_3PARAM || $dest->datum->datum_type == Proj4php::$common->PJD_7PARAM) && (isset($source->datumCode) && $source->datumCode != "WGS84")))) {
+                (($source->datum->datum_type == Proj4php::$common->pjd3Param || $source->datum->datum_type == Proj4php::$common->pjd7Param) && (isset($dest->datumCode) && $dest->datumCode != "WGS84")) ||
+                (($dest->datum->datum_type == Proj4php::$common->pjd3Param || $dest->datum->datum_type == Proj4php::$common->pjd7Param) && (isset($source->datumCode) && $source->datumCode != "WGS84")))) {
             $wgs84 = Proj4php::$WGS84;
             $this->transform($source, $wgs84, $point);
             $source = $wgs84;
@@ -220,8 +220,8 @@ class Proj4php
 
         // Transform source points to long/lat, if they aren't already.
         if ($source->projName == "longlat") {
-            $point->x *= Proj4php::$common->D2R;  // convert degrees to radians
-            $point->y *= Proj4php::$common->D2R;
+            $point->x *= Proj4php::$common->dToR;  // convert degrees to radians
+            $point->y *= Proj4php::$common->dToR;
         } else {
             if (isset($source->to_meter)) {
                 $point->x *= $source->to_meter;
@@ -245,8 +245,8 @@ class Proj4php
 
         if ($dest->projName == "longlat") {
             // convert radians to decimal degrees
-            $point->x *= Proj4php::$common->R2D;
-            $point->y *= Proj4php::$common->R2D;
+            $point->x *= Proj4php::$common->rToD;
+            $point->y *= Proj4php::$common->rToD;
         } else {               // else project
             $dest->forward($point);
             if (isset($dest->to_meter)) {
@@ -279,8 +279,8 @@ class Proj4php
         }
 
         // Explicitly skip datum transform by setting 'datum=none' as parameter for either source or dest
-        if ($source->datum_type == Proj4php::$common->PJD_NODATUM
-                || $dest->datum_type == Proj4php::$common->PJD_NODATUM) {
+        if ($source->datum_type == Proj4php::$common->pjdNodatum
+                || $dest->datum_type == Proj4php::$common->pjdNodatum) {
             return $point;
         }
 
@@ -297,21 +297,21 @@ class Proj4php
 
         // Do we need to go through geocentric coordinates?
         if ($source->es != $dest->es || $source->a != $dest->a
-                || $source->datum_type == Proj4php::$common->PJD_3PARAM
-                || $source->datum_type == Proj4php::$common->PJD_7PARAM
-                || $dest->datum_type == Proj4php::$common->PJD_3PARAM
-                || $dest->datum_type == Proj4php::$common->PJD_7PARAM) {
+                || $source->datum_type == Proj4php::$common->pjd3Param
+                || $source->datum_type == Proj4php::$common->pjd7Param
+                || $dest->datum_type == Proj4php::$common->pjd3Param
+                || $dest->datum_type == Proj4php::$common->pjd7Param) {
 
             // Convert to geocentric coordinates.
             $source->geodetic_to_geocentric($point);
             // CHECK_RETURN;
             // Convert between datums
-            if ($source->datum_type == Proj4php::$common->PJD_3PARAM || $source->datum_type == Proj4php::$common->PJD_7PARAM) {
+            if ($source->datum_type == Proj4php::$common->pjd3Param || $source->datum_type == Proj4php::$common->pjd7Param) {
                 $source->geocentric_to_wgs84($point);
                 // CHECK_RETURN;
             }
 
-            if ($dest->datum_type == Proj4php::$common->PJD_3PARAM || $dest->datum_type == Proj4php::$common->PJD_7PARAM) {
+            if ($dest->datum_type == Proj4php::$common->pjd3Param || $dest->datum_type == Proj4php::$common->pjd7Param) {
                 $dest->geocentric_from_wgs84($point);
                 // CHECK_RETURN;
             }

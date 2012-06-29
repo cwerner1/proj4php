@@ -68,7 +68,7 @@ class Proj4phpProjEqui {
         $p->y -= $this->y0;
         $lat = $p->y / $this->a;
 
-        if( abs( $lat ) > Proj4php::$common->HALF_PI ) {
+        if( abs( $lat ) > Proj4php::$common->halfPi ) {
             Proj4php::reportError( "equi:Inv:DataError" );
         }
         $lon = Proj4php::$common->adjust_lon( $this->long0 + $p->x / ($this->a * cos( $this->lat0 )) );

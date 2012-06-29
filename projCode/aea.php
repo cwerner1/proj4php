@@ -37,7 +37,7 @@ class Proj4phpProjAea {
      */
     public function init() {
 
-        if( abs( $this->lat1 + $this->lat2 ) < Proj4php::$common->EPSLN ) {
+        if( abs( $this->lat1 + $this->lat2 ) < Proj4php::$common->epsln ) {
             Proj4php::reportError( "aeaInitEqualLatitudes" );
             return;
         }
@@ -63,7 +63,7 @@ class Proj4phpProjAea {
         $this->t3 = $this->sin_po;
         $this->qs0 = Proj4php::$common->qsfnz( $this->e3, $this->sin_po, $this->cos_po );
 
-        if( abs( $this->lat1 - $this->lat2 ) > Proj4php::$common->EPSLN ) {
+        if( abs( $this->lat1 - $this->lat2 ) > Proj4php::$common->epsln ) {
             $this->ns0 = ($this->ms1 * $this->ms1 - $this->ms2 * $this->ms2) / ($this->qs2 - $this->qs1);
         } else {
             $this->ns0 = $this->con;
@@ -131,9 +131,9 @@ class Proj4phpProjAea {
                 $lat = $this->phi1z( $this->e3, $qs );
             } else {
                 if( $qs >= 0 ) {
-                    $lat = .5 * Proj4php::$Common->PI;
+                    $lat = .5 * Proj4php::$Common->pi;
                 } else {
-                    $lat = -.5 * Proj4php::$Common->PI;
+                    $lat = -.5 * Proj4php::$Common->pi;
                 }
             }
         } else {
@@ -159,7 +159,7 @@ class Proj4phpProjAea {
         
         $phi = Proj4php::$common->asinz( .5 * $qs );
         
-        if( $eccent < Proj4php::$common->EPSLN )
+        if( $eccent < Proj4php::$common->epsln )
             return $phi;
 
         $eccnts = $eccent * $eccent;

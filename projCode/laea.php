@@ -54,9 +54,9 @@ class Proj4phpProjLaea {
       ------------------------------------------------------ */
     public function init() {
         $t = abs( $this->lat0 );
-        if( abs( $t - Proj4php::$common->HALF_PI ) < Proj4php::$common->EPSLN ) {
+        if( abs( $t - Proj4php::$common->halfPi ) < Proj4php::$common->epsln ) {
             $this->mode = $this->lat0 < 0. ? $this->S_POLE : $this->N_POLE;
-        } else if( abs( $t ) < Proj4php::$common->EPSLN ) {
+        } else if( abs( $t ) < Proj4php::$common->epsln ) {
             $this->mode = $this->EQUIT;
         } else {
             $this->mode = $this->OBLIQ;
@@ -122,7 +122,7 @@ class Proj4phpProjLaea {
                 case $this->OBLIQ:
                 case $this->EQUIT:
                     $y = ($this->mode == $this->EQUIT) ? 1. + $cosphi * $coslam : 1. + $this->sinph0 * $sinphi + $this->cosph0 * $cosphi * $coslam;
-                    if( y <= Proj4php::$common->EPSLN ) {
+                    if( y <= Proj4php::$common->epsln ) {
                         Proj4php::reportError( "laea:fwd:y less than eps" );
                         return null;
                     }
@@ -133,11 +133,11 @@ class Proj4phpProjLaea {
                 case $this->N_POLE:
                     $coslam = -$coslam;
                 case $this->S_POLE:
-                    if( abs( $phi + $this->phi0 ) < Proj4php::$common->EPSLN ) {
+                    if( abs( $phi + $this->phi0 ) < Proj4php::$common->epsln ) {
                         Proj4php::reportError( "laea:fwd:phi < eps" );
                         return null;
                     }
-                    $y = Proj4php::$common->FORTPI - $phi * .5;
+                    $y = Proj4php::$common->fortPi - $phi * .5;
                     $y = 2. * (($this->mode == $this->S_POLE) ? cos( $y ) : sin( $y ));
                     $x = $y * sin( $lam );
                     $y *= $coslam;
@@ -170,15 +170,15 @@ class Proj4phpProjLaea {
                     $b = 1. + $cosb * $coslam;
                     break;
                 case $this->N_POLE:
-                    $b = Proj4php::$common->HALF_PI + $phi;
+                    $b = Proj4php::$common->halfPi + $phi;
                     $q = $this->qp - $q;
                     break;
                 case $this->S_POLE:
-                    $b = $phi - Proj4php::$common->HALF_PI;
+                    $b = $phi - Proj4php::$common->halfPi;
                     $q = $this->qp + $q;
                     break;
             }
-            if( abs( $b ) < Proj4php::$common->EPSLN ) {
+            if( abs( $b ) < Proj4php::$common->epsln ) {
                 Proj4php::reportError( "laea:fwd:b < eps" );
                 return null;
             }
@@ -254,21 +254,21 @@ class Proj4phpProjLaea {
             }
             switch( $this->mode ) {
                 case $this->EQUIT:
-                    $phi = (abs( $rh ) <= Proj4php::$common->EPSLN) ? 0. : asin( $y * $sinz / $rh );
+                    $phi = (abs( $rh ) <= Proj4php::$common->epsln) ? 0. : asin( $y * $sinz / $rh );
                     $x *= $sinz;
                     $y = $cosz * $rh;
                     break;
                 case $this->OBLIQ:
-                    $phi = (abs( $rh ) <= Proj4php::$common->EPSLN) ? $this->phi0 : asin( $cosz * $this->sinph0 + $y * $sinz * $this->cosph0 / $rh );
+                    $phi = (abs( $rh ) <= Proj4php::$common->epsln) ? $this->phi0 : asin( $cosz * $this->sinph0 + $y * $sinz * $this->cosph0 / $rh );
                     $x *= $sinz * $this->cosph0;
                     $y = ($cosz - sin( $phi ) * $this->sinph0) * $rh;
                     break;
                 case $this->N_POLE:
                     $y = -$y;
-                    $phi = Proj4php::$common->HALF_PI - $phi;
+                    $phi = Proj4php::$common->halfPi - $phi;
                     break;
                 case $this->S_POLE:
-                    $phi -= Proj4php::$common->HALF_PI;
+                    $phi -= Proj4php::$common->halfPi;
                     break;
             }
             $lam = ($y == 0. && ($this->mode == $this->EQUIT || $this->mode == $this->OBLIQ)) ? 0. : atan2( $x, $y );
@@ -287,7 +287,7 @@ class Proj4phpProjLaea {
                     $x /= $this->dd;
                     $y *= $this->dd;
                     $rho = sqrt( $x * $x + $y * $y );
-                    if( $rho < Proj4php::$common->EPSLN ) {
+                    if( $rho < Proj4php::$common->epsln ) {
                         $p->x = 0.;
                         $p->y = $this->phi0;
                         return $p;
