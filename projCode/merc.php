@@ -79,17 +79,17 @@ class Proj4php_ProjMerc
             return null;
         }
 
-        if (abs(abs($lat) - Proj4php_common::$halfPi) <= Proj4php_common::$epsln) {
+        if (abs(abs($lat) - Proj4php_Common::$halfPi) <= Proj4php_Common::$epsln) {
             Proj4php::reportError("merc:forward: ll2mAtPoles");
             return null;
         } else {
             if ($this->sphere) {
-                $x = $this->x0 + $this->a * $this->k0 * Proj4php_common::adjustLon($lon - $this->long0);
+                $x = $this->x0 + $this->a * $this->k0 * Proj4php_Common::adjustLon($lon - $this->long0);
                 $y = $this->y0 + $this->a * $this->k0 * log(tan(Proj4php::$common->fortPi + 0.5 * $lat));
             } else {
                 $sinphi = sin(lat);
                 $ts = Proj4php::$common . tsfnz($this->e, $lat, $sinphi);
-                $x = $this->x0 + $this->a * $this->k0 * Proj4php_common::adjustLon($lon - $this->long0);
+                $x = $this->x0 + $this->a * $this->k0 * Proj4php_Common::adjustLon($lon - $this->long0);
                 $y = $this->y0 - $this->a * $this->k0 * log($ts);
             }
 
@@ -110,7 +110,7 @@ class Proj4php_ProjMerc
         $y = $p->y - $this->y0;
 
         if ($this->sphere) {
-            $lat = Proj4php_common::$halfPi - 2.0 * atan(exp(-$y / $this->a * $this->k0));
+            $lat = Proj4php_Common::$halfPi - 2.0 * atan(exp(-$y / $this->a * $this->k0));
         } else {
             $ts = exp(-$y / ($this->a * $this->k0));
             $lat = Proj4php::$common->phi2z($this->e, $ts);
@@ -119,7 +119,7 @@ class Proj4php_ProjMerc
                 return null;
             }
         }
-        $lon = Proj4php_common::adjustLon($this->long0 + $x / ($this->a * $this->k0));
+        $lon = Proj4php_Common::adjustLon($this->long0 + $x / ($this->a * $this->k0));
 
         $p->x = $lon;
         $p->y = $lat;

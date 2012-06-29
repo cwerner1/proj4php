@@ -79,7 +79,7 @@ class Proj4php_ProjKrovak
 
         $lon = $p->x;
         $lat = $p->y;
-        $delta_lon = Proj4php_common::adjustLon($lon - $this->long0); // Delta longitude
+        $delta_lon = Proj4php_Common::adjustLon($lon - $this->long0); // Delta longitude
 
         /* Transformation */
         $gfi = pow(((1. + $this->e * sin($lat)) / (1. - $this->e * sin($lat))), ($this->alfa * $this->e / 2.));

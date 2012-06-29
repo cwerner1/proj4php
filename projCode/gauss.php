@@ -36,7 +36,7 @@ class Proj4php_ProjGauss
         $lon = $p->x;
         $lat = $p->y;
 
-        $p->y = 2.0 * atan($this->K * pow(tan(0.5 * $lat + Proj4php::$common->fortPi), $this->C) * Proj4php::$common->srat($this->e * sin($lat), $this->ratexp)) - Proj4php_common::$halfPi;
+        $p->y = 2.0 * atan($this->K * pow(tan(0.5 * $lat + Proj4php::$common->fortPi), $this->C) * Proj4php::$common->srat($this->e * sin($lat), $this->ratexp)) - Proj4php_Common::$halfPi;
         $p->x = $this->C * $lon;
 
         return $p;
@@ -56,7 +56,7 @@ class Proj4php_ProjGauss
         $num = pow(tan(0.5 * $lat + Proj4php::$common . FORTPI) / $this->K, 1. / $this->C);
 
         for ($i = Proj4php::$common . MAX_ITER; $i > 0; --$i) {
-            $lat = 2.0 * atan($num * Proj4php::$common->srat($this->e * sin($p->y), -0.5 * $this->e)) - Proj4php_common::$halfPi;
+            $lat = 2.0 * atan($num * Proj4php::$common->srat($this->e * sin($p->y), -0.5 * $this->e)) - Proj4php_Common::$halfPi;
             if (abs($lat - $p->y) < $DEL_TOL)
                 break;
             $p->y = $lat;

@@ -40,7 +40,7 @@ class Proj4php_ProjAea
     public function init()
     {
 
-        if (abs($this->lat1 + $this->lat2) < Proj4php_common::$epsln) {
+        if (abs($this->lat1 + $this->lat2) < Proj4php_Common::$epsln) {
             Proj4php::reportError("aeaInitEqualLatitudes");
             return;
         }
@@ -48,25 +48,25 @@ class Proj4php_ProjAea
         $this->es = 1.0 - pow($this->temp, 2);
         $this->e3 = sqrt($this->es);
 
-        $this->sin_po = sin($this->lat1);
-        $this->cos_po = cos($this->lat1);
-        $this->t1 = $this->sin_po;
-        $this->con = $this->sin_po;
-        $this->ms1 = Proj4php_common::msfnz($this->e3, $this->sin_po, $this->cos_po);
-        $this->qs1 = Proj4php_common::qsfnz($this->e3, $this->sin_po, $this->cos_po);
+        $this->sinPo = sin($this->lat1);
+        $this->cosPo = cos($this->lat1);
+        $this->t1 = $this->sinPo;
+        $this->con = $this->sinPo;
+        $this->ms1 = Proj4php_Common::msfnz($this->e3, $this->sinPo, $this->cosPo);
+        $this->qs1 = Proj4php_Common::qsfnz($this->e3, $this->sinPo, $this->cosPo);
 
-        $this->sin_po = sin($this->lat2);
-        $this->cos_po = cos($this->lat2);
-        $this->t2 = $this->sin_po;
-        $this->ms2 = Proj4php_common::msfnz($this->e3, $this->sin_po, $this->cos_po);
-        $this->qs2 = Proj4php_common::qsfnz($this->e3, $this->sin_po, $this->cos_po);
+        $this->sinPo = sin($this->lat2);
+        $this->cosPo = cos($this->lat2);
+        $this->t2 = $this->sinPo;
+        $this->ms2 = Proj4php_Common::msfnz($this->e3, $this->sinPo, $this->cosPo);
+        $this->qs2 = Proj4php_Common::qsfnz($this->e3, $this->sinPo, $this->cosPo);
 
-        $this->sin_po = sin($this->lat0);
-        $this->cos_po = cos($this->lat0);
-        $this->t3 = $this->sin_po;
-        $this->qs0 = Proj4php_common::qsfnz($this->e3, $this->sin_po, $this->cos_po);
+        $this->sinPo = sin($this->lat0);
+        $this->cosPo = cos($this->lat0);
+        $this->t3 = $this->sinPo;
+        $this->qs0 = Proj4php_Common::qsfnz($this->e3, $this->sinPo, $this->cosPo);
 
-        if (abs($this->lat1 - $this->lat2) > Proj4php_common::$epsln) {
+        if (abs($this->lat1 - $this->lat2) > Proj4php_Common::$epsln) {
             $this->ns0 = ($this->ms1 * $this->ms1 - $this->ms2 * $this->ms2) / ($this->qs2 - $this->qs1);
         } else {
             $this->ns0 = $this->con;
@@ -88,12 +88,12 @@ class Proj4php_ProjAea
         $lon = $p->x;
         $lat = $p->y;
 
-        $this->sin_phi = sin($lat);
-        $this->cos_phi = cos($lat);
+        $this->sinPhi = sin($lat);
+        $this->cosPhi = cos($lat);
 
-        $qs = Proj4php_common::qsfnz($this->e3, $this->sin_phi, $this->cos_phi);
+        $qs = Proj4php_Common::qsfnz($this->e3, $this->sinPhi, $this->cosPhi);
         $rh1 = $this->a * sqrt($this->c - $this->ns0 * $qs) / $this->ns0;
-        $theta = $this->ns0 * Proj4php_common::adjustLon($lon - $this->long0);
+        $theta = $this->ns0 * Proj4php_Common::adjustLon($lon - $this->long0);
         $x = rh1 * sin($theta) + $this->x0;
         $y = $this->rh - $rh1 * cos($theta) + $this->y0;
 
@@ -136,16 +136,16 @@ class Proj4php_ProjAea
                 $lat = $this->phi1z($this->e3, $qs);
             } else {
                 if ($qs >= 0) {
-                    $lat = .5 * Proj4php_common::$pi;
+                    $lat = .5 * Proj4php_Common::$pi;
                 } else {
-                    $lat = -.5 * Proj4php_common::$pi;
+                    $lat = -.5 * Proj4php_Common::$pi;
                 }
             }
         } else {
             $lat = $this->phi1z($this->e3, $qs);
         }
 
-        $lon = Proj4php_common::adjustLon($theta / $this->ns0 + $this->long0);
+        $lon = Proj4php_Common::adjustLon($theta / $this->ns0 + $this->long0);
 
         $p->x = $lon;
         $p->y = $lat;
@@ -163,9 +163,9 @@ class Proj4php_ProjAea
     public function phi1z($eccent, $qs)
     {
 
-        $phi = Proj4php_common::asinz(.5 * $qs);
+        $phi = Proj4php_Common::asinz(.5 * $qs);
 
-        if ($eccent < Proj4php_common::$epsln)
+        if ($eccent < Proj4php_Common::$epsln)
             return $phi;
 
         $eccnts = $eccent * $eccent;

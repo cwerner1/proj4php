@@ -60,7 +60,7 @@ class Proj4php_ProjCass
         #$y;
         $lam = $p->x;
         $phi = $p->y;
-        $lam =  Proj4php_common::adjustLon($lam - $this->long0);
+        $lam =  Proj4php_Common::adjustLon($lam - $this->long0);
 
         if ($this->sphere) {
             $x = asin(cos($phi) * sin($lam));
@@ -114,7 +114,7 @@ class Proj4php_ProjCass
             $phi = $ph1 - ($this->n * $this->tn / $this->r) * $this->d2 * (.5 - (1. + 3. * $this->t) * $this->d2 * $this->C3);
             $lam = $this->dd * (1. + $this->t * $this->d2 * (-$this->C4 + (1. + 3. * $this->t) * $this->d2 * $this->C5)) / cos($ph1);
         }
-        $p->x =  Proj4php_common::adjustLon($this->long0 + $lam);
+        $p->x =  Proj4php_Common::adjustLon($this->long0 + $lam);
         $p->y = $phi;
 
         return $p;

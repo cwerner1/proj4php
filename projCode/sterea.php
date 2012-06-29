@@ -40,7 +40,7 @@ class Proj4php_ProjSterea
     public function forward($p)
     {
 
-        $p->x = Proj4php_common::adjustLon($p->x - $this->long0); /* adjust del longitude */
+        $p->x = Proj4php_Common::adjustLon($p->x - $this->long0); /* adjust del longitude */
         $p = Proj4php::$proj['gauss']->forward($p);
         $sinc = sin($p->y);
         $cosc = cos($p->y);
@@ -86,7 +86,7 @@ class Proj4php_ProjSterea
         $p->x = $lon;
         $p->y = $lat;
         $p = Proj4php::$proj['gauss']->inverse($p);
-        $p->x = Proj4php_common::adjustLon($p->x + $this->long0); /* adjust longitude to CM */
+        $p->x = Proj4php_Common::adjustLon($p->x + $this->long0); /* adjust longitude to CM */
 
         return $p;
     }
