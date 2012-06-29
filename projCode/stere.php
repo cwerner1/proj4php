@@ -236,7 +236,7 @@ class Proj4php_ProjStere
                     break;
                 case self::$obliq:
                     if (abs($rh) <= Proj4php_Common::$epsln) {
-                        $lat = $this->phi0;
+                        $lat = $this->phiZero;
                     } else {
                         $lat = asin($cosc * $this->sinphZero + $y * $sinc * $this->cosphZero / $rh);
                     }
@@ -249,7 +249,7 @@ class Proj4php_ProjStere
                     $y = -$y;
                 case self::$sPole:
                     if (abs($rh) <= Proj4php_Common::$epsln) {
-                        $lat = $this->phi0;
+                        $lat = $this->phiZero;
                     } else {
                         $lat = asin($this->mode == self::$sPole ? -$cosc : $cosc );
                     }
