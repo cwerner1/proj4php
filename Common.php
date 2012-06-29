@@ -131,7 +131,7 @@ class Proj4php_Common
     }
 
 // following functions from gctpc cproj.c for transverse mercator projections
-    public static function eZerofn($x)
+    public static function e0fn($x)
     {
         return(1.0 - 0.25 * $x * (1.0 + $x / 16.0 * (3.0 + 1.25 * $x)));
     }
@@ -151,9 +151,9 @@ class Proj4php_Common
         return($x * $x * $x * (35.0 / 3072.0));
     }
 
-    public static function mlfn($eZero, $e1, $e2, $e3, $phi)
+    public static function mlfn($e0, $e1, $e2, $e3, $phi)
     {
-        return($eZero * $phi - $e1 * sin(2.0 * $phi) + $e2 * sin(4.0 * $phi) - $e3 * sin(6.0 * $phi));
+        return($e0 * $phi - $e1 * sin(2.0 * $phi) + $e2 * sin(4.0 * $phi) - $e3 * sin(6.0 * $phi));
     }
 
     public static function srat($esinp, $exp)

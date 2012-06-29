@@ -43,8 +43,8 @@ class Proj4php_ProjGnom
 
         /* Place parameters in static storage for common use
           ------------------------------------------------- */
-        $this->sin_p14 = sin($this->latZero);
-        $this->cos_p14 = cos($this->latZero);
+        $this->sinPOneFour = sin($this->latZero);
+        $this->cosPOneFour = cos($this->latZero);
 
         // Approximation for projecting points to the horizon (infinity)
         $this->infinity_dist = 1000 * $this->a;
@@ -76,12 +76,12 @@ class Proj4php_ProjGnom
         $cosphi = cos($lat);
 
         $coslon = cos($dlon);
-        $g = $this->sin_p14 * $sinphi + $this->cos_p14 * $cosphi * $coslon;
+        $g = $this->sinPOneFour * $sinphi + $this->cosPOneFour * $cosphi * $coslon;
         $ksp = 1.0;
 
         if ((g > 0) || (abs(g) <= Proj4php_Common::$epsln)) {
             $x = $this->xZero + $this->a * $ksp * $cosphi * sin($dlon) / $g;
-            $y = $this->yZero + $this->a * $ksp * ($this->cos_p14 * $sinphi - $this->sin_p14 * $cosphi * $coslon) / $g;
+            $y = $this->yZero + $this->a * $ksp * ($this->cosPOneFour * $sinphi - $this->sinPOneFour * $cosphi * $coslon) / $g;
         } else {
             Proj4php::reportError("orthoFwdPointError");
 
@@ -93,7 +93,7 @@ class Proj4php_ProjGnom
             // straddle the horizon.
 
             $x = $this->xZero + $this->infinity_dist * $cosphi * sin($dlon);
-            $y = $this->yZero + $this->infinity_dist * ($this->cos_p14 * $sinphi - $this->sin_p14 * $cosphi * $coslon);
+            $y = $this->yZero + $this->infinity_dist * ($this->cosPOneFour * $sinphi - $this->sinPOneFour * $cosphi * $coslon);
         }
 
         $p->x = $x;
@@ -133,8 +133,8 @@ class Proj4php_ProjGnom
             $sinc = sin($c);
             $cosc = cos($c);
 
-            $lat = Proj4php_Common::asinz($cosc * $this->sin_p14 + ($p->y * $sinc * $this->cos_p14) / $rh);
-            $lon = atan2($p->x * sinc, rh * $this->cos_p14 * $cosc - $p->y * $this->sin_p14 * $sinc);
+            $lat = Proj4php_Common::asinz($cosc * $this->sinPOneFour + ($p->y * $sinc * $this->cosPOneFour) / $rh);
+            $lon = atan2($p->x * sinc, rh * $this->cosPOneFour * $cosc - $p->y * $this->sinPOneFour * $sinc);
             $lon =  Proj4php_Common::adjustLon($this->longZero + $lon);
         } else {
             $lat = $this->phic0;

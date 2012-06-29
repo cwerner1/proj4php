@@ -10,7 +10,7 @@
 /* Function to compute, phi4, the latitude for the inverse of the
   Polyconic projection.
   ------------------------------------------------------------ */
-function phi4z($eccent, $eZero, $e1, $e2, $e3, $a, $b, &$c, $phi)
+function phi4z($eccent, $e0, $e1, $e2, $e3, $a, $b, &$c, $phi)
 {
     /*
       $sinphi;
@@ -32,11 +32,11 @@ function phi4z($eccent, $eZero, $e1, $e2, $e3, $a, $b, &$c, $phi)
         $c = $tanphi * sqrt(1.0 - $eccent * $sinphi * $sinphi);
         $sin2ph = sin(2.0 * $phi);
         /*
-          ml = eZero * *phi - e1 * sin2ph + e2 * sin (4.0 *  *phi);
-          mlp = eZero - 2.0 * e1 * cos (2.0 *  *phi) + 4.0 * e2 *  cos (4.0 *  *phi);
+          ml = e0 * *phi - e1 * sin2ph + e2 * sin (4.0 *  *phi);
+          mlp = e0 - 2.0 * e1 * cos (2.0 *  *phi) + 4.0 * e2 *  cos (4.0 *  *phi);
          */
-        $ml = $eZero * $phi - $e1 * $sin2ph + $e2 * sin(4.0 * $phi) - $e3 * sin(6.0 * $phi);
-        $mlp = $eZero - 2.0 * $e1 * cos(2.0 * $phi) + 4.0 * $e2 * cos(4.0 * $phi) - 6.0 * $e3 * cos(6.0 * $phi);
+        $ml = $e0 * $phi - $e1 * $sin2ph + $e2 * sin(4.0 * $phi) - $e3 * sin(6.0 * $phi);
+        $mlp = $e0 - 2.0 * $e1 * cos(2.0 * $phi) + 4.0 * $e2 * cos(4.0 * $phi) - 6.0 * $e3 * cos(6.0 * $phi);
         $con1 = 2.0 * $ml + $c * ($ml * $ml + $b) - 2.0 * $a * ($c * $ml + 1.0);
         $con2 = $eccent * $sin2ph * ($ml * $ml + $b - 2.0 * $a * $ml) / (2.0 * $c);
         $con3 = 2.0 * ($a - $ml) * ($c * $mlp - 2.0 / $sin2ph) - 2.0 * $mlp;
@@ -104,11 +104,11 @@ class Proj4php_ProjPoly
         $this->temp = $this->b / $this->a;
         $this->es = 1.0 - pow($this->temp, 2); // devait etre dans tmerc.js mais n y est pas donc je commente sinon retour de valeurs nulles 
         $this->e = sqrt($this->es);
-        $this->eZero = Proj4php::$common->eZerofn($this->es);
+        $this->e0 = Proj4php::$common->e0fn($this->es);
         $this->e1 = Proj4php::$common->e1fn($this->es);
         $this->e2 = Proj4php::$common->e2fn($this->es);
         $this->e3 = Proj4php::$common->e3fn($this->es);
-        $this->mlZero = Proj4php::$common->mlfn($this->eZero, $this->e1, $this->e2, $this->e3, $this->latZero); //si que des zeros le calcul ne se fait pas
+        $this->mlZero = Proj4php::$common->mlfn($this->e0, $this->e1, $this->e2, $this->e3, $this->latZero); //si que des zeros le calcul ne se fait pas
         //if (!$this->mlZero) {$this->mlZero=0;}
     }
 
@@ -142,7 +142,7 @@ class Proj4php_ProjPoly
             $sinphi = sin($lat);
             $cosphi = cos($lat);
 
-            $ml = Proj4php::$common->mlfn($this->eZero, $this->e1, $this->e2, $this->e3, $lat);
+            $ml = Proj4php::$common->mlfn($this->e0, $this->e1, $this->e2, $this->e3, $lat);
             $ms = Proj4php::$common->msfnz($this->e, $sinphi, $cosphi);
 
             $x = $this->xZero + $this->a * $ms * sin($sinphi) / $sinphi;
@@ -184,7 +184,7 @@ class Proj4php_ProjPoly
             $lat = 0.0;
         } else {
             $b = $al * $al + ($p->x / $this->a) * ($p->x / $this->a);
-            $iflg = phi4z($this->es, $this->eZero, $this->e1, $this->e2, $this->e3, $this->al, $b, $c, $lat);
+            $iflg = phi4z($this->es, $this->e0, $this->e1, $this->e2, $this->e3, $this->al, $b, $c, $lat);
             if ($iflg != 1)
                 return($iflg);
             $lon = Proj4php_Common::adjustLon((Proj4php_Common::asinz($p->x * $c / $this->a) / sin($lat)) + $this->longZero);
