@@ -47,8 +47,8 @@ class Proj4php_ProjOmerc
         if (!$this->lon2) {
             $this->lon2 = 0;
         }
-        if (!$this->lat2) {
-            $this->lat2 = 0;
+        if (!$this->latTwo) {
+            $this->latTwo = 0;
         }
 
         /* Place parameters in static storage for common use
@@ -114,10 +114,10 @@ class Proj4php_ProjOmerc
                 Proj4php::reportError("omerc:Init:DataError");
             }
         } else {
-            $this->sinphi = sin($this->at1);
-            $this->ts1 = Proj4php::$common->tsfnz($this->e, $this->lat1, $this->sinphi);
-            $this->sinphi = sin($this->lat2);
-            $this->ts2 = Proj4php::$common->tsfnz($this->e, $this->lat2, $this->sinphi);
+            $this->sinphi = sin($this->atOne);
+            $this->ts1 = Proj4php::$common->tsfnz($this->e, $this->latOne, $this->sinphi);
+            $this->sinphi = sin($this->latTwo);
+            $this->ts2 = Proj4php::$common->tsfnz($this->e, $this->latTwo, $this->sinphi);
             $this->h = pow($this->ts1, $this->bl);
             $this->l = pow($this->ts2, $this->bl);
             $this->f = $this->el / $this->h;
@@ -137,11 +137,11 @@ class Proj4php_ProjOmerc
 
             /* Report parameters common to format A
               ------------------------------------- */
-            if (abs($this->lat1 - $this->lat2) <= Proj4php_Common::$epsln) {
+            if (abs($this->latOne - $this->latTwo) <= Proj4php_Common::$epsln) {
                 Proj4php::reportError("omercInitDataError");
                 //return(202);
             } else {
-                $this->con = abs($this->lat1);
+                $this->con = abs($this->latOne);
             }
             if (($this->con <= Proj4php_Common::$epsln) || (abs($this->con - Proj4php_Common::$halfPi) <= Proj4php_Common::$epsln)) {
                 Proj4php::reportError("omercInitDataError");

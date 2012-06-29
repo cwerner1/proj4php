@@ -546,9 +546,9 @@ class Proj4php_Proj
                     break; // inverse flattening rf= a/(a-b)
                 case "lat_0": $this->latZero = $paramVal * Proj4php_Common::$dToR;
                     break;        // phi0, central latitude
-                case "lat_1": $this->lat1 = $paramVal * Proj4php_Common::$dToR;
+                case "lat_1": $this->latOne = $paramVal * Proj4php_Common::$dToR;
                     break;        //standard parallel 1
-                case "lat_2": $this->lat2 = $paramVal * Proj4php_Common::$dToR;
+                case "lat_2": $this->latTwo = $paramVal * Proj4php_Common::$dToR;
                     break;        //standard parallel 2
                 case "latTs": $this->latTs = $paramVal * Proj4php_Common::$dToR;
                     break;      // used in merc and eqc
