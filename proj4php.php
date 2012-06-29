@@ -471,7 +471,7 @@ if (!function_exists('dbg')) {
             echo $var . '<br>';
 
         if ($die === TRUE) {
-            die();
+            throw new Exception('cant die');
         }
     }
 
