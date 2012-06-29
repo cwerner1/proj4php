@@ -3,7 +3,7 @@
 /**
  * Author : Julien Moquet
  * 
- * Inspired by Proj4php from Mike Adair madairATdmsolutions.ca
+ * Inspired by ProjFourphp from Mike Adair madairATdmsolutions.ca
  *                      and Richard Greenwood rich@greenwoodma$p->com 
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
@@ -46,7 +46,7 @@ function phi4z($eccent, $e0, $e1, $e2, $e3, $a, $b, &$c, $phi)
             return($phi);
     }
 
-    Proj4php::reportError("phi4z: No convergence");
+    ProjFourphp::reportError("phi4z: No convergence");
 
     return null;
 }
@@ -88,7 +88,7 @@ function e4fn($x)
   Printing Office, Washington D.C., 1989.
  * ***************************************************************************** */
 
-class Proj4php_ProjPoly
+class ProjFourphp_ProjPoly
 {
     /* Initialize the POLYCONIC projection
       ---------------------------------- */
@@ -104,11 +104,11 @@ class Proj4php_ProjPoly
         $this->temp = $this->b / $this->a;
         $this->es = 1.0 - pow($this->temp, 2); // devait etre dans tmerc.js mais n y est pas donc je commente sinon retour de valeurs nulles 
         $this->e = sqrt($this->es);
-        $this->e0 = Proj4php::$common->e0fn($this->es);
-        $this->e1 = Proj4php::$common->e1fn($this->es);
-        $this->e2 = Proj4php::$common->e2fn($this->es);
-        $this->e3 = Proj4php::$common->e3fn($this->es);
-        $this->mlZero = Proj4php::$common->mlfn($this->e0, $this->e1, $this->e2, $this->e3, $this->latZero); //si que des zeros le calcul ne se fait pas
+        $this->e0 = ProjFourphp::$common->e0fn($this->es);
+        $this->e1 = ProjFourphp::$common->e1fn($this->es);
+        $this->e2 = ProjFourphp::$common->e2fn($this->es);
+        $this->e3 = ProjFourphp::$common->e3fn($this->es);
+        $this->mlZero = ProjFourphp::$common->mlfn($this->e0, $this->e1, $this->e2, $this->e3, $this->latZero); //si que des zeros le calcul ne se fait pas
         //if (!$this->mlZero) {$this->mlZero=0;}
     }
 
@@ -133,7 +133,7 @@ class Proj4php_ProjPoly
         $lon = $p->x;
         $lat = $p->y;
 
-        $con = Proj4php_Common::adjustLon($lon - $this->longZero);
+        $con = ProjFourphp_Common::adjustLon($lon - $this->longZero);
 
         if (abs($lat) <= .0000001) {
             $x = $this->xZero + $this->a * $con;
@@ -142,8 +142,8 @@ class Proj4php_ProjPoly
             $sinphi = sin($lat);
             $cosphi = cos($lat);
 
-            $ml = Proj4php::$common->mlfn($this->e0, $this->e1, $this->e2, $this->e3, $lat);
-            $ms = Proj4php::$common->msfnz($this->e, $sinphi, $cosphi);
+            $ml = ProjFourphp::$common->mlfn($this->e0, $this->e1, $this->e2, $this->e3, $lat);
+            $ms = ProjFourphp::$common->msfnz($this->e, $sinphi, $cosphi);
 
             $x = $this->xZero + $this->a * $ms * sin($sinphi) / $sinphi;
             $y = $this->yZero + $this->a * ($ml - $this->mlZero + $ms * (1.0 - cos($sinphi)) / $sinphi);
@@ -187,7 +187,7 @@ class Proj4php_ProjPoly
             $iflg = phi4z($this->es, $this->e0, $this->e1, $this->e2, $this->e3, $this->al, $b, $c, $lat);
             if ($iflg != 1)
                 return($iflg);
-            $lon = Proj4php_Common::adjustLon((Proj4php_Common::asinz($p->x * $c / $this->a) / sin($lat)) + $this->longZero);
+            $lon = ProjFourphp_Common::adjustLon((ProjFourphp_Common::asinz($p->x * $c / $this->a) / sin($lat)) + $this->longZero);
         }
 
         $p->x = $lon;
@@ -197,4 +197,4 @@ class Proj4php_ProjPoly
 
 }
 
-Proj4php::$proj['poly'] = new Proj4php_ProjPoly();
+ProjFourphp::$proj['poly'] = new ProjFourphp_ProjPoly();

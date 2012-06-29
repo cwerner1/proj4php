@@ -3,7 +3,7 @@
 /**
  * Author : Julien Moquet
  * 
- * Inspired by Proj4php from Mike Adair madairATdmsolutions.ca
+ * Inspired by ProjFourphp from Mike Adair madairATdmsolutions.ca
  *                      and Richard Greenwood rich@greenwoodma$p->com 
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
@@ -41,7 +41,7 @@
 //static double false_easting = xZero;	   /* x offset in meters			*/
 //scale_fact = kZero 
 
-class Proj4php_ProjMerc
+class ProjFourphp_ProjMerc
 {
 
     public function init()
@@ -56,7 +56,7 @@ class Proj4php_ProjMerc
             if ($this->sphere) {
                 $this->kZero = cos($this->latTs);
             } else {
-                $this->kZero = Proj4php::$common->msfnz($this->es, sin($this->latTs), cos($this->latTs));
+                $this->kZero = ProjFourphp::$common->msfnz($this->es, sin($this->latTs), cos($this->latTs));
             }
         }
     }
@@ -71,25 +71,25 @@ class Proj4php_ProjMerc
         $lon = $p->x;
         $lat = $p->y;
         // convert to radians
-        if ($lat * Proj4php::$common->rToD > 90.0 &&
-                $lat * Proj4php::$common->rToD < -90.0 &&
-                $lon * Proj4php::$common->rToD > 180.0 &&
-                $lon * Proj4php::$common->rToD < -180.0) {
-            Proj4php::reportError("merc:forward: llInputOutOfRange: " . $lon . " : " . $lat);
+        if ($lat * ProjFourphp::$common->rToD > 90.0 &&
+                $lat * ProjFourphp::$common->rToD < -90.0 &&
+                $lon * ProjFourphp::$common->rToD > 180.0 &&
+                $lon * ProjFourphp::$common->rToD < -180.0) {
+            ProjFourphp::reportError("merc:forward: llInputOutOfRange: " . $lon . " : " . $lat);
             return null;
         }
 
-        if (abs(abs($lat) - Proj4php_Common::$halfPi) <= Proj4php_Common::$epsln) {
-            Proj4php::reportError("merc:forward: ll2mAtPoles");
+        if (abs(abs($lat) - ProjFourphp_Common::$halfPi) <= ProjFourphp_Common::$epsln) {
+            ProjFourphp::reportError("merc:forward: ll2mAtPoles");
             return null;
         } else {
             if ($this->sphere) {
-                $x = $this->xZero + $this->a * $this->kZero * Proj4php_Common::adjustLon($lon - $this->longZero);
-                $y = $this->yZero + $this->a * $this->kZero * log(tan(Proj4php::$common->fortPi + 0.5 * $lat));
+                $x = $this->xZero + $this->a * $this->kZero * ProjFourphp_Common::adjustLon($lon - $this->longZero);
+                $y = $this->yZero + $this->a * $this->kZero * log(tan(ProjFourphp::$common->fortPi + 0.5 * $lat));
             } else {
                 $sinphi = sin(lat);
-                $ts = Proj4php::$common . tsfnz($this->e, $lat, $sinphi);
-                $x = $this->xZero + $this->a * $this->kZero * Proj4php_Common::adjustLon($lon - $this->longZero);
+                $ts = ProjFourphp::$common . tsfnz($this->e, $lat, $sinphi);
+                $x = $this->xZero + $this->a * $this->kZero * ProjFourphp_Common::adjustLon($lon - $this->longZero);
                 $y = $this->yZero - $this->a * $this->kZero * log($ts);
             }
 
@@ -110,16 +110,16 @@ class Proj4php_ProjMerc
         $y = $p->y - $this->yZero;
 
         if ($this->sphere) {
-            $lat = Proj4php_Common::$halfPi - 2.0 * atan(exp(-$y / $this->a * $this->kZero));
+            $lat = ProjFourphp_Common::$halfPi - 2.0 * atan(exp(-$y / $this->a * $this->kZero));
         } else {
             $ts = exp(-$y / ($this->a * $this->kZero));
-            $lat = Proj4php::$common->phi2z($this->e, $ts);
+            $lat = ProjFourphp::$common->phi2z($this->e, $ts);
             if ($lat == -9999) {
-                Proj4php::reportError("merc:inverse: lat = -9999");
+                ProjFourphp::reportError("merc:inverse: lat = -9999");
                 return null;
             }
         }
-        $lon = Proj4php_Common::adjustLon($this->longZero + $x / ($this->a * $this->kZero));
+        $lon = ProjFourphp_Common::adjustLon($this->longZero + $x / ($this->a * $this->kZero));
 
         $p->x = $lon;
         $p->y = $lat;
@@ -128,6 +128,6 @@ class Proj4php_ProjMerc
 
 }
 
-Proj4php::$proj['merc'] = new Proj4php_ProjMerc();
+ProjFourphp::$proj['merc'] = new ProjFourphp_ProjMerc();
 
 

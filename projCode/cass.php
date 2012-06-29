@@ -23,22 +23,22 @@
 /**
  * Author : Julien Moquet
  * 
- * Inspired by Proj4php from Mike Adair madairATdmsolutions.ca
+ * Inspired by ProjFourphp from Mike Adair madairATdmsolutions.ca
  *                      and Richard Greenwood rich@greenwoodma$p->com 
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
-//Proj4php.defs["EPSG:28191"] = "+proj=cass +lat_0=31.73409694444445 +lon_0=35.21208055555556 +x_0=170251.555 +y_0=126867.909 +a=6378300.789 +b=6356566.435 +towgs84=-275.722,94.7824,340.894,-8.001,-4.42,-11.821,1 +units=m +no_defs";
+//ProjFourphp.defs["EPSG:28191"] = "+proj=cass +lat_0=31.73409694444445 +lon_0=35.21208055555556 +x_0=170251.555 +y_0=126867.909 +a=6378300.789 +b=6356566.435 +towgs84=-275.722,94.7824,340.894,-8.001,-4.42,-11.821,1 +units=m +no_defs";
 // Initialize the Cassini projection
 // -----------------------------------------------------------------
 
-class Proj4php_ProjCass
+class ProjFourphp_ProjCass
 {
 
     public function init()
     {
         if (!$this->sphere) {
-            $this->en = Proj4php::$common->pjEnfn($this->es);
-            $this->mZero = Proj4php::$common->pjMlfn($this->latZero, sin($this->latZero), cos($this->latZero), $this->en);
+            $this->en = ProjFourphp::$common->pjEnfn($this->es);
+            $this->mZero = ProjFourphp::$common->pjMlfn($this->latZero, sin($this->latZero), cos($this->latZero), $this->en);
         }
     }
 
@@ -60,7 +60,7 @@ class Proj4php_ProjCass
         #$y;
         $lam = $p->x;
         $phi = $p->y;
-        $lam =  Proj4php_Common::adjustLon($lam - $this->longZero);
+        $lam =  ProjFourphp_Common::adjustLon($lam - $this->longZero);
 
         if ($this->sphere) {
             $x = asin(cos($phi) * sin($lam));
@@ -102,19 +102,19 @@ class Proj4php_ProjCass
             $lam = atan2(tan($x), cos($this->dd));
         } else {
             /* ellipsoid */
-            $ph1 = Proj4php::$common->pjInvMlfn($this->mZero + $y, $this->es, $this->en);
-            $this->tn = tan($ph1);
+            $phOne = ProjFourphp::$common->pjInvMlfn($this->mZero + $y, $this->es, $this->en);
+            $this->tn = tan($phOne);
             $this->t = $this->tn * $this->tn;
-            $this->n = sin($ph1);
+            $this->n = sin($phOne);
             $this->r = 1. / (1. - $this->es * $this->n * $this->n);
             $this->n = sqrt($this->r);
             $this->r *= (1. - $this->es) * $this->n;
             $this->dd = $x / $this->n;
-            $this->d2 = $this->dd * $this->dd;
-            $phi = $ph1 - ($this->n * $this->tn / $this->r) * $this->d2 * (.5 - (1. + 3. * $this->t) * $this->d2 * $this->C3);
-            $lam = $this->dd * (1. + $this->t * $this->d2 * (-$this->C4 + (1. + 3. * $this->t) * $this->d2 * $this->C5)) / cos($ph1);
+            $this->dTwo = $this->dd * $this->dd;
+            $phi = $phOne - ($this->n * $this->tn / $this->r) * $this->dTwo * (.5 - (1. + 3. * $this->t) * $this->dTwo * $this->C3);
+            $lam = $this->dd * (1. + $this->t * $this->dTwo * (-$this->C4 + (1. + 3. * $this->t) * $this->dTwo * $this->C5)) / cos($phOne);
         }
-        $p->x =  Proj4php_Common::adjustLon($this->longZero + $lam);
+        $p->x =  ProjFourphp_Common::adjustLon($this->longZero + $lam);
         $p->y = $phi;
 
         return $p;
@@ -122,4 +122,4 @@ class Proj4php_ProjCass
 
 }
 
-Proj4php::$proj['cass'] = new Proj4php_ProjCass();
+ProjFourphp::$proj['cass'] = new ProjFourphp_ProjCass();

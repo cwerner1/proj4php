@@ -1,26 +1,26 @@
 <?php
 
-require_once 'Proj4php/proj4php.php';
+require_once 'ProjFourphp/projFourphp.php';
 
 /**
- * @group Proj4 
+ * @group ProjFour 
  */
-class Proj4phpTest extends PHPUnit_Framework_TestCase
+class ProjFourphpTest extends PHPUnit_Framework_TestCase
 {
 
     public function testProjFour()
     {
 
 
-        $projFour = new Proj4php();
-        $projLNintyThree = new Proj4php_Proj('EPSG:2154', $projFour);
-        $projWgsEightyFour = new Proj4php_Proj('EPSG:4326', $projFour);
-        $projLI = new Proj4php_Proj('EPSG:27571', $projFour);
-        $projLSud = new Proj4php_Proj('EPSG:27563', $projFour);
-        $projLSeventyTwo = new Proj4php_Proj('EPSG:31370', $projFour);
+        $projFour = new ProjFourphp();
+        $projLNintyThree = new ProjFourphp_Proj('EPSG:2154', $projFour);
+        $projWgsEightyFour = new ProjFourphp_Proj('EPSG:4326', $projFour);
+        $projLI = new ProjFourphp_Proj('EPSG:27571', $projFour);
+        $projLSud = new ProjFourphp_Proj('EPSG:27563', $projFour);
+        $projLSeventyTwo = new ProjFourphp_Proj('EPSG:31370', $projFour);
 
 
-        $pointSrc = new proj4php_Point('652709.401', '6859290.946');
+        $pointSrc = new projFourphp_Point('652709.401', '6859290.946');
         $this->assertEquals('652709.401 6859290.946', $pointSrc->toShortString());
 
         $pointDest = $projFour->transform($projLNintyThree, $projWgsEightyFour, $pointSrc);

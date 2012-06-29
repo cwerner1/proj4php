@@ -3,7 +3,7 @@
 /**
  * Author : Julien Moquet
  * 
- * Inspired by Proj4php from Mike Adair madairATdmsolutions.ca
+ * Inspired by ProjFourphp from Mike Adair madairATdmsolutions.ca
  *                      and Richard Greenwood rich@greenwoodma$p->com 
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
@@ -29,7 +29,7 @@
 /**
   Initialize Transverse Mercator projection
  */
-class Proj4php_ProjUtm
+class ProjFourphp_ProjUtm
 {
 
     public $dependsOn = 'tmerc';
@@ -44,12 +44,12 @@ class Proj4php_ProjUtm
     {
 
         if (!isset($this->zone)) {
-            Proj4php::reportError("utm:init: zone must be specified for UTM");
+            ProjFourphp::reportError("utm:init: zone must be specified for UTM");
             return;
         }
 
         $this->latZero = 0.0;
-        $this->longZero = ((6 * abs($this->zone)) - 183) * Proj4php::$common->dToR;
+        $this->longZero = ((6 * abs($this->zone)) - 183) * ProjFourphp::$common->dToR;
         $this->xZero = 500000.0;
         $this->yZero = $this->utmSouth ? 10000000.0 : 0.0;
         $this->kZero = 0.9996;
@@ -62,7 +62,7 @@ class Proj4php_ProjUtm
      */
     public function forward($p)
     {
-        return Proj4php::$proj['tmerc']->forward($p);
+        return ProjFourphp::$proj['tmerc']->forward($p);
     }
 
     /**
@@ -72,9 +72,9 @@ class Proj4php_ProjUtm
      */
     public function inverse($p)
     {
-        return Proj4php::$proj['tmerc']->inverse($p);
+        return ProjFourphp::$proj['tmerc']->inverse($p);
     }
 
 }
 
-Proj4php::$proj['utm'] = new Proj4php_ProjUtm();
+ProjFourphp::$proj['utm'] = new ProjFourphp_ProjUtm();

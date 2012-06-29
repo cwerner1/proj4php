@@ -3,7 +3,7 @@
 /**
  * Author : Julien Moquet
  * 
- * Inspired by Proj4php from Mike Adair madairATdmsolutions.ca
+ * Inspired by ProjFourphp from Mike Adair madairATdmsolutions.ca
  *                      and Richard Greenwood rich@greenwoodma$p->com 
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
@@ -36,7 +36,7 @@
   Package", U.S. Geological Survey National Mapping Division, May 1982.
  * ***************************************************************************** */
 
-class Proj4php_ProjVandg
+class ProjFourphp_ProjVandg
 {
     /* Initialize the Van Der Grinten projection
       ---------------------------------------- */
@@ -59,25 +59,25 @@ class Proj4php_ProjVandg
 
         /* Forward equations
           ----------------- */
-        $dlon = Proj4php_Common::adjustLon($lon - $this->longZero);
+        $dlon = ProjFourphp_Common::adjustLon($lon - $this->longZero);
         $x;
         $y;
 
-        if (abs($lat) <= Proj4php_Common::$epsln) {
+        if (abs($lat) <= ProjFourphp_Common::$epsln) {
             $x = $this->xZero + $this->R * $dlon;
             $y = $this->yZero;
         }
-        $theta = Proj4php::$common . asinz(2.0 * abs($lat / Proj4php::$common->pi));
-        if ((abs($dlon) <= Proj4php_Common::$epsln) || (abs(abs($lat) - Proj4php_Common::$halfPi) <= Proj4php_Common::$epsln)) {
+        $theta = ProjFourphp::$common . asinz(2.0 * abs($lat / ProjFourphp::$common->pi));
+        if ((abs($dlon) <= ProjFourphp_Common::$epsln) || (abs(abs($lat) - ProjFourphp_Common::$halfPi) <= ProjFourphp_Common::$epsln)) {
             $x = $this->xZero;
             if ($lat >= 0) {
-                $y = $this->yZero + Proj4php::$common->pi * $this->R * tan(.5 * $theta);
+                $y = $this->yZero + ProjFourphp::$common->pi * $this->R * tan(.5 * $theta);
             } else {
-                $y = $this->yZero + Proj4php::$common->pi * $this->R * - tan(.5 * $theta);
+                $y = $this->yZero + ProjFourphp::$common->pi * $this->R * - tan(.5 * $theta);
             }
             //  return(OK);
         }
-        $al = .5 * abs((Proj4php::$common->pi / $dlon) - ($dlon / Proj4php::$common->pi));
+        $al = .5 * abs((ProjFourphp::$common->pi / $dlon) - ($dlon / ProjFourphp::$common->pi));
         $asq = $al * $al;
         $sinth = sin($theta);
         $costh = cos($theta);
@@ -86,16 +86,16 @@ class Proj4php_ProjVandg
         $gsq = $g * $g;
         $m = $g * (2.0 / $sinth - 1.0);
         $msq = $m * $m;
-        $con = Proj4php::$common->pi * $this->R * ($al * ($g - $msq) + sqrt($asq * ($g - $sq) * ($g - $msq) - ($msq + $asq) * ($gsq - $msq))) / ($msq + $asq);
+        $con = ProjFourphp::$common->pi * $this->R * ($al * ($g - $msq) + sqrt($asq * ($g - $sq) * ($g - $msq) - ($msq + $asq) * ($gsq - $msq))) / ($msq + $asq);
         if ($dlon < 0) {
             $con = -$con;
         }
         $x = $this->xZero + $con;
-        $con = abs($con / (Proj4php::$common->pi * $this->R));
+        $con = abs($con / (ProjFourphp::$common->pi * $this->R));
         if ($lat >= 0) {
-            $y = $this->yZero + Proj4php::$common->pi * $this->R * sqrt(1.0 - $con * $con - 2.0 * $al * $con);
+            $y = $this->yZero + ProjFourphp::$common->pi * $this->R * sqrt(1.0 - $con * $con - 2.0 * $al * $con);
         } else {
-            $y = $this->yZero - Proj4php::$common->pi * $this->R * sqrt(1.0 - $con * $con - 2.0 * $al * $con);
+            $y = $this->yZero - ProjFourphp::$common->pi * $this->R * sqrt(1.0 - $con * $con - 2.0 * $al * $con);
         }
 
         $p->x = $x;
@@ -131,7 +131,7 @@ class Proj4php_ProjVandg
           ----------------- */
         $p->x -= $this->xZero;
         $p->y -= $this->yZero;
-        $con = Proj4php::$common->pi * $this->R;
+        $con = ProjFourphp::$common->pi * $this->R;
         $xx = $p->x / $con;
         $yy = $p->y / $con;
         $xys = $xx * $xx + $yy * $yy;
@@ -151,15 +151,15 @@ class Proj4php_ProjVandg
         }
         $th1 = acos($con) / 3.0;
         if ($p->$y >= 0) {
-            $lat = (-$m1 * cos($th1 + Proj4php::$common->pi / 3.0) - $c2 / 3.0 / $c3) * Proj4php::$common->pi;
+            $lat = (-$m1 * cos($th1 + ProjFourphp::$common->pi / 3.0) - $c2 / 3.0 / $c3) * ProjFourphp::$common->pi;
         } else {
-            $lat = -(-m1 * cos($th1 + Proj4php::$common->pi / 3.0) - $c2 / 3.0 / $c3) * Proj4php::$common->pi;
+            $lat = -(-m1 * cos($th1 + ProjFourphp::$common->pi / 3.0) - $c2 / 3.0 / $c3) * ProjFourphp::$common->pi;
         }
 
-        if (abs($xx) < Proj4php_Common::$epsln) {
+        if (abs($xx) < ProjFourphp_Common::$epsln) {
             $lon = $this->$long0;
         }
-        $lon = Proj4php_Common::adjustLon($this->longZero + Proj4php::$common->pi * ($xys - 1.0 + sqrt(1.0 + 2.0 * ($xx * $xx - $yy * $yy) + $xys * $xys)) / 2.0 / $xx);
+        $lon = ProjFourphp_Common::adjustLon($this->longZero + ProjFourphp::$common->pi * ($xys - 1.0 + sqrt(1.0 + 2.0 * ($xx * $xx - $yy * $yy) + $xys * $xys)) / 2.0 / $xx);
 
         $p->x = $lon;
         $p->y = $lat;
@@ -169,4 +169,4 @@ class Proj4php_ProjVandg
 
 }
 
-Proj4php::$proj['vandg'] = new Proj4php_ProjVandg();
+ProjFourphp::$proj['vandg'] = new ProjFourphp_ProjVandg();

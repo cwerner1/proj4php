@@ -3,11 +3,11 @@
 /**
  * Author : Julien Moquet
  * 
- * Inspired by Proj4php from Mike Adair madairATdmsolutions.ca
+ * Inspired by ProjFourphp from Mike Adair madairATdmsolutions.ca
  *                      and Richard Greenwood rich@greenwoodma$p->com 
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
-class Proj4php_ProjGstmerc
+class ProjFourphp_ProjGstmerc
 {
 
     public function init()
@@ -21,7 +21,7 @@ class Proj4php_ProjGstmerc
         $sinz = sin($this->latZero);
         $pc = asin($sinz / $this->rs);
         $sinzpc = sin($pc);
-        $this->cp = Proj4php::$common->latiso(0.0, $pc, $sinzpc) - $this->rs * Proj4php::$common->latiso($this->e, $this->latZero, $sinz);
+        $this->cp = ProjFourphp::$common->latiso(0.0, $pc, $sinzpc) - $this->rs * ProjFourphp::$common->latiso($this->e, $this->latZero, $sinz);
         $this->n2 = $this->kZero * $this->a * sqrt(1.0 - $this->e * $this->e) / (1.0 - $this->e * $this->e * $sinz * $sinz);
         $this->xs = $this->xZero;
         $this->ys = $this->yZero - $this->n2 * $pc;
@@ -39,11 +39,11 @@ class Proj4php_ProjGstmerc
         $lat = $p->y;
 
         $L = $this->rs * ($lon - $this->lc);
-        $Ls = $this->cp + ($this->rs * Proj4php::$common->latiso($this->e, $lat, sin($lat)));
-        $latOne = asin(sin($L) / Proj4php::$common . cosh($Ls));
-        $Ls1 = Proj4php::$common . latiso(0.0, $latOne, sin($latOne));
+        $Ls = $this->cp + ($this->rs * ProjFourphp::$common->latiso($this->e, $lat, sin($lat)));
+        $latOne = asin(sin($L) / ProjFourphp::$common . cosh($Ls));
+        $Ls1 = ProjFourphp::$common . latiso(0.0, $latOne, sin($latOne));
         $p->x = $this->xs + ($this->n2 * $Ls1);
-        $p->y = $this->ys + ($this->n2 * atan(Proj4php::$common->sinh($Ls) / cos($L)));
+        $p->y = $this->ys + ($this->n2 * atan(ProjFourphp::$common->sinh($Ls) / cos($L)));
         return $p;
     }
 
@@ -55,14 +55,14 @@ class Proj4php_ProjGstmerc
         $x = $p->x;
         $y = $p->y;
 
-        $L = atan(Proj4php::$common . sinh(($x - $this->xs) / $this->n2) / cos(($y - $this->ys) / $this->n2));
-        $latOne = asin(sin(($y - $this->ys) / $this->n2) / Proj4php::$common . cosh(($x - $this->xs) / $this->n2));
-        $LC = Proj4php::$common . latiso(0.0, $latOne, sin($latOne));
+        $L = atan(ProjFourphp::$common . sinh(($x - $this->xs) / $this->n2) / cos(($y - $this->ys) / $this->n2));
+        $latOne = asin(sin(($y - $this->ys) / $this->n2) / ProjFourphp::$common . cosh(($x - $this->xs) / $this->n2));
+        $LC = ProjFourphp::$common . latiso(0.0, $latOne, sin($latOne));
         $p->x = $this->lc + $L / $this->rs;
-        $p->y = Proj4php::$common . invlatiso($this->e, ($LC - $this->cp) / $this->rs);
+        $p->y = ProjFourphp::$common . invlatiso($this->e, ($LC - $this->cp) / $this->rs);
         return $p;
     }
 
 }
 
-Proj4php::$proj['gstmerc'] = new Proj4php_ProjGstmerc();
+ProjFourphp::$proj['gstmerc'] = new ProjFourphp_ProjGstmerc();

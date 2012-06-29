@@ -26,11 +26,11 @@
 /**
  * Author : Julien Moquet
  * 
- * Inspired by Proj4php from Mike Adair madairATdmsolutions.ca
+ * Inspired by ProjFourphp from Mike Adair madairATdmsolutions.ca
  *                      and Richard Greenwood rich@greenwoodma$p->com 
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
-class Proj4php_ProjAea
+class ProjFourphp_ProjAea
 {
 
     /**
@@ -40,8 +40,8 @@ class Proj4php_ProjAea
     public function init()
     {
 
-        if (abs($this->latOne + $this->latTwo) < Proj4php_Common::$epsln) {
-            Proj4php::reportError("aeaInitEqualLatitudes");
+        if (abs($this->latOne + $this->latTwo) < ProjFourphp_Common::$epsln) {
+            ProjFourphp::reportError("aeaInitEqualLatitudes");
             return;
         }
         $this->temp = $this->b / $this->a;
@@ -52,21 +52,21 @@ class Proj4php_ProjAea
         $this->cosPo = cos($this->latOne);
         $this->tOne = $this->sinPo;
         $this->con = $this->sinPo;
-        $this->msOne = Proj4php_Common::msfnz($this->e3, $this->sinPo, $this->cosPo);
-        $this->qsOne = Proj4php_Common::qsfnz($this->e3, $this->sinPo, $this->cosPo);
+        $this->msOne = ProjFourphp_Common::msfnz($this->e3, $this->sinPo, $this->cosPo);
+        $this->qsOne = ProjFourphp_Common::qsfnz($this->e3, $this->sinPo, $this->cosPo);
 
         $this->sinPo = sin($this->latTwo);
         $this->cosPo = cos($this->latTwo);
         $this->tTwo = $this->sinPo;
-        $this->msTwo = Proj4php_Common::msfnz($this->e3, $this->sinPo, $this->cosPo);
-        $this->qsTwo = Proj4php_Common::qsfnz($this->e3, $this->sinPo, $this->cosPo);
+        $this->msTwo = ProjFourphp_Common::msfnz($this->e3, $this->sinPo, $this->cosPo);
+        $this->qsTwo = ProjFourphp_Common::qsfnz($this->e3, $this->sinPo, $this->cosPo);
 
         $this->sinPo = sin($this->latZero);
         $this->cosPo = cos($this->latZero);
         $this->t3 = $this->sinPo;
-        $this->qsZero = Proj4php_Common::qsfnz($this->e3, $this->sinPo, $this->cosPo);
+        $this->qsZero = ProjFourphp_Common::qsfnz($this->e3, $this->sinPo, $this->cosPo);
 
-        if (abs($this->latOne - $this->latTwo) > Proj4php_Common::$epsln) {
+        if (abs($this->latOne - $this->latTwo) > ProjFourphp_Common::$epsln) {
             $this->nsZero = ($this->msOne * $this->msOne - $this->msTwo * $this->msTwo) / ($this->qsTwo - $this->qsOne);
         } else {
             $this->nsZero = $this->con;
@@ -91,9 +91,9 @@ class Proj4php_ProjAea
         $this->sinPhi = sin($lat);
         $this->cosPhi = cos($lat);
 
-        $qs = Proj4php_Common::qsfnz($this->e3, $this->sinPhi, $this->cosPhi);
+        $qs = ProjFourphp_Common::qsfnz($this->e3, $this->sinPhi, $this->cosPhi);
         $rhOne = $this->a * sqrt($this->c - $this->nsZero * $qs) / $this->nsZero;
-        $theta = $this->nsZero * Proj4php_Common::adjustLon($lon - $this->longZero);
+        $theta = $this->nsZero * ProjFourphp_Common::adjustLon($lon - $this->longZero);
         $x = rhOne * sin($theta) + $this->xZero;
         $y = $this->rh - $rhOne * cos($theta) + $this->yZero;
 
@@ -136,16 +136,16 @@ class Proj4php_ProjAea
                 $lat = $this->phi1z($this->e3, $qs);
             } else {
                 if ($qs >= 0) {
-                    $lat = .5 * Proj4php_Common::$pi;
+                    $lat = .5 * ProjFourphp_Common::$pi;
                 } else {
-                    $lat = -.5 * Proj4php_Common::$pi;
+                    $lat = -.5 * ProjFourphp_Common::$pi;
                 }
             }
         } else {
             $lat = $this->phi1z($this->e3, $qs);
         }
 
-        $lon = Proj4php_Common::adjustLon($theta / $this->nsZero + $this->longZero);
+        $lon = ProjFourphp_Common::adjustLon($theta / $this->nsZero + $this->longZero);
 
         $p->x = $lon;
         $p->y = $lat;
@@ -163,9 +163,9 @@ class Proj4php_ProjAea
     public function phi1z($eccent, $qs)
     {
 
-        $phi = Proj4php_Common::asinz(.5 * $qs);
+        $phi = ProjFourphp_Common::asinz(.5 * $qs);
 
-        if ($eccent < Proj4php_Common::$epsln)
+        if ($eccent < ProjFourphp_Common::$epsln)
             return $phi;
 
         $eccnts = $eccent * $eccent;
@@ -180,11 +180,11 @@ class Proj4php_ProjAea
                 return $phi;
         }
 
-        Proj4php::reportError("aea:phi1z:Convergence error");
+        ProjFourphp::reportError("aea:phi1z:Convergence error");
 
         return null;
     }
 
 }
 
-Proj4php::$proj['aea'] = new Proj4php_ProjAea();
+ProjFourphp::$proj['aea'] = new ProjFourphp_ProjAea();

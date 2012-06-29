@@ -3,7 +3,7 @@
 /**
  * Author : Julien Moquet
  * 
- * Inspired by Proj4php from Mike Adair madairATdmsolutions.ca
+ * Inspired by ProjFourphp from Mike Adair madairATdmsolutions.ca
  *                      and Richard Greenwood rich@greenwoodma$p->com 
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
@@ -29,7 +29,7 @@
   Accessed: 12th November 2009
  * **************************************************************************** */
 
-class Proj4php_ProjGnom
+class ProjFourphp_ProjGnom
 {
 
     /**
@@ -70,7 +70,7 @@ class Proj4php_ProjGnom
         $lat = $p->y;
         /* Forward equations
           ----------------- */
-        $dlon =  Proj4php_Common::adjustLon($lon - $this->longZero);
+        $dlon =  ProjFourphp_Common::adjustLon($lon - $this->longZero);
 
         $sinphi = sin($lat);
         $cosphi = cos($lat);
@@ -79,11 +79,11 @@ class Proj4php_ProjGnom
         $g = $this->sinPOneFour * $sinphi + $this->cosPOneFour * $cosphi * $coslon;
         $ksp = 1.0;
 
-        if ((g > 0) || (abs(g) <= Proj4php_Common::$epsln)) {
+        if ((g > 0) || (abs(g) <= ProjFourphp_Common::$epsln)) {
             $x = $this->xZero + $this->a * $ksp * $cosphi * sin($dlon) / $g;
             $y = $this->yZero + $this->a * $ksp * ($this->cosPOneFour * $sinphi - $this->sinPOneFour * $cosphi * $coslon) / $g;
         } else {
-            Proj4php::reportError("orthoFwdPointError");
+            ProjFourphp::reportError("orthoFwdPointError");
 
             // Point is in the opposing hemisphere and is unprojectable
             // We still need to return a reasonable point, so we project 
@@ -133,9 +133,9 @@ class Proj4php_ProjGnom
             $sinc = sin($c);
             $cosc = cos($c);
 
-            $lat = Proj4php_Common::asinz($cosc * $this->sinPOneFour + ($p->y * $sinc * $this->cosPOneFour) / $rh);
+            $lat = ProjFourphp_Common::asinz($cosc * $this->sinPOneFour + ($p->y * $sinc * $this->cosPOneFour) / $rh);
             $lon = atan2($p->x * sinc, rh * $this->cosPOneFour * $cosc - $p->y * $this->sinPOneFour * $sinc);
-            $lon =  Proj4php_Common::adjustLon($this->longZero + $lon);
+            $lon =  ProjFourphp_Common::adjustLon($this->longZero + $lon);
         } else {
             $lat = $this->phic0;
             $lon = 0.0;
@@ -149,4 +149,4 @@ class Proj4php_ProjGnom
 
 }
 
-Proj4php::$proj['gnom'] = new Proj4php_ProjGnom();
+ProjFourphp::$proj['gnom'] = new ProjFourphp_ProjGnom();

@@ -3,7 +3,7 @@
 /**
  * Author : Julien Moquet
  * 
- * Inspired by Proj4php from Mike Adair madairATdmsolutions.ca
+ * Inspired by ProjFourphp from Mike Adair madairATdmsolutions.ca
  *                      and Richard Greenwood rich@greenwoodma$p->com 
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
@@ -36,7 +36,7 @@
   Package", U.S. Geological Survey National Mapping Division, May 1982.
  * ***************************************************************************** */
 
-class Proj4php_ProjMill
+class ProjFourphp_ProjMill
 {
     /* Initialize the Miller Cylindrical projection
       ------------------------------------------- */
@@ -57,9 +57,9 @@ class Proj4php_ProjMill
 
         /* Forward equations
           ----------------- */
-        $dlon = Proj4php_Common::adjustLon($lon - $this->longZero);
+        $dlon = ProjFourphp_Common::adjustLon($lon - $this->longZero);
         $x = $this->xZero + $this->a * $dlon;
-        $y = $this->yZero + $this->a * log(tan((Proj4php::$common->pi / 4.0) + ($lat / 2.5))) * 1.25;
+        $y = $this->yZero + $this->a * log(tan((ProjFourphp::$common->pi / 4.0) + ($lat / 2.5))) * 1.25;
 
         $p->x = $x;
         $p->y = $y;
@@ -76,8 +76,8 @@ class Proj4php_ProjMill
         $p->x -= $this->xZero;
         $p->y -= $this->yZero;
 
-        $lon = Proj4php_Common::adjustLon($this->longZero + $p->x / $this->a);
-        $lat = 2.5 * (atan(exp(0.8 * $p->y / $this->a)) - Proj4php::$common->pi / 4.0);
+        $lon = ProjFourphp_Common::adjustLon($this->longZero + $p->x / $this->a);
+        $lat = 2.5 * (atan(exp(0.8 * $p->y / $this->a)) - ProjFourphp::$common->pi / 4.0);
 
         $p->x = $lon;
         $p->y = $lat;
@@ -87,4 +87,4 @@ class Proj4php_ProjMill
 
 }
 
-Proj4php::$proj['mill'] = new Proj4php_ProjMill();
+ProjFourphp::$proj['mill'] = new ProjFourphp_ProjMill();

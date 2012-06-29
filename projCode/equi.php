@@ -3,7 +3,7 @@
 /**
  * Author : Julien Moquet
  * 
- * Inspired by Proj4php from Mike Adair madairATdmsolutions.ca
+ * Inspired by ProjFourphp from Mike Adair madairATdmsolutions.ca
  *                      and Richard Greenwood rich@greenwoodma$p->com 
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
@@ -29,7 +29,7 @@
   U.S. Geological Survey Professional Paper 1453 , United State Government
   Printing Office, Washington D.C., 1989.
  * ***************************************************************************** */
-class Proj4php_ProjEqui
+class ProjFourphp_ProjEqui
 {
 
     public function init()
@@ -54,7 +54,7 @@ class Proj4php_ProjEqui
         $lon = $p->x;
         $lat = $p->y;
 
-        $dlon =  Proj4php_Common::adjustLon($lon - $this->longZero);
+        $dlon =  ProjFourphp_Common::adjustLon($lon - $this->longZero);
         $x = $this->xZero + $this->a * $dlon * cos($this->latZero);
         $y = $this->yZero + $this->a * $lat;
 
@@ -75,14 +75,14 @@ class Proj4php_ProjEqui
         $p->y -= $this->yZero;
         $lat = $p->y / $this->a;
 
-        if (abs($lat) > Proj4php_Common::$halfPi) {
-            Proj4php::reportError("equi:Inv:DataError");
+        if (abs($lat) > ProjFourphp_Common::$halfPi) {
+            ProjFourphp::reportError("equi:Inv:DataError");
         }
-        $lon =  Proj4php_Common::adjustLon($this->longZero + $p->x / ($this->a * cos($this->latZero)));
+        $lon =  ProjFourphp_Common::adjustLon($this->longZero + $p->x / ($this->a * cos($this->latZero)));
         $p->x = $lon;
         $p->y = $lat;
     }
 
 }
 
-Proj4php::$proj['equi'] = new Proj4php_ProjEqui();
+ProjFourphp::$proj['equi'] = new ProjFourphp_ProjEqui();

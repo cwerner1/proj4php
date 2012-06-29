@@ -3,7 +3,7 @@
 /**
  * Author : Julien Moquet
  * 
- * Inspired by Proj4php from Mike Adair madairATdmsolutions.ca
+ * Inspired by ProjFourphp from Mike Adair madairATdmsolutions.ca
  *                      and Richard Greenwood rich@greenwoodma$p->com 
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
@@ -30,7 +30,7 @@
   Printing Office, Washington D.C., 1989.
  * ***************************************************************************** */
 
-class Proj4php_ProjOrtho
+class ProjFourphp_ProjOrtho
 {
     /* Initialize the Orthographic projection
       ------------------------------------- */
@@ -65,7 +65,7 @@ class Proj4php_ProjOrtho
 
         /* Forward equations
           ----------------- */
-        $dlon = Proj4php_Common::adjustLon($lon - $this->longZero);
+        $dlon = ProjFourphp_Common::adjustLon($lon - $this->longZero);
 
         $sinphi = sin($lat);
         $cosphi = cos($lat);
@@ -74,11 +74,11 @@ class Proj4php_ProjOrtho
         $g = $this->sinPOneFour * sinphi + $this->cosPOneFour * $cosphi * $coslon;
         $ksp = 1.0;
 
-        if (($g > 0) || (abs($g) <= Proj4php_Common::$epsln)) {
+        if (($g > 0) || (abs($g) <= ProjFourphp_Common::$epsln)) {
             $x = $this->a * $ksp * $cosphi * sin($dlon);
             $y = $this->yZero + $this->a * $ksp * ($this->cosPOneFour * $sinphi - $this->sinPOneFour * $cosphi * $coslon);
         } else {
-            Proj4php::reportError("orthoFwdPointError");
+            ProjFourphp::reportError("orthoFwdPointError");
         }
 
         $p->x = $x;
@@ -112,24 +112,24 @@ class Proj4php_ProjOrtho
         $p->y -= $this->yZero;
         $rh = sqrt($p->x * $p->x + $p->y * $p->y);
         if ($rh > $this->a + .0000001) {
-            Proj4php::reportError("orthoInvDataError");
+            ProjFourphp::reportError("orthoInvDataError");
         }
-        $z = Proj4php::$common . asinz($rh / $this->a);
+        $z = ProjFourphp::$common . asinz($rh / $this->a);
 
         $sinz = sin($z);
         $cosz = cos($z);
 
         $lon = $this->longZero;
-        if (abs($rh) <= Proj4php_Common::$epsln) {
+        if (abs($rh) <= ProjFourphp_Common::$epsln) {
             $lat = $this->latZero;
         }
-        $lat = Proj4php::$common . asinz($cosz * $this->sinPOneFour + ($p->y * $sinz * $this->cosPOneFour) / $rh);
-        $con = abs($this->latZero) - Proj4php_Common::$halfPi;
-        if (abs(con) <= Proj4php_Common::$epsln) {
+        $lat = ProjFourphp::$common . asinz($cosz * $this->sinPOneFour + ($p->y * $sinz * $this->cosPOneFour) / $rh);
+        $con = abs($this->latZero) - ProjFourphp_Common::$halfPi;
+        if (abs(con) <= ProjFourphp_Common::$epsln) {
             if ($this->latZero >= 0) {
-                $lon = Proj4php_Common::adjustLon($this->longZero + atan2($p->x, -$p->y));
+                $lon = ProjFourphp_Common::adjustLon($this->longZero + atan2($p->x, -$p->y));
             } else {
-                $lon = Proj4php_Common::adjustLon($this->longZero - atan2(-$p->x, $p->y));
+                $lon = ProjFourphp_Common::adjustLon($this->longZero - atan2(-$p->x, $p->y));
             }
         }
         $con = $cosz - $this->sinPOneFour * sin($lat);
@@ -142,4 +142,4 @@ class Proj4php_ProjOrtho
 
 }
 
-Proj4php::$proj['ortho'] = new Proj4php_ProjOrtho();
+ProjFourphp::$proj['ortho'] = new ProjFourphp_ProjOrtho();

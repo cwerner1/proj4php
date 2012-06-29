@@ -3,7 +3,7 @@
 /**
  * Author : Julien Moquet
  * 
- * Inspired by Proj4php from Mike Adair madairATdmsolutions.ca
+ * Inspired by ProjFourphp from Mike Adair madairATdmsolutions.ca
  *                      and Richard Greenwood rich@greenwoodma$p->com 
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
@@ -33,7 +33,7 @@
   Package", U.S. Geological Survey National Mapping Division, May 1982.
  * ***************************************************************************** */
 
-class Proj4php_ProjSinu
+class ProjFourphp_ProjSinu
 {
     /* Initialize the Sinusoidal projection
       ------------------------------------ */
@@ -45,7 +45,7 @@ class Proj4php_ProjSinu
         #$this->R = 6370997.0; //Radius of earth
 
         if (!$this->sphere) {
-            $this->en = Proj4php::$common->pjEnfn($this->es);
+            $this->en = ProjFourphp::$common->pjEnfn($this->es);
         } else {
             $this->n = 1.;
             $this->m = 0.;
@@ -67,17 +67,17 @@ class Proj4php_ProjSinu
 
         /* Forward equations
           ----------------- */
-        $lon = Proj4php_Common::adjustLon($lon - $this->longZero);
+        $lon = ProjFourphp_Common::adjustLon($lon - $this->longZero);
 
         if (isset($this->sphere)) {
             if (!$this->m) {
                 $lat = $this->n != 1. ? asin($this->n * sin($lat)) : $lat;
             } else {
                 $k = $this->n * sin($lat);
-                for ($i = Proj4php::$common->maxIter; $i; --$i) {
+                for ($i = ProjFourphp::$common->maxIter; $i; --$i) {
                     $V = ($this->m * $lat + sin($lat) - $k) / ($this->m + cos($lat));
                     $lat -= $V;
-                    if (abs($V) < Proj4php_Common::$epsln)
+                    if (abs($V) < ProjFourphp_Common::$epsln)
                         break;
                 }
             }
@@ -87,7 +87,7 @@ class Proj4php_ProjSinu
 
             $s = sin($lat);
             $c = cos($lat);
-            $y = $this->a * Proj4php::$common->pjMlfn($lat, $s, $c, $this->en);
+            $y = $this->a * ProjFourphp::$common->pjMlfn($lat, $s, $c, $this->en);
             $x = $this->a * $lon * $c / sqrt(1. - $this->es * $s * $s);
         }
 
@@ -120,15 +120,15 @@ class Proj4php_ProjSinu
             $lat = $this->m ? asin(($this->m * $p->y + sin($p->y)) / $this->n) : ( $this->n != 1. ? asin(sin($p->y) / $this->n) : $p->y );
             $lon = $p->x / ($this->C_x * ($this->m + cos($p->y)));
         } else {
-            $lat = Proj4php::$common->pjInvMlfn($p->y / $this->a, $this->es, $this->en);
+            $lat = ProjFourphp::$common->pjInvMlfn($p->y / $this->a, $this->es, $this->en);
             $s = abs($lat);
 
-            if ($s < Proj4php_Common::$halfPi) {
+            if ($s < ProjFourphp_Common::$halfPi) {
                 $s = sin($lat);
                 $temp = $this->longZero + $p->x * sqrt(1. - $this->es * $s * $s) / ($this->a * cos($lat));
                 //temp = $this->longZero + $p->x / ($this->a * cos($lat));
-                $lon = Proj4php_Common::adjustLon($temp);
-            } else if (($s - Proj4php_Common::$epsln) < Proj4php_Common::$halfPi) {
+                $lon = ProjFourphp_Common::adjustLon($temp);
+            } else if (($s - ProjFourphp_Common::$epsln) < ProjFourphp_Common::$halfPi) {
                 $lon = $this->longZero;
             }
         }
@@ -141,4 +141,4 @@ class Proj4php_ProjSinu
 
 }
 
-Proj4php::$proj['sinu'] = new Proj4php_ProjSinu();
+ProjFourphp::$proj['sinu'] = new ProjFourphp_ProjSinu();

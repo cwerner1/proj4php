@@ -3,7 +3,7 @@
 /**
  * Author : Julien Moquet
  * 
- * Inspired by Proj4php from Mike Adair madairATdmsolutions.ca
+ * Inspired by ProjFourphp from Mike Adair madairATdmsolutions.ca
  *                      and Richard Greenwood rich@greenwoodma$p->com 
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
@@ -108,8 +108,8 @@
   NZGD49   EPSG:4272
 
   http://spatialreference.org/ defines these as
-  Proj4php.defs["EPSG:4272"] = "+proj=longlat +ellps=intl +datum=nzgd49 +no_defs ";
-  Proj4php.defs["EPSG:27200"] = "+proj=nzmg +lat_0=-41 +lon_0=173 +x_0=2510000 +y_0=6023150 +ellps=intl +datum=nzgd49 +units=m +no_defs ";
+  ProjFourphp.defs["EPSG:4272"] = "+proj=longlat +ellps=intl +datum=nzgd49 +no_defs ";
+  ProjFourphp.defs["EPSG:27200"] = "+proj=nzmg +lat_0=-41 +lon_0=173 +x_0=2510000 +y_0=6023150 +ellps=intl +datum=nzgd49 +units=m +no_defs ";
 
 
   LICENSE
@@ -121,7 +121,7 @@
 /**
   Initialize New Zealand Map Grip projection
  */
-class Proj4php_ProjNzmg
+class ProjFourphp_ProjNzmg
 {
 
     /**
@@ -206,7 +206,7 @@ class Proj4php_ProjNzmg
 
         // 1. Calculate d_phi and d_psi    ...                          // and d_lambda
         // For this algorithm, delta_latitude is in seconds of arc x 10-5, so we need to scale to those units. Longitude is radians.
-        $dPhi = $deltaLat / Proj4php::$common->secToRad * 1E-5;
+        $dPhi = $deltaLat / ProjFourphp::$common->secToRad * 1E-5;
         $dLambda = $deltaLon;
         $dPhiN = 1;  // d_phi^0
 
@@ -330,7 +330,7 @@ class Proj4php_ProjNzmg
 
         // 4. Calculate latitude and longitude
         // d_phi is calcuated in second of arc * 10^-5, so we need to scale back to radians. d_lambda is in radians.
-        $lat = $this->latZero + ($dPhi * Proj4php::$common->secToRad * 1E5);
+        $lat = $this->latZero + ($dPhi * ProjFourphp::$common->secToRad * 1E5);
         $lon = $this->longZero + $dLambda;
 
         $p->x = $lon;
@@ -341,4 +341,4 @@ class Proj4php_ProjNzmg
 
 }
 
-Proj4php::$proj['nzmg'] = new Proj4php_ProjNzmg();
+ProjFourphp::$proj['nzmg'] = new ProjFourphp_ProjNzmg();

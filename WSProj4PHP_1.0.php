@@ -1,6 +1,6 @@
 <?php
 
-include_once("Proj4php/proj4php.php");
+include_once("ProjFourphp/projFourphp.php");
 return;
 
 $error = false;
@@ -60,14 +60,14 @@ else
     $format = 'xml';
 
 
-$proj4 = new Proj4php();
-$projsource = new Proj4php_Proj($srcProjection, $proj4);
-$projdest = new Proj4php_Proj($tgtProjection, $proj4);
+$projFour = new ProjFourphp();
+$projsource = new ProjFourphp_Proj($srcProjection, $projFour);
+$projdest = new ProjFourphp_Proj($tgtProjection, $projFour);
 
 // check the projections
-if (Proj4php::$defs[$srcProjection] == Proj4php::$defs['WGS84'] && $srcProjection != 'EPSG:4326')
+if (ProjFourphp::$defs[$srcProjection] == ProjFourphp::$defs['WGS84'] && $srcProjection != 'EPSG:4326')
     $error = true;
-if (Proj4php::$defs[$tgtProjection] == Proj4php::$defs['WGS84'] && $tgtProjection != 'EPSG:4326')
+if (ProjFourphp::$defs[$tgtProjection] == ProjFourphp::$defs['WGS84'] && $tgtProjection != 'EPSG:4326')
     $error = true;
 
 if ($error === true) {
@@ -84,8 +84,8 @@ if ($error === true) {
     }
 }
 
-$pointSrc = new proj4php_Point($x, $y);
-$pointDest = $proj4->transform($projsource, $projdest, $pointSrc);
+$pointSrc = new projFourphp_Point($x, $y);
+$pointDest = $projFour->transform($projsource, $projdest, $pointSrc);
 
 $tgtProjection = str_replace(':', '::', $tgtProjection);
 

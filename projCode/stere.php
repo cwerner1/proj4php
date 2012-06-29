@@ -3,12 +3,12 @@
 /**
  * Author : Julien Moquet
  * 
- * Inspired by Proj4php from Mike Adair madairATdmsolutions.ca
+ * Inspired by ProjFourphp from Mike Adair madairATdmsolutions.ca
  *                      and Richard Greenwood rich@greenwoodma$p->com 
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
 // Initialize the Stereographic projection
-class Proj4php_ProjStere
+class ProjFourphp_ProjStere
 {
 
     static protected $tol = 1.e-8;
@@ -29,7 +29,7 @@ class Proj4php_ProjStere
     public function ssfn_($phit, $sinphi, $eccen)
     {
         $sinphi *= $eccen;
-        return (tan(.5 * (Proj4php_Common::$halfPi + $phit)) * pow((1. - $sinphi) / (1. + $sinphi), .5 * $eccen));
+        return (tan(.5 * (ProjFourphp_Common::$halfPi + $phit)) * pow((1. - $sinphi) / (1. + $sinphi), .5 * $eccen));
     }
 
     /**
@@ -37,12 +37,12 @@ class Proj4php_ProjStere
      */
     public function init()
     {
-        $this->phits = $this->latTs ? $this->latTs : Proj4php_Common::$halfPi;
+        $this->phits = $this->latTs ? $this->latTs : ProjFourphp_Common::$halfPi;
         $t = abs($this->latZero);
-        if ((abs($t) - Proj4php_Common::$halfPi) < Proj4php_Common::$epsln) {
+        if ((abs($t) - ProjFourphp_Common::$halfPi) < ProjFourphp_Common::$epsln) {
             $this->mode = $this->latZero < 0. ? self::$sPole : self::$nPole;
         } else {
-            $this->mode = $t > Proj4php_Common::$epsln ? self::$obliq : self::$equit;
+            $this->mode = $t > ProjFourphp_Common::$epsln ? self::$obliq : self::$equit;
         }
         $this->phits = abs($this->phits);
         if ($this->es) {
@@ -51,11 +51,11 @@ class Proj4php_ProjStere
             switch ($this->mode) {
                 case self::$nPole:
                 case self::$sPole:
-                    if (abs($this->phits - Proj4php_Common::$halfPi) < Proj4php_Common::$epsln) {
+                    if (abs($this->phits - ProjFourphp_Common::$halfPi) < ProjFourphp_Common::$epsln) {
                         $this->akmOne = 2. * $this->kZero / sqrt(pow(1 + $this->e, 1 + $this->e) * pow(1 - $this->e, 1 - $this->e));
                     } else {
                         $t = sin($this->phits);
-                        $this->akmOne = cos($this->phits) / Proj4php::$common->tsfnz($this->e, $this->phits, $t);
+                        $this->akmOne = cos($this->phits) / ProjFourphp::$common->tsfnz($this->e, $this->phits, $t);
                         $t *= $this->e;
                         $this->akmOne /= sqrt(1. - $t * $t);
                     }
@@ -65,7 +65,7 @@ class Proj4php_ProjStere
                     break;
                 case self::$obliq:
                     $t = sin($this->latZero);
-                    $X = 2. * atan($this->ssfn_($this->latZero, $t, $this->e)) - Proj4php_Common::$halfPi;
+                    $X = 2. * atan($this->ssfn_($this->latZero, $t, $this->e)) - ProjFourphp_Common::$halfPi;
                     $t *= $this->e;
                     $this->akmOne = 2. * $this->kZero * cos($this->latZero) / sqrt(1. - $t * $t);
                     $this->sinX1 = sin($X);
@@ -82,8 +82,8 @@ class Proj4php_ProjStere
                     break;
                 case self::$sPole:
                 case self::$nPole:
-                    $this->akmOne = abs($this->phits - Proj4php_Common::$halfPi) >= Proj4php_Common::$epsln ?
-                            cos($this->phits) / tan(Proj4php::$common->fortPi - .5 * $this->phits) :
+                    $this->akmOne = abs($this->phits - ProjFourphp_Common::$halfPi) >= ProjFourphp_Common::$epsln ?
+                            cos($this->phits) / tan(ProjFourphp::$common->fortPi - .5 * $this->phits) :
                             2. * $this->kZero;
                     break;
             }
@@ -100,7 +100,7 @@ class Proj4php_ProjStere
     {
 
         $lon = $p->x;
-        $lon = Proj4php_Common::adjustLon($lon - $this->longZero);
+        $lon = ProjFourphp_Common::adjustLon($lon - $this->longZero);
         $lat = $p->y;
         #$x;
         #$y;
@@ -120,8 +120,8 @@ class Proj4php_ProjStere
             switch ($this->mode) {
                 case self::$equit:
                     $y = 1. + $cosphi * $coslam;
-                    if (y <= Proj4php_Common::$epsln) {
-                        Proj4php::reportError("stere:forward:Equit");
+                    if (y <= ProjFourphp_Common::$epsln) {
+                        ProjFourphp::reportError("stere:forward:Equit");
                     }
                     $y = $this->akmOne / $y;
                     $x = $y * $cosphi * $sinlam;
@@ -129,8 +129,8 @@ class Proj4php_ProjStere
                     break;
                 case self::$obliq:
                     $y = 1. + $this->sinphZero * $sinphi + $this->cosphZero * $cosphi * $coslam;
-                    if ($y <= Proj4php_Common::$epsln) {
-                        Proj4php::reportError("stere:forward:Obliq");
+                    if ($y <= ProjFourphp_Common::$epsln) {
+                        ProjFourphp::reportError("stere:forward:Obliq");
                     }
                     $y = $this->akmOne / $y;
                     $x = $y * $cosphi * $sinlam;
@@ -141,10 +141,10 @@ class Proj4php_ProjStere
                     $lat = -$lat;
                 //Note  no break here so it conitnues through S_POLE
                 case self::$sPole:
-                    if (abs($lat - Proj4php_Common::$halfPi) < self::$tol) {
-                        Proj4php::reportError("stere:forward:S_POLE");
+                    if (abs($lat - ProjFourphp_Common::$halfPi) < self::$tol) {
+                        ProjFourphp::reportError("stere:forward:S_POLE");
                     }
-                    $y = $this->akmOne * tan(Proj4php::$common->fortPi + .5 * $lat);
+                    $y = $this->akmOne * tan(ProjFourphp::$common->fortPi + .5 * $lat);
                     $x = $sinlam * $y;
                     $y *= $coslam;
                     break;
@@ -155,7 +155,7 @@ class Proj4php_ProjStere
             $sinphi = sin($lat);
             if ($this->mode == self::$obliq || $this->mode == self::$equit) {
                 $Xt = 2. * atan($this->ssfn_($lat, $sinphi, $this->e));
-                $sinX = sin($Xt - Proj4php_Common::$halfPi);
+                $sinX = sin($Xt - ProjFourphp_Common::$halfPi);
                 $cosX = cos($Xt);
             }
             switch ($this->mode) {
@@ -174,7 +174,7 @@ class Proj4php_ProjStere
                     $coslam = - $coslam;
                     $sinphi = -$sinphi;
                 case self::$nPole:
-                    $x = $this->akmOne * Proj4php::$common->tsfnz($this->e, $lat, $sinphi);
+                    $x = $this->akmOne * ProjFourphp::$common->tsfnz($this->e, $lat, $sinphi);
                     $y = - $x * $coslam;
                     break;
             }
@@ -226,7 +226,7 @@ class Proj4php_ProjStere
 
             switch ($this->mode) {
                 case self::$equit:
-                    if (abs($rh) <= Proj4php_Common::$epsln) {
+                    if (abs($rh) <= ProjFourphp_Common::$epsln) {
                         $lat = 0.;
                     } else {
                         $lat = asin($y * $sinc / $rh);
@@ -235,7 +235,7 @@ class Proj4php_ProjStere
                         $lon = atan2($x * $sinc, $cosc * $rh);
                     break;
                 case self::$obliq:
-                    if (abs($rh) <= Proj4php_Common::$epsln) {
+                    if (abs($rh) <= ProjFourphp_Common::$epsln) {
                         $lat = $this->phiZero;
                     } else {
                         $lat = asin($cosc * $this->sinphZero + $y * $sinc * $this->cosphZero / $rh);
@@ -248,7 +248,7 @@ class Proj4php_ProjStere
                 case self::$nPole:
                     $y = -$y;
                 case self::$sPole:
-                    if (abs($rh) <= Proj4php_Common::$epsln) {
+                    if (abs($rh) <= ProjFourphp_Common::$epsln) {
                         $lat = $this->phiZero;
                     } else {
                         $lat = asin($this->mode == self::$sPole ? -$cosc : $cosc );
@@ -256,7 +256,7 @@ class Proj4php_ProjStere
                     $lon = ($x == 0. && $y == 0.) ? 0. : atan2($x, $y);
                     break;
             }
-            $p->x = Proj4php_Common::adjustLon($lon + $this->longZero);
+            $p->x = ProjFourphp_Common::adjustLon($lon + $this->longZero);
             $p->y = $lat;
         } else {
             $rho = sqrt($x * $x + $y * $y);
@@ -272,18 +272,18 @@ class Proj4php_ProjStere
                         $phi_l = asin($cosphi * $this->sinX1 + ($y * $sinphi * $this->cosX1 / $rho));
                     }
 
-                    $tp = tan(.5 * (Proj4php_Common::$halfPi + $phi_l));
+                    $tp = tan(.5 * (ProjFourphp_Common::$halfPi + $phi_l));
                     $x *= $sinphi;
                     $y = $rho * $this->cosX1 * $cosphi - $y * $this->sinX1 * $sinphi;
-                    $pi2 = Proj4php_Common::$halfPi;
+                    $pi2 = ProjFourphp_Common::$halfPi;
                     $halfe = .5 * $this->e;
                     break;
                 case self::$nPole:
                     $y = -$y;
                 case self::$sPole:
                     $tp = - $rho / $this->akmOne;
-                    $phi_l = Proj4php_Common::$halfPi - 2. * atan($tp);
-                    $pi2 = -Proj4php_Common::$halfPi;
+                    $phi_l = ProjFourphp_Common::$halfPi - 2. * atan($tp);
+                    $pi2 = -ProjFourphp_Common::$halfPi;
                     $halfe = -.5 * $this->e;
                     break;
             }
@@ -294,7 +294,7 @@ class Proj4php_ProjStere
                     if ($this->mode == self::$sPole)
                         $lat = -$lat;
                     $lon = ($x == 0. && $y == 0.) ? 0. : atan2($x, $y);
-                    $p->x = Proj4php_Common::adjustLon($lon + $this->longZero);
+                    $p->x = ProjFourphp_Common::adjustLon($lon + $this->longZero);
                     $p->y = $lat;
                     return $p;
                 }
@@ -304,4 +304,4 @@ class Proj4php_ProjStere
 
 }
 
-Proj4php::$proj['stere'] = new Proj4php_ProjStere();
+ProjFourphp::$proj['stere'] = new ProjFourphp_ProjStere();

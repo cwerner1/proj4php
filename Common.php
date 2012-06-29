@@ -3,11 +3,11 @@
 /**
  * Author : Julien Moquet
  * 
- * Inspired by Proj4js from Mike Adair madairATdmsolutions.ca
+ * Inspired by ProjFourjs from Mike Adair madairATdmsolutions.ca
  *                      and Richard Greenwood rich@greenwoodmap.com 
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
-class Proj4php_Common
+class ProjFourphp_Common
 {
 
     public static $pi = 3.141592653589793238; //Math.PI,
@@ -263,7 +263,7 @@ class Proj4php_Common
                 return $phi;
         }
 
-        Proj4php::reportError("cass:pjInvMlfn: Convergence error");
+        ProjFourphp::reportError("cass:pjInvMlfn: Convergence error");
 
         return $phi;
     }
