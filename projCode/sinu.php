@@ -67,7 +67,7 @@ class Proj4php_ProjSinu
 
         /* Forward equations
           ----------------- */
-        $lon = Proj4php::$common->adjustLon($lon - $this->long0);
+        $lon = Proj4php_common::adjustLon($lon - $this->long0);
 
         if (isset($this->sphere)) {
             if (!$this->m) {
@@ -127,7 +127,7 @@ class Proj4php_ProjSinu
                 $s = sin($lat);
                 $temp = $this->long0 + $p->x * sqrt(1. - $this->es * $s * $s) / ($this->a * cos($lat));
                 //temp = $this->long0 + $p->x / ($this->a * cos($lat));
-                $lon = Proj4php::$common->adjustLon($temp);
+                $lon = Proj4php_common::adjustLon($temp);
             } else if (($s - Proj4php::$common->epsln) < Proj4php::$common->halfPi) {
                 $lon = $this->long0;
             }

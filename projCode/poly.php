@@ -133,7 +133,7 @@ class Proj4php_ProjPoly
         $lon = $p->x;
         $lat = $p->y;
 
-        $con = Proj4php::$common->adjustLon($lon - $this->long0);
+        $con = Proj4php_common::adjustLon($lon - $this->long0);
 
         if (abs($lat) <= .0000001) {
             $x = $this->x0 + $this->a * $con;
@@ -187,7 +187,7 @@ class Proj4php_ProjPoly
             $iflg = phi4z($this->es, $this->e0, $this->e1, $this->e2, $this->e3, $this->al, $b, $c, $lat);
             if ($iflg != 1)
                 return($iflg);
-            $lon = Proj4php::$common->adjustLon((Proj4php::$common->asinz($p->x * $c / $this->a) / sin($lat)) + $this->long0);
+            $lon = Proj4php_common::adjustLon((Proj4php::$common->asinz($p->x * $c / $this->a) / sin($lat)) + $this->long0);
         }
 
         $p->x = $lon;

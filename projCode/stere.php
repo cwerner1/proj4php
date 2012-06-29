@@ -100,7 +100,7 @@ class Proj4php_ProjStere
     {
 
         $lon = $p->x;
-        $lon = Proj4php::$common->adjustLon($lon - $this->long0);
+        $lon = Proj4php_common::adjustLon($lon - $this->long0);
         $lat = $p->y;
         #$x;
         #$y;
@@ -256,7 +256,7 @@ class Proj4php_ProjStere
                     $lon = ($x == 0. && $y == 0.) ? 0. : atan2($x, $y);
                     break;
             }
-            $p->x = Proj4php::$common->adjustLon($lon + $this->long0);
+            $p->x = Proj4php_common::adjustLon($lon + $this->long0);
             $p->y = $lat;
         } else {
             $rho = sqrt($x * $x + $y * $y);
@@ -294,7 +294,7 @@ class Proj4php_ProjStere
                     if ($this->mode == $this->S_POLE)
                         $lat = -$lat;
                     $lon = ($x == 0. && $y == 0.) ? 0. : atan2($x, $y);
-                    $p->x = Proj4php::$common->adjustLon($lon + $this->long0);
+                    $p->x = Proj4php_common::adjustLon($lon + $this->long0);
                     $p->y = $lat;
                     return $p;
                 }

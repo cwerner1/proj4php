@@ -57,7 +57,7 @@ class Proj4php_ProjTmerc
         $lon = $p->x;
         $lat = $p->y;
 
-        $deltaLon = Proj4php::$common->adjustLon($lon - $this->long0); // Delta longitude
+        $deltaLon = Proj4php_common::adjustLon($lon - $this->long0); // Delta longitude
         #$con = 0;    // cone constant
         #$x = 0;
         #$y = 0;
@@ -119,7 +119,7 @@ class Proj4php_ProjTmerc
             if (($g == 0) && ($h == 0)) {
                 $lon = $this->long0;
             } else {
-                $lon = Proj4php::$common->adjustLon(atan2($g, $h) + $this->long0);
+                $lon = Proj4php_common::adjustLon(atan2($g, $h) + $this->long0);
             }
         } else {    // ellipsoidal form
             $x = $p->x - $this->x0;
@@ -153,7 +153,7 @@ class Proj4php_ProjTmerc
                 $d = $x / ($n * $this->k0);
                 $ds = pow($d, 2);
                 $lat = $phi - ($n * $tanPhi * $ds / $r) * (0.5 - $ds / 24.0 * (5.0 + 3.0 * $t + 10.0 * $c - 4.0 * $cs - 9.0 * $this->ep2 - $ds / 30.0 * (61.0 + 90.0 * $t + 298.0 * $c + 45.0 * $ts - 252.0 * $this->ep2 - 3.0 * $cs)));
-                $lon = Proj4php::$common->adjustLon($this->long0 + ($d * (1.0 - $ds / 6.0 * (1.0 + 2.0 * $t + $c - $ds / 20.0 * (5.0 - 2.0 * $c + 28.0 * $t - 3.0 * $cs + 8.0 * $this->ep2 + 24.0 * $ts))) / $cosPhi));
+                $lon = Proj4php_common::adjustLon($this->long0 + ($d * (1.0 - $ds / 6.0 * (1.0 + 2.0 * $t + $c - $ds / 20.0 * (5.0 - 2.0 * $c + 28.0 * $t - 3.0 * $cs + 8.0 * $this->ep2 + 24.0 * $ts))) / $cosPhi));
             } else {
                 $lat = Proj4php::$common->halfPi * Proj4php::$common->sign($y);
                 $lon = $this->long0;
