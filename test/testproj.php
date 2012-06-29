@@ -1,12 +1,11 @@
 <?php
-include_once("../src/proj4php/proj4php.php");
-
+include_once("../proj4php.php");
 $proj4 = new Proj4php();
-$projL93 = new Proj4phpProj('EPSG:2154',$proj4);
-$projWGS84 = new Proj4phpProj('EPSG:4326',$proj4);
-$projLI = new Proj4phpProj('EPSG:27571',$proj4);
-$projLSud = new Proj4phpProj('EPSG:27563',$proj4);
-$projL72 = new Proj4phpProj('EPSG:31370',$proj4);
+$projL93 = new Proj4php_Proj('EPSG:2154',$proj4);
+$projWGS84 = new Proj4php_Proj('EPSG:4326',$proj4);
+$projLI = new Proj4php_Proj('EPSG:27571',$proj4);
+$projLSud = new Proj4php_Proj('EPSG:27563',$proj4);
+$projL72 = new Proj4php_Proj('EPSG:31370',$proj4);
 
 // GPS
 // latitude        longitude
@@ -19,7 +18,7 @@ $projL72 = new Proj4phpProj('EPSG:31370',$proj4);
 // LI
 // 601413.709   1125717.730
 
-$pointSrc = new proj4phpPoint('652709.401','6859290.946');
+$pointSrc = new proj4php_Point('652709.401','6859290.946');
 echo "Source : ".$pointSrc->toShortString()." in L93 <br>";
 $pointDest = $proj4->transform($projL93,$projWGS84,$pointSrc);
 echo "Conversion : ".$pointDest->toShortString()." in WGS84<br><br>";
