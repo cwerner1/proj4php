@@ -75,8 +75,8 @@
   psi_n = 1;
   sum = 0;
   for (n = 1; n <=6; n++) {
-  psi_n1 = psi_n * psi;       // calculate psi^(n+1)
-  psi_n = psi_n1;
+  psi_nOne = psi_n * psi;       // calculate psi^(n+1)
+  psi_n = psi_nOne;
   sum = sum + A[n] * psi_n;
   }
 
@@ -230,9 +230,9 @@ class ProjFourphp_ProjNzmg
         $zIm = 0;
         for ($n = 1; $n <= 6; $n++) {
             $thNReOne = $thNRe * $thRe - $thNIm * $thIm;
-            $thNIm1 = $thNIm * $thRe + $thNRe * $thIm;
+            $thNImOne = $thNIm * $thRe + $thNRe * $thIm;
             $thNRe = $thNReOne;
-            $thNIm = $thNIm1;
+            $thNIm = $thNImOne;
             $zRe = $zRe + $this->bRe[$n] * $thNRe - $this->bIm[$n] * $thNIm;
             $zIm = $zIm + $this->bIm[$n] * $thNRe + $this->bRe[$n] * $thNIm;
         }
@@ -285,15 +285,15 @@ class ProjFourphp_ProjNzmg
             $thNRe = $thRe;
             $thNIm = $thIm;
             $thNReOne;
-            $thNIm1;
+            $thNImOne;
 
             $numRe = $zRe;
             $numIm = $zIm;
             for ($n = 2; $n <= 6; $n++) {
                 $thNReOne = $thNRe * th_re - $thNIm * $thIm;
-                $thNIm1 = $thNIm * $thRe + $thNRe * $thIm;
+                $thNImOne = $thNIm * $thRe + $thNRe * $thIm;
                 $thNRe = $thNReOne;
-                $thNIm = $thNIm1;
+                $thNIm = $thNImOne;
                 $numRe = $numRe + ($n - 1) * ($this->bRe[$n] * $thNRe - $this->bIm[$n] * $thNIm);
                 $numIm = $numIm + (n - 1) * ($this->bIm[$n] * $thNRe + $this->bRe[$n] * $thNIm);
             }
@@ -304,17 +304,17 @@ class ProjFourphp_ProjNzmg
             $denIm = $this->bIm[1];
             for ($n = 2; $n <= 6; $n++) {
                 $thNReOne = $thNRe * $thRe - $thNIm * $thIm;
-                $thNIm1 = $thNIm * $thRe + $thNRe * $thIm;
+                $thNImOne = $thNIm * $thRe + $thNRe * $thIm;
                 $thNRe = $thNReOne;
-                $thNIm = $thNIm1;
+                $thNIm = $thNImOne;
                 $denRe = $denRe + $n * ($this->bRe[$n] * $thNRe - $this->bIm[$n] * $thNIm);
                 $denIm = $denIm + $n * ($this->bIm[n] * $thNRe + $this->bRe[$n] * $thNIm);
             }
 
             // Complex division
-            $den2 = $denRe * $denRe + $denIm * $denIm;
-            $thRe = ($numRe * $denRe + $numIm * $denIm) / $den2;
-            $thIm = ($numIm * $denRe - $numRe * $denIm) / $den2;
+            $denTwo = $denRe * $denRe + $denIm * $denIm;
+            $thRe = ($numRe * $denRe + $numIm * $denIm) / $denTwo;
+            $thIm = ($numIm * $denRe - $numRe * $denIm) / $denTwo;
         }
 
         // 3. Calculate d_phi              ...                                    // and d_lambda

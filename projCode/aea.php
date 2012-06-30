@@ -124,7 +124,7 @@ class ProjFourphp_ProjAea
 
         $theta = 0.0;
         if ($rhOne != 0.0) {
-            $theta = atan2($con * $p->x, $con * $p->y);
+            $theta = atanTwo($con * $p->x, $con * $p->y);
         }
 
         $con = $rhOne * $this->nsZero / $this->a;

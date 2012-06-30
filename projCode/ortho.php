@@ -127,9 +127,9 @@ class ProjFourphp_ProjOrtho
         $con = abs($this->latZero) - ProjFourphp_Common::$halfPi;
         if (abs(con) <= ProjFourphp_Common::$epsln) {
             if ($this->latZero >= 0) {
-                $lon = ProjFourphp_Common::adjustLon($this->longZero + atan2($p->x, -$p->y));
+                $lon = ProjFourphp_Common::adjustLon($this->longZero + atanTwo($p->x, -$p->y));
             } else {
-                $lon = ProjFourphp_Common::adjustLon($this->longZero - atan2(-$p->x, $p->y));
+                $lon = ProjFourphp_Common::adjustLon($this->longZero - atanTwo(-$p->x, $p->y));
             }
         }
         $con = $cosz - $this->sinPOneFour * sin($lat);

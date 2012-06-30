@@ -43,12 +43,12 @@ class ProjFourphp_ProjLaea
     protected $nPole = 2;
     protected $equit = 3;
     protected $obliq = 4;
-    protected $P00 = .33333333333333333333;
-    protected $P01 = .17222222222222222222;
-    protected $P02 = .10257936507936507936;
-    protected $P10 = .06388888888888888888;
+    protected $pZeroZero = .33333333333333333333;
+    protected $pZeroOne = .17222222222222222222;
+    protected $pZeroTwo = .10257936507936507936;
+    protected $pOneZero = .06388888888888888888;
     protected $P11 = .06640211640211640211;
-    protected $P20 = .01641501294219154443;
+    protected $pTwoZero = .01641501294219154443;
 
     /* Initialize the Lambert Azimuthal Equal Area projection
       ------------------------------------------------------ */
@@ -83,9 +83,9 @@ class ProjFourphp_ProjLaea
                 case self::$obliq:
                     $this->rq = sqrt(.5 * $this->qp);
                     $sinphi = sin($this->latZero);
-                    $this->sinb1 = ProjFourphp::$common->qsfnz($this->e, $sinphi) / $this->qp;
-                    $this->cosb1 = sqrt(1. - $this->sinb1 * $this->sinb1);
-                    $this->dd = cos($this->latZero) / (sqrt(1. - $this->es * $sinphi * $sinphi) * $this->rq * $this->cosb1);
+                    $this->sinbOne = ProjFourphp::$common->qsfnz($this->e, $sinphi) / $this->qp;
+                    $this->cosbOne = sqrt(1. - $this->sinbOne * $this->sinbOne);
+                    $this->dd = cos($this->latZero) / (sqrt(1. - $this->es * $sinphi * $sinphi) * $this->rq * $this->cosbOne);
                     $this->ymf = ($this->xmf = $this->rq) / $this->dd;
                     $this->xmf *= $this->dd;
                     break;
@@ -168,7 +168,7 @@ class ProjFourphp_ProjLaea
             }
             switch ($this->mode) {
                 case self::$obliq:
-                    $b = 1. + $this->sinb1 * $sinb + $this->cosb1 * $cosb * $coslam;
+                    $b = 1. + $this->sinbOne * $sinb + $this->cosbOne * $cosb * $coslam;
                     break;
                 case self::$equit:
                     $b = 1. + $cosb * $coslam;
@@ -191,7 +191,7 @@ class ProjFourphp_ProjLaea
                 case self::$equit:
                     $b = sqrt(2. / $b);
                     if ($this->mode == self::$obliq) {
-                        $y = $this->ymf * $b * ($this->cosb1 * $sinb - $this->sinb1 * $cosb * $coslam);
+                        $y = $this->ymf * $b * ($this->cosbOne * $sinb - $this->sinbOne * $cosb * $coslam);
                     } else {
                         $y = ($b = sqrt(2. / (1. + $cosb * $coslam))) * $sinb * $this->ymf;
                     }
@@ -277,7 +277,7 @@ class ProjFourphp_ProjLaea
                     $phi -= ProjFourphp_Common::$halfPi;
                     break;
             }
-            $lam = ($y == 0. && ($this->mode == self::$equit || $this->mode == self::$obliq)) ? 0. : atan2($x, $y);
+            $lam = ($y == 0. && ($this->mode == self::$equit || $this->mode == self::$obliq)) ? 0. : atanTwo($x, $y);
         } else {
             /*
               $cCe;
@@ -302,9 +302,9 @@ class ProjFourphp_ProjLaea
                     $cCe = cos($sCe);
                     $x *= ($sCe = sin($sCe));
                     if ($this->mode == self::$obliq) {
-                        $ab = $cCe * $this->sinb1 + $y * $sCe * $this->cosb1 / $rho;
+                        $ab = $cCe * $this->sinbOne + $y * $sCe * $this->cosbOne / $rho;
                         $q = $this->qp * $ab;
-                        $y = $rho * $this->cosb1 * $cCe - $y * $this->sinb1 * $sCe;
+                        $y = $rho * $this->cosbOne * $cCe - $y * $this->sinbOne * $sCe;
                     } else {
                         $ab = $y * $sCe / $rho;
                         $q = $this->qp * $ab;
@@ -329,7 +329,7 @@ class ProjFourphp_ProjLaea
                     }
                     break;
             }
-            $lam = atan2($x, $y);
+            $lam = atanTwo($x, $y);
             $phi = $this->authlat(asin($ab), $this->apa);
         }
 
@@ -352,11 +352,11 @@ class ProjFourphp_ProjLaea
           $temp =abs($this->latZero) - ProjFourphp::$common->HALF_PI;
           if (abs(temp) > ProjFourphp::$common->EPSLN) {
           temp = cos_z -$this->sin_lat_o * sin(lat);
-          if(temp!=0.0) lon=ProjFourphp::$common->adjust_lon($this->longZero+atan2($p->x*sin_z*$this->cos_lat_o,temp*Rh));
+          if(temp!=0.0) lon=ProjFourphp::$common->adjust_lon($this->longZero+atanTwo($p->x*sin_z*$this->cos_lat_o,temp*Rh));
           } else if ($this->latZero < 0.0) {
-          lon = ProjFourphp::$common->adjust_lon($this->longZero - atan2(-$p->x,$p->y));
+          lon = ProjFourphp::$common->adjust_lon($this->longZero - atanTwo(-$p->x,$p->y));
           } else {
-          lon = ProjFourphp::$common->adjust_lon($this->longZero + atan2($p->x, -$p->y));
+          lon = ProjFourphp::$common->adjust_lon($this->longZero + atanTwo($p->x, -$p->y));
           }
           } else {
           lat = $this->latZero;
@@ -377,28 +377,28 @@ class ProjFourphp_ProjLaea
     public function authset($es)
     {
         #$t;
-        $APA = array();
-        $APA[0] = $es * $this->P00;
+        $apa = array();
+        $apa[0] = $es * $this->pZeroZero;
         $t = $es * $es;
-        $APA[0] += $t * $this->P01;
-        $APA[1] = $t * $this->P10;
+        $apa[0] += $t * $this->pZeroOne;
+        $apa[1] = $t * $this->pOneZero;
         $t *= $es;
-        $APA[0] += $t * $this->P02;
-        $APA[1] += $t * $this->P11;
-        $APA[2] = $t * $this->P20;
-        return $APA;
+        $apa[0] += $t * $this->pZeroTwo;
+        $apa[1] += $t * $this->P11;
+        $apa[2] = $t * $this->pTwoZero;
+        return $apa;
     }
 
     /**
      *
      * @param type $beta
-     * @param type $APA
+     * @param type $apa
      * @return type 
      */
-    public function authlat($beta, $APA)
+    public function authlat($beta, $apa)
     {
         $t = $beta + $beta;
-        return($beta + $APA[0] * sin($t) + $APA[1] * sin($t + $t) + $APA[2] * sin($t + $t + $t));
+        return($beta + $apa[0] * sin($t) + $apa[1] * sin($t + $t) + $apa[2] * sin($t + $t + $t));
     }
 
 }

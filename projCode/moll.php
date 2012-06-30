@@ -60,9 +60,9 @@ class ProjFourphp_ProjMoll
         /* Iterate using the Newton-Raphson method to find theta
           ----------------------------------------------------- */
         for ($i = 0; true; ++$i) {
-            $delta_theta = -($theta + sin($theta) - $con) / (1.0 + cos($theta));
-            $theta += $delta_theta;
-            if (abs($delta_theta) < ProjFourphp_Common::$epsln)
+            $deltaTheta = -($theta + sin($theta) - $con) / (1.0 + cos($theta));
+            $theta += $deltaTheta;
+            if (abs($deltaTheta) < ProjFourphp_Common::$epsln)
                 break;
             if ($i >= 50) {
                 ProjFourphp::reportError("moll:Fwd:IterationError");

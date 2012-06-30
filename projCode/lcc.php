@@ -63,25 +63,25 @@ class ProjFourphp_ProjLcc
         $temp = $this->b / $this->a;
         $this->e = sqrt(1.0 - $temp * $temp);
 
-        $sin1 = sin($this->latOne);
-        $cos1 = cos($this->latOne);
-        $msOne = ProjFourphp::$common->msfnz($this->e, $sin1, $cos1);
-        $ts1 = ProjFourphp::$common->tsfnz($this->e, $this->latOne, $sin1);
+        $sinOne = sin($this->latOne);
+        $cosOne = cos($this->latOne);
+        $msOne = ProjFourphp::$common->msfnz($this->e, $sinOne, $cosOne);
+        $tsOne = ProjFourphp::$common->tsfnz($this->e, $this->latOne, $sinOne);
 
-        $sin2 = sin($this->latTwo);
-        $cos2 = cos($this->latTwo);
-        $msTwo = ProjFourphp::$common->msfnz($this->e, $sin2, $cos2);
-        $ts2 = ProjFourphp::$common->tsfnz($this->e, $this->latTwo, $sin2);
+        $sinTwo = sin($this->latTwo);
+        $cosTwo = cos($this->latTwo);
+        $msTwo = ProjFourphp::$common->msfnz($this->e, $sinTwo, $cosTwo);
+        $tsTwo = ProjFourphp::$common->tsfnz($this->e, $this->latTwo, $sinTwo);
 
         $tsZero = ProjFourphp::$common->tsfnz($this->e, $this->latZero, sin($this->latZero));
 
         if (abs($this->latOne - $this->latTwo) > ProjFourphp_Common::$epsln) {
-            $this->ns = log($msOne / $msTwo) / log($ts1 / $ts2);
+            $this->ns = log($msOne / $msTwo) / log($tsOne / $tsTwo);
         } else {
-            $this->ns = $sin1;
+            $this->ns = $sinOne;
         }
-        $this->f0 = $msOne / ($this->ns * pow($ts1, $this->ns));
-        $this->rh = $this->a * $this->f0 * pow($tsZero, $this->ns);
+        $this->fZero = $msOne / ($this->ns * pow($tsOne, $this->ns));
+        $this->rh = $this->a * $this->fZero * pow($tsZero, $this->ns);
 
         if (!isset($this->title))
             $this->title = "Lambert Conformal Conic";
@@ -108,7 +108,7 @@ class ProjFourphp_ProjLcc
 
         if ($con > ProjFourphp_Common::$epsln) {
             $ts = ProjFourphp::$common->tsfnz($this->e, $lat, sin($lat));
-            $rhOne = $this->a * $this->f0 * pow($ts, $this->ns);
+            $rhOne = $this->a * $this->fZero * pow($ts, $this->ns);
         } else {
             $con = $lat * $this->ns;
             if ($con <= 0) {
@@ -145,11 +145,11 @@ class ProjFourphp_ProjLcc
         }
         $theta = 0.0;
         if ($rhOne != 0) {
-            $theta = atan2(($con * $x), ($con * $y));
+            $theta = atanTwo(($con * $x), ($con * $y));
         }
         if (($rhOne != 0) || ($this->ns > 0.0)) {
             $con = 1.0 / $this->ns;
-            $ts = pow(($rhOne / ($this->a * $this->f0)), $con);
+            $ts = pow(($rhOne / ($this->a * $this->fZero)), $con);
             $lat = ProjFourphp::$common->phi2z($this->e, $ts);
             if ($lat == -9999)
                 return null;

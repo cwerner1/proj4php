@@ -124,7 +124,7 @@ class ProjFourphp_ProjKrovak
         }
 
         $ro = sqrt($p->x * $p->x + $p->y * $p->y);
-        $eps = atan2($p->y, $p->x);
+        $eps = atanTwo($p->y, $p->x);
         $d = $eps / sin($this->sZero);
         $s = 2. * (atan(pow($this->roZero / $ro, 1. / $this->n) * tan($this->sZero / 2. + $this->sFourtyFive)) - $this->sFourtyFive);
         $u = asin(cos($this->ad) * sin(s) - sin($this->ad) * cos(s) * cos(d));
@@ -132,17 +132,17 @@ class ProjFourphp_ProjKrovak
         $p->x = $this->longZero - $deltav / $this->alfa;
 
         /* ITERATION FOR $lat */
-        $fi1 = $u;
+        $fiOne = $u;
         $ok = 0;
         $iter = 0;
         do {
             $p->y = 2. * ( atan(pow($this->k, -1. / $this->alfa) *
                             pow(tan($u / 2. + $this->sFourtyFive), 1. / $this->alfa) *
-                            pow((1. + $this->e * sin($fi1)) / (1. - $this->e * sin($fi1)), $this->e / 2.)
+                            pow((1. + $this->e * sin($fiOne)) / (1. - $this->e * sin($fiOne)), $this->e / 2.)
                     ) - $this->sFourtyFive);
-            if (abs($fi1 - $p->y) < 0.0000000001)
+            if (abs($fiOne - $p->y) < 0.0000000001)
                 $ok = 1;
-            $fi1 = $p->y;
+            $fiOne = $p->y;
             $iter += 1;
         } while ($ok == 0 && $iter < 15);
 
