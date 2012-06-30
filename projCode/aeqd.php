@@ -79,17 +79,17 @@ class ProjFourphp_ProjAeqd
             $con = abs($this->latZero) - ProjFourphp_Common::$halfPi;
             if (abs($con) <= ProjFourphp_Common::$epsln) {
                 if ($this->latZero >= 0.0) {
-                    $lon = ProjFourphp_Common::adjustLon($this->longZero + atan2($p->x, -$p->y));
+                    $lon = ProjFourphp_Common::adjustLon($this->longZero + atanTwo($p->x, -$p->y));
                 } else {
-                    $lon = ProjFourphp_Common::adjustLon($this->longZero - atan2(-$p->x, $p->y));
+                    $lon = ProjFourphp_Common::adjustLon($this->longZero - atanTwo(-$p->x, $p->y));
                 }
             } else {
                 $con = $cosz - $this->sinPOneTwo * sin($lat);
                 if ((abs($con) < ProjFourphp_Common::$epsln) && (abs($p->x) < ProjFourphp_Common::$epsln)) {
                     //no-op, just keep the lon value as is
                 } else {
-                    #$temp = atan2( ($p->x * $sinz * $this->cosPOneTwo ), ($con * $rh ) ); // $temp is unused !?!
-                    $lon = ProjFourphp_Common::adjustLon($this->longZero + atan2(($p->x * $sinz * $this->cosPOneTwo), ($con * $rh)));
+                    #$temp = atanTwo( ($p->x * $sinz * $this->cosPOneTwo ), ($con * $rh ) ); // $temp is unused !?!
+                    $lon = ProjFourphp_Common::adjustLon($this->longZero + atanTwo(($p->x * $sinz * $this->cosPOneTwo), ($con * $rh)));
                 }
             }
         }

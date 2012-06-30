@@ -14,12 +14,12 @@ function phi4z($eccent, $e0, $eOne, $e2, $eThree, $a, $b, &$c, $phi)
 {
     /*
       $sinphi;
-      $sin2ph;
+      $sinTwoph;
       $tanph;
       $ml;
       $mlp;
-      $con1;
-      $con2;
+      $conOne;
+      $conTwo;
       $con3;
       $dphi;
       $i;
@@ -30,17 +30,17 @@ function phi4z($eccent, $e0, $eOne, $e2, $eThree, $a, $b, &$c, $phi)
         $sinphi = sin($phi);
         $tanphi = tan($phi);
         $c = $tanphi * sqrt(1.0 - $eccent * $sinphi * $sinphi);
-        $sin2ph = sin(2.0 * $phi);
+        $sinTwoph = sin(2.0 * $phi);
         /*
-          ml = e0 * *phi - eOne * sin2ph + e2 * sin (4.0 *  *phi);
+          ml = e0 * *phi - eOne * sinTwoph + e2 * sin (4.0 *  *phi);
           mlp = e0 - 2.0 * eOne * cos (2.0 *  *phi) + 4.0 * e2 *  cos (4.0 *  *phi);
          */
-        $ml = $e0 * $phi - $eOne * $sin2ph + $e2 * sin(4.0 * $phi) - $eThree * sin(6.0 * $phi);
+        $ml = $e0 * $phi - $eOne * $sinTwoph + $e2 * sin(4.0 * $phi) - $eThree * sin(6.0 * $phi);
         $mlp = $e0 - 2.0 * $eOne * cos(2.0 * $phi) + 4.0 * $e2 * cos(4.0 * $phi) - 6.0 * $eThree * cos(6.0 * $phi);
-        $con1 = 2.0 * $ml + $c * ($ml * $ml + $b) - 2.0 * $a * ($c * $ml + 1.0);
-        $con2 = $eccent * $sin2ph * ($ml * $ml + $b - 2.0 * $a * $ml) / (2.0 * $c);
-        $con3 = 2.0 * ($a - $ml) * ($c * $mlp - 2.0 / $sin2ph) - 2.0 * $mlp;
-        $dphi = $con1 / ($con2 + $con3);
+        $conOne = 2.0 * $ml + $c * ($ml * $ml + $b) - 2.0 * $a * ($c * $ml + 1.0);
+        $conTwo = $eccent * $sinTwoph * ($ml * $ml + $b - 2.0 * $a * $ml) / (2.0 * $c);
+        $con3 = 2.0 * ($a - $ml) * ($c * $mlp - 2.0 / $sinTwoph) - 2.0 * $mlp;
+        $dphi = $conOne / ($conTwo + $con3);
         $phi += $dphi;
         if (abs($dphi) <= .0000000001)
             return($phi);

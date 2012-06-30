@@ -64,7 +64,7 @@ class ProjFourphp_ProjCass
 
         if ($this->sphere) {
             $x = asin(cos($phi) * sin($lam));
-            $y = atan2(tan($phi), cos($lam)) - $this->phiZero;
+            $y = atanTwo(tan($phi), cos($lam)) - $this->phiZero;
         } else {
             //ellipsoid
             $this->n = sin($phi);
@@ -99,7 +99,7 @@ class ProjFourphp_ProjCass
         if ($this->sphere) {
             $this->dd = $y + $this->latZero;
             $phi = asin(sin($this->dd) * cos($x));
-            $lam = atan2(tan($x), cos($this->dd));
+            $lam = atanTwo(tan($x), cos($this->dd));
         } else {
             /* ellipsoid */
             $phOne = ProjFourphp::$common->pjInvMlfn($this->mZero + $y, $this->es, $this->en);

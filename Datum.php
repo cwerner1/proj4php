@@ -208,7 +208,7 @@ class ProjFourphp_Datum
         } else {
             /*  ellipsoidal (geodetic) longitude
              *  interval: -PI < Longitude <= +PI */
-            $longitude = atan2($y, $x);
+            $longitude = atanTwo($y, $x);
         }
 
         /* --------------------------------------------------------------
@@ -293,7 +293,7 @@ class ProjFourphp_Datum
 
         $atPole = false;
         if ($x <> 0.0) {
-            $longitude = atan2($y, $x);
+            $longitude = atanTwo($y, $x);
         } else {
             if ($y > 0) {
                 $longitude = ProjFourphp_Common::$halfPi;
