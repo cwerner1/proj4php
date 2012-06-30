@@ -74,8 +74,9 @@ class ProjFourphp_ProjSinu
                 $lat = $this->n != 1. ? asin($this->n * sin($lat)) : $lat;
             } else {
                 $k = $this->n * sin($lat);
-                for ($i = ProjFourphp::$common->maxIter; $i; --$i) {
-                    $V = ($this->m * $lat + sin($lat) - $k) / ($this->m + cos($lat));
+                for ($i = ProjFourphp_Common::$maxIter; $i; --$i) {
+                    $V = ($this->m * $lat + sin($lat) - $k) /
+                        ($this->m + cos($lat));
                     $lat -= $V;
                     if (abs($V) < ProjFourphp_Common::$epsln)
                         break;
@@ -87,7 +88,7 @@ class ProjFourphp_ProjSinu
 
             $s = sin($lat);
             $c = cos($lat);
-            $y = $this->a * ProjFourphp::$common->pjMlfn($lat, $s, $c, $this->en);
+            $y = $this->a * ProjFourphp_Common::jMlfn($lat, $s, $c, $this->en);
             $x = $this->a * $lon * $c / sqrt(1. - $this->es * $s * $s);
         }
 
@@ -121,13 +122,13 @@ class ProjFourphp_ProjSinu
             $lon = $p->x / ($this->C_x * ($this->m + cos($p->y)));
         } else {
             $lat = ProjFourphp::$common->pjInvMlfn($p->y / $this->a, $this->es, $this->en);
-            $s = abs($lat);
+            $s   = abs($lat);
 
             if ($s < ProjFourphp_Common::$halfPi) {
-                $s = sin($lat);
+                $s    = sin($lat);
                 $temp = $this->longZero + $p->x * sqrt(1. - $this->es * $s * $s) / ($this->a * cos($lat));
                 //temp = $this->longZero + $p->x / ($this->a * cos($lat));
-                $lon = ProjFourphp_Common::adjustLon($temp);
+                $lon  = ProjFourphp_Common::adjustLon($temp);
             } else if (($s - ProjFourphp_Common::$epsln) < ProjFourphp_Common::$halfPi) {
                 $lon = $this->longZero;
             }

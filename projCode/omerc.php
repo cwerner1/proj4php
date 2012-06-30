@@ -93,7 +93,7 @@ class ProjFourphp_ProjOmerc
 
             /* Report parameters common to format B
               ------------------------------------- */
-            //genrpt(azimuth * R2D,"Azimuth of Central Line:    ");
+            //genrpt(azimuth * rTwoD,"Azimuth of Central Line:    ");
             //cenlon(lon_origin);
             // cenlat(lat_origin);
 

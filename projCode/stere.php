@@ -11,13 +11,13 @@
 class ProjFourphp_ProjStere
 {
 
-    static protected $tol = 1.e-8;
-    static protected $niter = 8;
-    static protected $conv = 1.e-10;
-    static protected $sPole = 0;
-    static protected $nPole = 1;
-    static protected $obliq = 2;
-    static protected $equit = 3;
+    static protected $_tol   = 1.e-8;
+    static protected $_niter = 8;
+    static protected $_conv  = 1.e-10;
+    static protected $_sPole = 0;
+    static protected $_nPole = 1;
+    static protected $_obliq = 2;
+    static protected $_equit = 3;
 
     /**
      *
@@ -40,17 +40,17 @@ class ProjFourphp_ProjStere
         $this->phits = $this->latTs ? $this->latTs : ProjFourphp_Common::$halfPi;
         $t = abs($this->latZero);
         if ((abs($t) - ProjFourphp_Common::$halfPi) < ProjFourphp_Common::$epsln) {
-            $this->mode = $this->latZero < 0. ? self::$sPole : self::$nPole;
+            $this->mode = $this->latZero < 0. ? self::$_sPole : self::$_nPole;
         } else {
-            $this->mode = $t > ProjFourphp_Common::$epsln ? self::$obliq : self::$equit;
+            $this->mode = $t > ProjFourphp_Common::$epsln ? self::$_obliq : self::$_equit;
         }
         $this->phits = abs($this->phits);
         if ($this->es) {
             #$X;
 
             switch ($this->mode) {
-                case self::$nPole:
-                case self::$sPole:
+                case self::$_nPole:
+                case self::$_sPole:
                     if (abs($this->phits - ProjFourphp_Common::$halfPi) < ProjFourphp_Common::$epsln) {
                         $this->akmOne = 2. * $this->kZero / sqrt(pow(1 + $this->e, 1 + $this->e) * pow(1 - $this->e, 1 - $this->e));
                     } else {
@@ -60,31 +60,31 @@ class ProjFourphp_ProjStere
                         $this->akmOne /= sqrt(1. - $t * $t);
                     }
                     break;
-                case self::$equit:
+                case self::$_equit:
                     $this->akmOne = 2. * $this->kZero;
                     break;
-                case self::$obliq:
+                case self::$_obliq:
                     $t = sin($this->latZero);
-                    $X = 2. * atan($this->ssfn_($this->latZero, $t, $this->e)) - ProjFourphp_Common::$halfPi;
+                    $x = 2. * atan($this->ssfn_($this->latZero, $t, $this->e)) - ProjFourphp_Common::$halfPi;
                     $t *= $this->e;
                     $this->akmOne = 2. * $this->kZero * cos($this->latZero) / sqrt(1. - $t * $t);
-                    $this->sinX1 = sin($X);
-                    $this->cosX1 = cos($X);
+                    $this->sinXOne = sin($x);
+                    $this->cosXOne = cos($x);
                     break;
             }
         } else {
             switch ($this->mode) {
-                case self::$obliq:
+                case self::$_obliq:
                     $this->sinphZero = sin($this->latZero);
                     $this->cosphZero = cos($this->latZero);
-                case self::$equit:
+                case self::$_equit:
                     $this->akmOne = 2. * $this->kZero;
                     break;
-                case self::$sPole:
-                case self::$nPole:
+                case self::$_sPole:
+                case self::$_nPole:
                     $this->akmOne = abs($this->phits - ProjFourphp_Common::$halfPi) >= ProjFourphp_Common::$epsln ?
-                            cos($this->phits) / tan(ProjFourphp::$common->fortPi - .5 * $this->phits) :
-                            2. * $this->kZero;
+                        cos($this->phits) / tan(ProjFourphp::$common->fortPi - .5 * $this->phits) :
+                        2. * $this->kZero;
                     break;
             }
         }
@@ -118,7 +118,7 @@ class ProjFourphp_ProjStere
             $coslam = cos($lon);
             $sinlam = sin($lon);
             switch ($this->mode) {
-                case self::$equit:
+                case self::$_equit:
                     $y = 1. + $cosphi * $coslam;
                     if (y <= ProjFourphp_Common::$epsln) {
                         ProjFourphp::reportError("stere:forward:Equit");
@@ -127,24 +127,27 @@ class ProjFourphp_ProjStere
                     $x = $y * $cosphi * $sinlam;
                     $y *= $sinphi;
                     break;
-                case self::$obliq:
-                    $y = 1. + $this->sinphZero * $sinphi + $this->cosphZero * $cosphi * $coslam;
+                case self::$_obliq:
+                    $y = 1. + $this->sinphZero * $sinphi + $this->cosphZero *
+                        $cosphi * $coslam;
                     if ($y <= ProjFourphp_Common::$epsln) {
                         ProjFourphp::reportError("stere:forward:Obliq");
                     }
-                    $y = $this->akmOne / $y;
-                    $x = $y * $cosphi * $sinlam;
-                    $y *= $this->cosphZero * $sinphi - $this->sinphZero * $cosphi * $coslam;
+                    $y      = $this->akmOne / $y;
+                    $x      = $y * $cosphi * $sinlam;
+                    $y *= $this->cosphZero * $sinphi - $this->sinphZero *
+                        $cosphi * $coslam;
                     break;
-                case self::$nPole:
+                case self::$_nPole:
                     $coslam = -$coslam;
-                    $lat = -$lat;
+                    $lat    = -$lat;
                 //Note  no break here so it conitnues through S_POLE
-                case self::$sPole:
-                    if (abs($lat - ProjFourphp_Common::$halfPi) < self::$tol) {
+                case self::$_sPole:
+                    if (abs($lat - ProjFourphp_Common::$halfPi) < self::$_tol) {
                         ProjFourphp::reportError("stere:forward:S_POLE");
                     }
-                    $y = $this->akmOne * tan(ProjFourphp::$common->fortPi + .5 * $lat);
+                    $y = $this->akmOne *
+                        tan(ProjFourphp::$common->fortPi + .5 * $lat);
                     $x = $sinlam * $y;
                     $y *= $coslam;
                     break;
@@ -153,32 +156,36 @@ class ProjFourphp_ProjStere
             $coslam = cos($lon);
             $sinlam = sin($lon);
             $sinphi = sin($lat);
-            if ($this->mode == self::$obliq || $this->mode == self::$equit) {
-                $Xt = 2. * atan($this->ssfn_($lat, $sinphi, $this->e));
-                $sinX = sin($Xt - ProjFourphp_Common::$halfPi);
-                $cosX = cos($Xt);
+            if ($this->mode == self::$_obliq || $this->mode == self::$_equit) {
+                $xt   = 2. * atan($this->ssfn_($lat, $sinphi, $this->e));
+                $sinX = sin($xt - ProjFourphp_Common::$halfPi);
+                $cosX = cos($xt);
             }
             switch ($this->mode) {
-                case self::$obliq:
-                    $A = $this->akmOne / ($this->cosX1 * (1. + $this->sinX1 * $sinX + $this->cosX1 * $cosX * $coslam));
-                    $y = $A * ($this->cosX1 * $sinX - $this->sinX1 * $cosX * $coslam);
-                    $x = $A * $cosX;
+                case self::$_obliq:
+                    $a      = $this->akmOne / ($this->cosXOne *
+                        (1. + $this->sinXOne * $sinX +
+                        $this->cosXOne * $cosX * $coslam));
+                    $y      = $a * ($this->cosXOne * $sinX -
+                        $this->sinXOne * $cosX * $coslam);
+                    $x      = $a * $cosX;
                     break;
-                case self::$equit:
-                    $A = 2. * $this->akmOne / (1. + $cosX * $coslam);
-                    $y = $A * $sinX;
-                    $x = $A * $cosX;
+                case self::$_equit:
+                    $a      = 2. * $this->akmOne / (1. + $cosX * $coslam);
+                    $y      = $a * $sinX;
+                    $x      = $a * $cosX;
                     break;
-                case self::$sPole:
-                    $lat = -$lat;
+                case self::$_sPole:
+                    $lat    = -$lat;
                     $coslam = - $coslam;
                     $sinphi = -$sinphi;
-                case self::$nPole:
-                    $x = $this->akmOne * ProjFourphp::$common->tsfnz($this->e, $lat, $sinphi);
-                    $y = - $x * $coslam;
+                case self::$_nPole:
+                    $x      = $this->akmOne *
+                        ProjFourphp::$common->tsfnz($this->e, $lat, $sinphi);
+                    $y      = - $x * $coslam;
                     break;
             }
-            $x = $x * $sinlam;
+            $x      = $x * $sinlam;
         }
 
         $p->x = $x * $this->a + $this->xZero;
@@ -195,8 +202,8 @@ class ProjFourphp_ProjStere
      */
     public function inverse($p)
     {
-        $x = ($p->x - $this->xZero) / $this->a;   /* descale and de-offset */
-        $y = ($p->y - $this->yZero) / $this->a;
+        $x     = ($p->x - $this->xZero) / $this->a;   /* descale and de-offset */
+        $y     = ($p->y - $this->yZero) / $this->a;
         /*
           $lon;
           $lat;
@@ -208,7 +215,7 @@ class ProjFourphp_ProjStere
           $i;
          */
         $halfe = 0.0;
-        $pi2 = 0.0;
+        $piTwo = 0.0;
 
         if ($this->sphere) {
             /*
@@ -218,14 +225,14 @@ class ProjFourphp_ProjStere
               $cosc;
              */
 
-            $rh = sqrt($x * $x + $y * $y);
-            $c = 2. * atan($rh / $this->akmOne);
+            $rh   = sqrt($x * $x + $y * $y);
+            $c    = 2. * atan($rh / $this->akmOne);
             $sinc = sin($c);
             $cosc = cos($c);
-            $lon = 0.;
+            $lon  = 0.;
 
             switch ($this->mode) {
-                case self::$equit:
+                case self::$_equit:
                     if (abs($rh) <= ProjFourphp_Common::$epsln) {
                         $lat = 0.;
                     } else {
@@ -234,24 +241,24 @@ class ProjFourphp_ProjStere
                     if ($cosc != 0. || $x != 0.)
                         $lon = atan2($x * $sinc, $cosc * $rh);
                     break;
-                case self::$obliq:
+                case self::$_obliq:
                     if (abs($rh) <= ProjFourphp_Common::$epsln) {
                         $lat = $this->phiZero;
                     } else {
                         $lat = asin($cosc * $this->sinphZero + $y * $sinc * $this->cosphZero / $rh);
                     }
-                    $c = $cosc - $this->sinphZero * sin($lat);
+                    $c   = $cosc - $this->sinphZero * sin($lat);
                     if ($c != 0. || $x != 0.) {
                         $lon = atan2($x * $sinc * $this->cosphZero, $c * $rh);
                     }
                     break;
-                case self::$nPole:
-                    $y = -$y;
-                case self::$sPole:
+                case self::$_nPole:
+                    $y   = -$y;
+                case self::$_sPole:
                     if (abs($rh) <= ProjFourphp_Common::$epsln) {
                         $lat = $this->phiZero;
                     } else {
-                        $lat = asin($this->mode == self::$sPole ? -$cosc : $cosc );
+                        $lat = asin($this->mode == self::$_sPole ? -$cosc : $cosc);
                     }
                     $lon = ($x == 0. && $y == 0.) ? 0. : atan2($x, $y);
                     break;
@@ -261,37 +268,38 @@ class ProjFourphp_ProjStere
         } else {
             $rho = sqrt($x * $x + $y * $y);
             switch ($this->mode) {
-                case self::$obliq:
-                case self::$equit:
-                    $tp = 2. * atan2($rho * $this->cosX1, $this->akmOne);
+                case self::$_obliq:
+                case self::$_equit:
+                    $tp     = 2. * atan2($rho * $this->cosXOne, $this->akmOne);
                     $cosphi = cos($tp);
-                    $sinphi = sin($tp);
+                    $sinPhi = sin($tp);
                     if ($rho == 0.0) {
-                        $phi_l = asin($cosphi * $this->sinX1);
+                        $phiL = asin($cosphi * $this->sinXOne);
                     } else {
-                        $phi_l = asin($cosphi * $this->sinX1 + ($y * $sinphi * $this->cosX1 / $rho));
+                        $phiL = asin($cosphi * $this->sinXOne + ($y * $sinPhi * $this->cosXOne / $rho));
                     }
 
-                    $tp = tan(.5 * (ProjFourphp_Common::$halfPi + $phi_l));
-                    $x *= $sinphi;
-                    $y = $rho * $this->cosX1 * $cosphi - $y * $this->sinX1 * $sinphi;
-                    $pi2 = ProjFourphp_Common::$halfPi;
+                    $tp    = tan(.5 * (ProjFourphp_Common::$halfPi + $phiL));
+                    $x *= $sinPhi;
+                    $y     = $rho * $this->cosXOne * $cosphi - $y *
+                        $this->sinXOne * $sinPhi;
+                    $piTwo = ProjFourphp_Common::$halfPi;
                     $halfe = .5 * $this->e;
                     break;
-                case self::$nPole:
-                    $y = -$y;
-                case self::$sPole:
-                    $tp = - $rho / $this->akmOne;
-                    $phi_l = ProjFourphp_Common::$halfPi - 2. * atan($tp);
-                    $pi2 = -ProjFourphp_Common::$halfPi;
+                case self::$_nPole:
+                    $y     = -$y;
+                case self::$_sPole:
+                    $tp    = - $rho / $this->akmOne;
+                    $phiL  = ProjFourphp_Common::$halfPi - 2. * atan($tp);
+                    $piTwo = -ProjFourphp_Common::$halfPi;
                     $halfe = -.5 * $this->e;
                     break;
             }
-            for ($i = $this->NITER; $i--; $phi_l = $lat) { //check this
-                $sinphi = $this->e * sin($phi_l);
-                $lat = 2. * atan($tp * pow((1. + $sinphi) / (1. - $sinphi), $halfe)) - $pi2;
-                if (abs(phi_l - lat) < $this->CONV) {
-                    if ($this->mode == self::$sPole)
+            for ($i     = static::$_niter; $i--; $phiL  = $lat) { //check this
+                $sinPhi = $this->e * sin($phiL);
+                $lat    = 2. * atan($tp * pow((1. + $sinPhi) / (1. - $sinPhi), $halfe)) - $piTwo;
+                if (abs($phiL - $lat) < static::$_conv) {
+                    if ($this->mode == self::$_sPole)
                         $lat = -$lat;
                     $lon = ($x == 0. && $y == 0.) ? 0. : atan2($x, $y);
                     $p->x = ProjFourphp_Common::adjustLon($lon + $this->longZero);

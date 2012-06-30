@@ -261,8 +261,8 @@ class ProjFourphp_Proj
     public function loadProjCodeSuccess($projName)
     {
 
-        if (isset(ProjFourphp::$proj[$projName]->dependsOn) && !empty(ProjFourphp::$proj[$projName]->dependsOn)) {
-            $this->loadProjCode(ProjFourphp::$proj[$projName]->dependsOn);
+        if (isset(ProjFourphp::$proj[$projName]->_dependsOn) && !empty(ProjFourphp::$proj[$projName]->_dependsOn)) {
+            $this->loadProjCode(ProjFourphp::$proj[$projName]->_dependsOn);
         } else {
             $this->initTransforms();
         }
@@ -304,7 +304,7 @@ class ProjFourphp_Proj
         $this->init();
 
         // initiate depending class
-        if (false !== ($dependsOn = isset($this->projection->dependsOn) && !empty($this->projection->dependsOn) ? $this->projection->dependsOn : false)) {
+        if (false !== ($dependsOn = isset($this->projection->_dependsOn) && !empty($this->projection->_dependsOn) ? $this->projection->_dependsOn : false)) {
             ProjFourphp::extend(ProjFourphp::$proj[$dependsOn], $this->projection) &&
                     ProjFourphp::$proj[$dependsOn]->init() &&
                     ProjFourphp::extend($this->projection, ProjFourphp::$proj[$dependsOn]);

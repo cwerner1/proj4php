@@ -21,9 +21,9 @@ class ProjFourphp_ProjGauss
         $cphi *= $cphi;
         $this->rc = sqrt(1.0 - $this->es) / (1.0 - $this->es * $sphi * $sphi);
         $this->C = sqrt(1.0 + $this->es * $cphi * $cphi / (1.0 - $this->es));
-        $this->phic0 = asin($sphi / $this->C);
+        $this->phicZero = asin($sphi / $this->C);
         $this->ratexp = 0.5 * $this->C * $this->e;
-        $this->K = tan(0.5 * $this->phic0 + ProjFourphp::$common->fortPi) / (pow(tan(0.5 * $this->latZero + ProjFourphp::$common->fortPi), $this->C) * ProjFourphp::$common->srat($this->e * $sphi, $this->ratexp));
+        $this->K = tan(0.5 * $this->phicZero + ProjFourphp::$common->fortPi) / (pow(tan(0.5 * $this->latZero + ProjFourphp::$common->fortPi), $this->C) * ProjFourphp::$common->srat($this->e * $sphi, $this->ratexp));
     }
 
     /**

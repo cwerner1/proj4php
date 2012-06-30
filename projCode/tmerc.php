@@ -102,7 +102,8 @@ class ProjFourphp_ProjTmerc
                 ($als * (0.5 + $als / 24.0 *
                 (5.0 - $t + 9.0 * $c + 4.0 * pow($c, 2)
                 + $als / 30.0 *
-                (61.0 - 58.0 * $t + pow($t, 2) + 600.0 * $c - 330.0 * $this->epTwo))))) + $this->yZero;
+                (61.0 - 58.0 * $t + pow($t, 2) + 600.0 * $c - 330.0 *
+                $this->epTwo))))) + $this->yZero;
         }
 
         $p->x = $x;
