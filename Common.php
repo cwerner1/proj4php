@@ -26,7 +26,7 @@ class ProjFourphp_Common
     /* datum_type values */
     public static $pjdUnknown = 0;
     public static $pjdThreeParam = 1;
-    public static $pjd7Param = 2;
+    public static $pjdSevenParam = 2;
     public static $pjdGridshift = 3;
     public static $pjdWgs84 = 4;   // WGS84 or equivalent
     public static $pjdNodatum = 5;   // WGS84 or equivalent
