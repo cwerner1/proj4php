@@ -59,7 +59,7 @@ class ProjFourphp_ProjMill
           ----------------- */
         $dlon = ProjFourphp_Common::adjustLon($lon - $this->longZero);
         $x = $this->xZero + $this->a * $dlon;
-        $y = $this->yZero + $this->a * log(tan((ProjFourphp::$common->pi / 4.0) + ($lat / 2.5))) * 1.25;
+        $y = $this->yZero + $this->a * log(tan((ProjFourphp_common::$pi / 4.0) + ($lat / 2.5))) * 1.25;
 
         $p->x = $x;
         $p->y = $y;
@@ -77,7 +77,7 @@ class ProjFourphp_ProjMill
         $p->y -= $this->yZero;
 
         $lon = ProjFourphp_Common::adjustLon($this->longZero + $p->x / $this->a);
-        $lat = 2.5 * (atan(exp(0.8 * $p->y / $this->a)) - ProjFourphp::$common->pi / 4.0);
+        $lat = 2.5 * (atan(exp(0.8 * $p->y / $this->a)) - ProjFourphp_common::$pi / 4.0);
 
         $p->x = $lon;
         $p->y = $lat;

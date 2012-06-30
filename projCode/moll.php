@@ -55,7 +55,7 @@ class ProjFourphp_ProjMoll
 
         $deltaLon = ProjFourphp_Common::adjustLon($lon - $this->longZero);
         $theta = $lat;
-        $con = ProjFourphp::$common->pi * sin($lat);
+        $con = ProjFourphp_common::$pi * sin($lat);
 
         /* Iterate using the Newton-Raphson method to find theta
           ----------------------------------------------------- */
@@ -74,7 +74,7 @@ class ProjFourphp_ProjMoll
         /* If the latitude is 90 deg, force the x coordinate to be "0 . false easting"
           this is done here because of precision problems with "cos(theta)"
           -------------------------------------------------------------------------- */
-        if (ProjFourphp::$common->pi / 2 - abs($lat) < ProjFourphp_Common::$epsln)
+        if (ProjFourphp_common::$pi / 2 - abs($lat) < ProjFourphp_Common::$epsln)
             $deltaLon = 0;
         $x = 0.900316316158 * $this->a * $deltaLon * cos($theta) + $this->xZero;
         $y = 1.4142135623731 * $this->a * sin($theta) + $this->yZero;
@@ -107,11 +107,11 @@ class ProjFourphp_ProjMoll
             $arg = 0.999999999999;
         $theta = asin($arg);
         $lon = ProjFourphp_Common::adjustLon($this->longZero + ($p->x / (0.900316316158 * $this->a * cos($theta))));
-        if ($lon < (-ProjFourphp::$common->pi))
-            $lon = -ProjFourphp::$common->pi;
-        if ($lon > ProjFourphp::$common->pi)
-            $lon = ProjFourphp::$common->pi;
-        $arg = (2.0 * $theta + sin(2.0 * $theta)) / ProjFourphp::$common->pi;
+        if ($lon < (-ProjFourphp_common::$pi))
+            $lon = -ProjFourphp_common::$pi;
+        if ($lon > ProjFourphp_common::$pi)
+            $lon = ProjFourphp_common::$pi;
+        $arg = (2.0 * $theta + sin(2.0 * $theta)) / ProjFourphp_common::$pi;
         if (abs($arg) > 1.0)
             $arg = 1.0;
         $lat = asin($arg);

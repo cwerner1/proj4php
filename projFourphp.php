@@ -556,7 +556,9 @@ class ProjFourphp
                     }
                     break;
                 default :
-                    throw new Exception("ERROR: unknow axis (" . $crs->axis[$i] . ") - check definition of " . $crs->projName);
+                    $exceptionsMsg = "ERROR: unknow axis (" . $crs->axis[$i] .
+                        ") - check definition of " . $crs->projName;
+                    throw new Exception(exceptionsMsg);
                     return null;
             }
         }

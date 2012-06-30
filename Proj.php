@@ -649,7 +649,7 @@ class ProjFourphp_Proj
             $this->b2 = $this->b * $this->b;
             $this->es = 0.0;
         }
-        $this->ep2 = ($this->aTwo - $this->b2) / $this->b2; // used in geocentric
+        $this->epTwo = ($this->aTwo - $this->b2) / $this->b2; // used in geocentric
         if (!isset($this->kZero))
             $this->kZero = 1.0;    //default value
 

@@ -57,7 +57,7 @@ class ProjFourphp_Datum
             $this->a = $proj->a;    //datum object also uses these values
             $this->b = $proj->b;
             $this->es = $proj->es;
-            $this->ep2 = $proj->ep2;
+            $this->epTwo = $proj->epTwo;
             #$this->datum_params = $proj->datum_params;
         }
     }
@@ -320,7 +320,7 @@ class ProjFourphp_Datum
         $sinBZero = $to / $sZero;
         $cosBzero = $w / $sZero;
         $sinThreeBZero = $sinBZero * $sinBZero * $sinBZero;
-        $tOne = $z + $this->b * $this->ep2 * $sinThreeBZero;
+        $tOne = $z + $this->b * $this->epTwo * $sinThreeBZero;
         $sum = $w - $this->a * $this->es * $cosBzero * $cosBzero * $cosBzero;
         $sOne = sqrt($tOne * $tOne + $sum * $sum);
         $sinPOne = $tOne / $sOne;
