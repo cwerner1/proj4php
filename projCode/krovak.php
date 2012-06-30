@@ -124,7 +124,7 @@ class ProjFourphp_ProjKrovak
         }
 
         $ro = sqrt($p->x * $p->x + $p->y * $p->y);
-        $eps = atanTwo($p->y, $p->x);
+        $eps = atan2($p->y, $p->x);
         $d = $eps / sin($this->sZero);
         $s = 2. * (atan(pow($this->roZero / $ro, 1. / $this->n) * tan($this->sZero / 2. + $this->sFourtyFive)) - $this->sFourtyFive);
         $u = asin(cos($this->ad) * sin(s) - sin($this->ad) * cos(s) * cos(d));

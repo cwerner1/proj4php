@@ -73,11 +73,11 @@ class ProjFourphp_ProjSterea
         $p->y /= $this->kZero;
 
         if (($rho = sqrt($p->x * $p->x + $p->y * $p->y))) {
-            $c = 2.0 * atanTwo($rho, $this->R2);
+            $c = 2.0 * atan2($rho, $this->R2);
             $sinc = sin($c);
             $cosc = cos($c);
             $lat = asin($cosc * $this->sinc0 + $p->y * $sinc * $this->cosc0 / $rho);
-            $lon = atanTwo($p->x * $sinc, $rho * $this->cosc0 * $cosc - $p->y * $this->sinc0 * $sinc);
+            $lon = atan2($p->x * $sinc, $rho * $this->cosc0 * $cosc - $p->y * $this->sinc0 * $sinc);
         } else {
             $lat = $this->phic0;
             $lon = 0.;

@@ -124,7 +124,7 @@ class ProjFourphp_ProjEqdc
         }
         $theta = 0.0;
         if ($rhOne != 0.0)
-            $theta = atanTwo($con * $p->x, $con * $p->y);
+            $theta = atan2($con * $p->x, $con * $p->y);
         $ml = $this->g - $rhOne / $this->a;
         $lat = $this->phi3z($ml, $this->e0, $this->eOne, $this->e2, $this->eThree);
         $lon =  ProjFourphp_Common::adjustLon($this->longZero + $theta / $this->ns);
