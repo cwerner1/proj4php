@@ -3,7 +3,8 @@
 /**
  * Author : Julien Moquet
  * 
- * Simple conversion from javascript to PHP of ProjFourphp by Mike Adair madairATdmsolutions.ca and Richard Greenwood rich@greenwoodmap.com 
+ * Simple conversion from javascript to PHP of ProjFourphp by 
+ * Mike Adair madairATdmsolutions.ca and Richard Greenwood rich@greenwoodmap.com 
  *                     
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
@@ -18,13 +19,13 @@ require_once($dir . "/Point.php");
 class ProjFourphp
 {
 
-    protected $defaultDatum = 'WGS84';
+    protected $_defaultDatum = 'WGS84';
     public static $ellipsoid = array();
     public static $common = null;
     public static $datum = array();
     public static $defs = array();
     public static $wktProjections = array();
-    public static $wgs84 = null;
+    public static $wgsEightFour = null;
     public static $primeMeridian = array();
     public static $proj = array();
 
@@ -91,48 +92,101 @@ class ProjFourphp
 
     protected function initEllipsoid()
     {
-        self::$ellipsoid["MERIT"] = array('a' => 6378137.0, 'rf' => 298.257, 'ellipseName' => "MERIT 1983");
-        self::$ellipsoid["SGS85"] = array('a' => 6378136.0, 'rf' => 298.257, 'ellipseName' => "Soviet Geodetic System 85");
-        self::$ellipsoid["GRS80"] = array('a' => 6378137.0, 'rf' => 298.257222101, 'ellipseName' => "GRS 1980(IUGG, 1980)");
-        self::$ellipsoid["IAU76"] = array('a' => 6378140.0, 'rf' => 298.257, 'ellipseName' => "IAU 1976");
-        self::$ellipsoid["airy"] = array('a' => 6377563.396, 'b' => 6356256.910, 'ellipseName' => "Airy 1830");
-        self::$ellipsoid["APL4."] = array('a' => 6378137, 'rf' => 298.25, 'ellipseName' => "Appl. Physics. 1965");
-        self::$ellipsoid["NWL9D"] = array('a' => 6378145.0, 'rf' => 298.25, 'ellipseName' => "Naval Weapons Lab., 1965");
-        self::$ellipsoid["mod_airy"] = array('a' => 6377340.189, 'b' => 6356034.446, 'ellipseName' => "Modified Airy");
-        self::$ellipsoid["andrae"] = array('a' => 6377104.43, 'rf' => 300.0, 'ellipseName' => "Andrae 1876 (Den., Iclnd.)");
-        self::$ellipsoid["aust_SA"] = array('a' => 6378160.0, 'rf' => 298.25, 'ellipseName' => "Australian Natl & S. Amer. 1969");
-        self::$ellipsoid["GRS67"] = array('a' => 6378160.0, 'rf' => 298.2471674270, 'ellipseName' => "GRS 67(IUGG 1967)");
-        self::$ellipsoid["bessel"] = array('a' => 6377397.155, 'rf' => 299.1528128, 'ellipseName' => "Bessel 1841");
-        self::$ellipsoid["bess_nam"] = array('a' => 6377483.865, 'rf' => 299.1528128, 'ellipseName' => "Bessel 1841 (Namibia)");
-        self::$ellipsoid["clrk66"] = array('a' => 6378206.4, 'b' => 6356583.8, 'ellipseName' => "Clarke 1866");
-        self::$ellipsoid["clrk80"] = array('a' => 6378249.145, 'rf' => 293.4663, 'ellipseName' => "Clarke 1880 mod.");
-        self::$ellipsoid["CPM"] = array('a' => 6375738.7, 'rf' => 334.29, 'ellipseName' => "Comm. des Poids et Mesures 1799");
-        self::$ellipsoid["delmbr"] = array('a' => 6376428.0, 'rf' => 311.5, 'ellipseName' => "Delambre 1810 (Belgium)");
-        self::$ellipsoid["engelis"] = array('a' => 6378136.05, 'rf' => 298.2566, 'ellipseName' => "Engelis 1985");
-        self::$ellipsoid["evrst30"] = array('a' => 6377276.345, 'rf' => 300.8017, 'ellipseName' => "Everest 1830");
-        self::$ellipsoid["evrst48"] = array('a' => 6377304.063, 'rf' => 300.8017, 'ellipseName' => "Everest 1948");
-        self::$ellipsoid["evrst56"] = array('a' => 6377301.243, 'rf' => 300.8017, 'ellipseName' => "Everest 1956");
-        self::$ellipsoid["evrst69"] = array('a' => 6377295.664, 'rf' => 300.8017, 'ellipseName' => "Everest 1969");
-        self::$ellipsoid["evrstSS"] = array('a' => 6377298.556, 'rf' => 300.8017, 'ellipseName' => "Everest (Sabah & Sarawak)");
-        self::$ellipsoid["fschr60"] = array('a' => 6378166.0, 'rf' => 298.3, 'ellipseName' => "Fischer (Mercury Datum) 1960");
-        self::$ellipsoid["fschr60m"] = array('a' => 6378155.0, 'rf' => 298.3, 'ellipseName' => "Fischer 1960");
-        self::$ellipsoid["fschr68"] = array('a' => 6378150.0, 'rf' => 298.3, 'ellipseName' => "Fischer 1968");
-        self::$ellipsoid["helmert"] = array('a' => 6378200.0, 'rf' => 298.3, 'ellipseName' => "Helmert 1906");
-        self::$ellipsoid["hough"] = array('a' => 6378270.0, 'rf' => 297.0, 'ellipseName' => "Hough");
-        self::$ellipsoid["intl"] = array('a' => 6378388.0, 'rf' => 297.0, 'ellipseName' => "International 1909 (Hayford)");
-        self::$ellipsoid["kaula"] = array('a' => 6378163.0, 'rf' => 298.24, 'ellipseName' => "Kaula 1961");
-        self::$ellipsoid["lerch"] = array('a' => 6378139.0, 'rf' => 298.257, 'ellipseName' => "Lerch 1979");
-        self::$ellipsoid["mprts"] = array('a' => 6397300.0, 'rf' => 191.0, 'ellipseName' => "Maupertius 1738");
-        self::$ellipsoid["new_intl"] = array('a' => 6378157.5, 'b' => 6356772.2, 'ellipseName' => "New International 1967");
-        self::$ellipsoid["plessis"] = array('a' => 6376523.0, 'rf' => 6355863.0, 'ellipseName' => "Plessis 1817 (France)");
-        self::$ellipsoid["krass"] = array('a' => 6378245.0, 'rf' => 298.3, 'ellipseName' => "Krassovsky, 1942");
-        self::$ellipsoid["SEasia"] = array('a' => 6378155.0, 'b' => 6356773.3205, 'ellipseName' => "Southeast Asia");
-        self::$ellipsoid["walbeck"] = array('a' => 6376896.0, 'b' => 6355834.8467, 'ellipseName' => "Walbeck");
-        self::$ellipsoid["WGS60"] = array('a' => 6378165.0, 'rf' => 298.3, 'ellipseName' => "WGS 60");
-        self::$ellipsoid["WGS66"] = array('a' => 6378145.0, 'rf' => 298.25, 'ellipseName' => "WGS 66");
-        self::$ellipsoid["WGS72"] = array('a' => 6378135.0, 'rf' => 298.26, 'ellipseName' => "WGS 72");
-        self::$ellipsoid["WGS84"] = array('a' => 6378137.0, 'rf' => 298.257223563, 'ellipseName' => "WGS 84");
-        self::$ellipsoid["sphere"] = array('a' => 6370997.0, 'b' => 6370997.0, 'ellipseName' => "Normal Sphere (r=6370997)");
+        self::$ellipsoid["MERIT"] = array(
+            'a' => 6378137.0,
+            'rf' => 298.257,
+            'ellipseName' => "MERIT 1983");
+        self::$ellipsoid["SGS85"] = array('a' => 6378136.0,
+            'rf' => 298.257,
+            'ellipseName' => "Soviet Geodetic System 85");
+        self::$ellipsoid["GRS80"] = array('a' => 6378137.0,
+            'rf' => 298.257222101,
+            'ellipseName' => "GRS 1980(IUGG, 1980)");
+        self::$ellipsoid["IAU76"] = array('a' => 6378140.0,
+            'rf' => 298.257,
+            'ellipseName' => "IAU 1976");
+        self::$ellipsoid["airy"] = array('a' => 6377563.396,
+            'b' => 6356256.910,
+            'ellipseName' => "Airy 1830");
+        self::$ellipsoid["APL4."] = array('a' => 6378137,
+            'rf' => 298.25,
+            'ellipseName' => "Appl. Physics. 1965");
+        self::$ellipsoid["NWL9D"] = array('a' => 6378145.0,
+            'rf' => 298.25,
+            'ellipseName' => "Naval Weapons Lab., 1965");
+        self::$ellipsoid["mod_airy"] = array('a' => 6377340.189,
+            'b' => 6356034.446,
+            'ellipseName' => "Modified Airy");
+        self::$ellipsoid["andrae"] = array('a' => 6377104.43,
+            'rf' => 300.0,
+            'ellipseName' => "Andrae 1876 (Den., Iclnd.)");
+        self::$ellipsoid["aust_SA"] = array('a' => 6378160.0,
+            'rf' => 298.25,
+            'ellipseName' => "Australian Natl & S. Amer. 1969");
+        self::$ellipsoid["GRS67"] = array('a' => 6378160.0,
+            'rf' => 298.2471674270, 'ellipseName' => "GRS 67(IUGG 1967)");
+        self::$ellipsoid["bessel"] = array('a' => 6377397.155,
+            'rf' => 299.1528128, 'ellipseName' => "Bessel 1841");
+        self::$ellipsoid["bess_nam"] = array('a' => 6377483.865,
+            'rf' => 299.1528128, 'ellipseName' => "Bessel 1841 (Namibia)");
+        self::$ellipsoid["clrk66"] = array('a' => 6378206.4,
+            'b' => 6356583.8, 'ellipseName' => "Clarke 1866");
+        self::$ellipsoid["clrk80"] = array('a' => 6378249.145,
+            'rf' => 293.4663, 'ellipseName' => "Clarke 1880 mod.");
+        self::$ellipsoid["CPM"] = array('a' => 6375738.7,
+            'rf' => 334.29, 'ellipseName' => "Comm. des Poids et Mesures 1799");
+        self::$ellipsoid["delmbr"] = array('a' => 6376428.0
+            , 'rf' => 311.5, 'ellipseName' => "Delambre 1810 (Belgium)");
+        self::$ellipsoid["engelis"] = array('a' => 6378136.05
+            , 'rf' => 298.2566, 'ellipseName' => "Engelis 1985");
+        self::$ellipsoid["evrst30"] = array('a' => 6377276.345,
+            'rf' => 300.8017, 'ellipseName' => "Everest 1830");
+        self::$ellipsoid["evrst48"] = array('a' => 6377304.063,
+            'rf' => 300.8017, 'ellipseName' => "Everest 1948");
+        self::$ellipsoid["evrst56"] = array('a' => 6377301.243,
+            'rf' => 300.8017, 'ellipseName' => "Everest 1956");
+        self::$ellipsoid["evrst69"] = array('a' => 6377295.664,
+            'rf' => 300.8017, 'ellipseName' => "Everest 1969");
+        self::$ellipsoid["evrstSS"] = array('a' => 6377298.556,
+            'rf' => 300.8017, 'ellipseName' => "Everest (Sabah & Sarawak)");
+        self::$ellipsoid["fschr60"] = array('a' => 6378166.0,
+            'rf' => 298.3, 'ellipseName' => "Fischer (Mercury Datum) 1960");
+        self::$ellipsoid["fschr60m"] = array('a' => 6378155.0,
+            'rf' => 298.3, 'ellipseName' => "Fischer 1960");
+        self::$ellipsoid["fschr68"] = array('a' => 6378150.0,
+            'rf' => 298.3, 'ellipseName' => "Fischer 1968");
+        self::$ellipsoid["helmert"] = array('a' => 6378200.0,
+            'rf' => 298.3, 'ellipseName' => "Helmert 1906");
+        self::$ellipsoid["hough"] = array('a' => 6378270.0,
+            'rf' => 297.0, 'ellipseName' => "Hough");
+        self::$ellipsoid["intl"] = array('a' => 6378388.0,
+            'rf' => 297.0, 'ellipseName' => "International 1909 (Hayford)");
+        self::$ellipsoid["kaula"] = array('a' => 6378163.0,
+            'rf' => 298.24, 'ellipseName' => "Kaula 1961");
+        self::$ellipsoid["lerch"] = array('a' => 6378139.0,
+            'rf' => 298.257, 'ellipseName' => "Lerch 1979");
+        self::$ellipsoid["mprts"] = array('a' => 6397300.0,
+            'rf' => 191.0, 'ellipseName' => "Maupertius 1738");
+        self::$ellipsoid["new_intl"] = array('a' => 6378157.5,
+            'b' => 6356772.2, 'ellipseName' => "New International 1967");
+        self::$ellipsoid["plessis"] = array('a' => 6376523.0,
+            'rf' => 6355863.0, 'ellipseName' => "Plessis 1817 (France)");
+        self::$ellipsoid["krass"] = array('a' => 6378245.0,
+            'rf' => 298.3, 'ellipseName' => "Krassovsky, 1942");
+        self::$ellipsoid["SEasia"] = array('a' => 6378155.0,
+            'b' => 6356773.3205, 'ellipseName' => "Southeast Asia");
+        self::$ellipsoid["walbeck"] = array('a' => 6376896.0,
+            'b' => 6355834.8467, 'ellipseName' => "Walbeck");
+        self::$ellipsoid["WGS60"] = array('a' => 6378165.0,
+            'rf' => 298.3, 'ellipseName' => "WGS 60");
+        self::$ellipsoid["WGS66"] = array('a' => 6378145.0,
+            'rf' => 298.25, 'ellipseName' => "WGS 66");
+        self::$ellipsoid["WGS72"] = array('a' => 6378135.0,
+            'rf' => 298.26, 'ellipseName' => "WGS 72");
+        self::$ellipsoid["WGS84"] = array('a' => 6378137.0,
+            'rf' => 298.257223563, 'ellipseName' => "WGS 84");
+        self::$ellipsoid["sphere"] = array('a' => 6370997.0,
+            'b' => 6370997.0, 'ellipseName' => "Normal Sphere (r=6370997)");
     }
 
     protected function initPrimeMeridian()
@@ -167,7 +221,7 @@ class ProjFourphp
         self::$proj['longlat'] = new ProjFourphp_LongLat();
         self::$proj['identity'] = new ProjFourphp_LongLat();
         self::$common = new projFourphp_Common();
-        self::$wgs84 = new ProjFourphp_Proj('WGS84');
+        self::$wgsEightFour = new ProjFourphp_Proj('WGS84');
     }
 
     /**
@@ -193,18 +247,24 @@ class ProjFourphp
             return $point;
         }
 
-        // Workaround for datum shifts towgs84, if either source or destination projection is not wgs84
+        // Workaround for datum shifts towgs84, if either source or destination
+        //  projection is not wgs84
         if (isset($source->datum) && isset($dest->datum) && (
-                (($source->datum->datumType == ProjFourphp_Common::$pjdThreeParam || $source->datum->datumType == ProjFourphp_Common::$pjd7Param) && (isset($dest->datumCode) && $dest->datumCode != "WGS84")) ||
-                (($dest->datum->datumType == ProjFourphp_Common::$pjdThreeParam || $dest->datum->datumType == ProjFourphp_Common::$pjd7Param) && (isset($source->datumCode) && $source->datumCode != "WGS84")))) {
-            $wgs84 = ProjFourphp::$wgs84;
+                (($source->datum->datumType == ProjFourphp_Common::$pjdThreeParam
+                || $source->datum->datumType == ProjFourphp_Common::$pjd7Param)
+                && (isset($dest->datumCode) && $dest->datumCode != "WGS84")) ||
+                (($dest->datum->datumType == ProjFourphp_Common::$pjdThreeParam
+                || $dest->datum->datumType == ProjFourphp_Common::$pjd7Param)
+                && (isset($source->datumCode) && $source->datumCode != "WGS84")))) {
+            $wgs84 = ProjFourphp::$wgsEightFour;
             $this->transform($source, $wgs84, $point);
             $source = $wgs84;
         }
 
         // Workaround for Spherical Mercator => skipped in projFourjs 1.1.0
         /*
-          if( ($source->srsProjNumber == "900913" && $dest->datumCode != "WGS84") ||
+          if( ($source->srsProjNumber == "900913" && $dest->datumCode != "WGS84")
+          ||
           ($dest->srsProjNumber == "900913" && $source->datumCode != "WGS84") ) {
           #dbg('Workaround for Spherical Mercator', false);
           $wgs84 = ProjFourphp::$wgs84; // DONT KNOW WHAT YET
@@ -278,7 +338,8 @@ class ProjFourphp
             // confusing, should fix this
         }
 
-        // Explicitly skip datum transform by setting 'datum=none' as parameter for either source or dest
+        // Explicitly skip datum transform by setting 'datum=none' as parameter 
+        // for either source or dest
         if ($source->datumType == ProjFourphp_Common::$pjdNodatum
                 || $dest->datumType == ProjFourphp_Common::$pjdNodatum) {
             return $point;
@@ -291,7 +352,8 @@ class ProjFourphp
           }
 
           if( $dest->datum_type ==  ProjFourphp_Common::$PJD_GRIDSHIFT ) {
-          throw(new Exception( "ERROR: Grid shift transformations are not implemented yet." ));
+          throw(new Exception( "ERROR: Grid shift transformations are not
+          implemented yet." ));
           }
          */
 
@@ -324,7 +386,8 @@ class ProjFourphp
         // Apply grid shift to destination if required
         /*
           if( $dest->datum_type ==  ProjFourphp_Common::$PJD_GRIDSHIFT ) {
-          throw(new Exception( "ERROR: Grid shift transformations are not implemented yet." ));
+          throw(new Exception( "ERROR: Grid shift transformations are not
+          implemented yet." ));
           // pj_apply_gridshift( pj_param(dest.params,"snadgrids").s, 1, point);
           // CHECK_RETURN;
           }
@@ -387,7 +450,8 @@ class ProjFourphp
                     }
                     break;
                 default :
-                    throw(new Exception("ERROR: unknow axis (" . $crs->axis[$i] . ") - check definition of " . $crs->projName));
+                    throw new Exception("ERROR: unknow axis (" . $crs->axis[$i]
+                            . ") - check definition of " . $crs->projName);
                     return null;
             }
         }
