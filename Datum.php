@@ -208,7 +208,7 @@ class ProjFourphp_Datum
         } else {
             /*  ellipsoidal (geodetic) longitude
              *  interval: -PI < Longitude <= +PI */
-            $longitude = atanTwo($y, $x);
+            $longitude = atan2($y, $x);
         }
 
         /* --------------------------------------------------------------
@@ -304,7 +304,7 @@ class ProjFourphp_Datum
                 $longitude = 0.0;
                 if ($z > 0.0) { /* north pole */
                     $latitude = ProjFourphp_Common::$halfPi;
-                } else if ($z< 0.0) { /* south pole */
+                } else if ($z < 0.0) { /* south pole */
                     $latitude = - ProjFourphp_Common::$halfPi;
                 } else { /* center of earth */
                     $latitude = ProjFourphp_Common::$halfPi;
