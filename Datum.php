@@ -43,7 +43,7 @@ class ProjFourphp_Datum
                 if ($proj->datumParams[3] != 0 || $proj->datumParams[4] != 0 ||
                         $proj->datumParams[5] != 0 || $proj->datumParams[6] != 0) {
 
-                    $this->datumType = ProjFourphp_Common::$pjd7Param;
+                    $this->datumType = ProjFourphp_Common::$pjdSevenParam;
                     $proj->datumParams[3] *= ProjFourphp_Common::$secToRad;
                     $proj->datumParams[4] *= ProjFourphp_Common::$secToRad;
                     $proj->datumParams[5] *= ProjFourphp_Common::$secToRad;
@@ -81,7 +81,7 @@ class ProjFourphp_Datum
             return ($this->datumParams[0] == $dest->datumParams[0]
                     && $this->datumParams[1] == $dest->datumParams[1]
                     && $this->datumParams[2] == $dest->datumParams[2]);
-        } else if ($this->datumType == ProjFourphp_Common::$pjd7Param) {
+        } else if ($this->datumType == ProjFourphp_Common::$pjdSevenParam) {
             return ($this->datumParams[0] == $dest->datumParams[0]
                     && $this->datumParams[1] == $dest->datumParams[1]
                     && $this->datumParams[2] == $dest->datumParams[2]
@@ -112,7 +112,7 @@ class ProjFourphp_Datum
      *
      */
 
-    public function GeodeticToGeocentric($p)
+    public function geodeticToGeocentric($p)
     {
 
         $longitude = $p->x;
@@ -348,7 +348,7 @@ class ProjFourphp_Datum
 
     // pj_geocentic_to_wgs84( p )
     //  p = point to transform in geocentric coordinates (x,y,z)
-    public function geocentricToWgs84($p)
+    public function geocentricToWgsEightFour($p)
     {
 
         if ($this->datumType == ProjFourphp_Common::$pjdThreeParam) {
@@ -357,7 +357,7 @@ class ProjFourphp_Datum
             $p->x += $this->datumParams[0];
             $p->y += $this->datumParams[1];
             $p->z += $this->datumParams[2];
-        } else if ($this->datumType == ProjFourphp_Common::$pjd7Param) {
+        } else if ($this->datumType == ProjFourphp_Common::$pjdSevenParam) {
             $dxBf = $this->datumParams[0];
             $dyBf = $this->datumParams[1];
             $dzBf = $this->datumParams[2];
@@ -378,7 +378,7 @@ class ProjFourphp_Datum
     // pj_geocentic_from_wgs84()
     //  coordinate system definition,
     //  point to transform in geocentric coordinates (x,y,z)
-    public function geocentric_from_wgs84($p)
+    public function geocentricFromWgsEightFour($p)
     {
 
         if ($this->datumType == ProjFourphp_Common::$pjdThreeParam) {
@@ -387,7 +387,7 @@ class ProjFourphp_Datum
             $p->x -= $this->datumParams[0];
             $p->y -= $this->datumParams[1];
             $p->z -= $this->datumParams[2];
-        } else if ($this->datumType == ProjFourphp_Common::$pjd7Param) {
+        } else if ($this->datumType == ProjFourphp_Common::$pjdSevenParam) {
             $dxBf = $this->datumParams[0];
             $dyBf = $this->datumParams[1];
             $dzBf = $this->datumParams[2];
@@ -404,7 +404,7 @@ class ProjFourphp_Datum
             $p->x = $xTmp + $rzBf * $yTmp - $ryBf * $zTmp;
             $p->y = -$rzBf * $xTmp + $yTmp + $rxBf * $zTmp;
             $p->z = $ryBf * $xTmp - $rxBf * $yTmp + $zTmp;
-        } //cs_geocentric_from_wgs84()
+        } //cs_geocentricFromWgsEightFour()
     }
 
 }

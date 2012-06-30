@@ -420,7 +420,7 @@ class ProjFourphp_Proj
                 $this->rf = floatval(array_shift($wktArray));
                 break;
             case 'PRIMEM':
-                $this->from_greenwich = floatval(array_shift($wktArray)); //to radians?
+                $this->fromGreenwich = floatval(array_shift($wktArray)); //to radians?
                 break;
             case 'UNIT':
                 $this->units = $wktName;
@@ -574,15 +574,15 @@ class ProjFourphp_Proj
                     break;  // UTM north/south
                 case "towgs84": $this->datum_params = explode(",", $paramVal);
                     break;
-                case "to_meter": $this->to_meter = floatval($paramVal);
+                case "toMeter": $this->toMeter = floatval($paramVal);
                     break; // cartesian scaling
-                case "from_greenwich": $this->from_greenwich = $paramVal * ProjFourphp_Common::$dToR;
+                case "fromGreenwich": $this->fromGreenwich = $paramVal * ProjFourphp_Common::$dToR;
                     break;
                 // DGR 2008-07-09 : if pm is not a well-known prime meridian take
                 // the value instead of 0.0, then convert to radians
                 case "pm": $paramVal = trim($paramVal);
-                    $this->from_greenwich = ProjFourphp::$primeMeridian[$paramVal] ? ProjFourphp::$primeMeridian[$paramVal] : floatval($paramVal);
-                    $this->from_greenwich *= ProjFourphp_Common::$dToR;
+                    $this->fromGreenwich = ProjFourphp::$primeMeridian[$paramVal] ? ProjFourphp::$primeMeridian[$paramVal] : floatval($paramVal);
+                    $this->fromGreenwich *= ProjFourphp_Common::$dToR;
                     break;
                 // DGR 2010-11-12: axis
                 case "axis": $paramVal = trim($paramVal);
