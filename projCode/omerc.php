@@ -125,10 +125,10 @@ class ProjFourphp_ProjOmerc
             $this->j = ($this->el * $this->el - $this->l * $this->h) / ($this->el * $this->el + $this->l * $this->h);
             $this->p = ($this->l - $this->h) / ($this->l + $this->h);
             $this->dlon = $this->lonOne - $this->lonTwo;
-            if ($this->dlon < -ProjFourphp::$common->pi)
-                $this->lonTwo = $this->lonTwo - 2.0 * ProjFourphp::$common->pi;
-            if ($this->dlon > ProjFourphp::$common->pi)
-                $this->lonTwo = $this->lonTwo + 2.0 * ProjFourphp::$common->pi;
+            if ($this->dlon < -ProjFourphp_common::$pi)
+                $this->lonTwo = $this->lonTwo - 2.0 * ProjFourphp_common::$pi;
+            if ($this->dlon > ProjFourphp_common::$pi)
+                $this->lonTwo = $this->lonTwo + 2.0 * ProjFourphp_common::$pi;
             $this->dlon = $this->lonOne - $this->lonTwo;
             $this->longc = .5 * ($this->lonOne + $this->lonTwo) - atan($this->j * tan(.5 * $this->bl * $this->dlon) / $this->p) / $this->bl;
             $this->dlon = ProjFourphp_Common::adjustLon($this->lonOne - $this->longc);
@@ -215,7 +215,7 @@ class ProjFourphp_ProjOmerc
             } else {
                 $us = $this->al * atan(($s * $this->cosgam + $vl * $this->singam) / $con) / $this->bl;
                 if ($con < 0)
-                    $us = $us + ProjFourphp::$common->pi * $this->al / $this->bl;
+                    $us = $us + ProjFourphp_common::$pi * $this->al / $this->bl;
             }
         } else {
             if ($lat >= 0) {
