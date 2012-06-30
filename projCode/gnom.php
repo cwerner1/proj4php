@@ -137,7 +137,7 @@ class ProjFourphp_ProjGnom
             $lon = atan2($p->x * sinc, rh * $this->cosPOneFour * $cosc - $p->y * $this->sinPOneFour * $sinc);
             $lon =  ProjFourphp_Common::adjustLon($this->longZero + $lon);
         } else {
-            $lat = $this->phic0;
+            $lat = $this->phicZero;
             $lon = 0.0;
         }
 

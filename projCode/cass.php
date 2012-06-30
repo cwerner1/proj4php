@@ -38,7 +38,7 @@ class ProjFourphp_ProjCass
     {
         if (!$this->sphere) {
             $this->en = ProjFourphp::$common->pjEnfn($this->es);
-            $this->mZero = ProjFourphp::$common->pjMlfn($this->latZero, sin($this->latZero), cos($this->latZero), $this->en);
+            $this->mZero = ProjFourphp_Common::jMlfn($this->latZero, sin($this->latZero), cos($this->latZero), $this->en);
         }
     }
 

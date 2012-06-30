@@ -10,7 +10,7 @@
 class ProjFourphp_ProjSterea
 {
 
-    protected $dependsOn = 'gauss';
+    protected $_dependsOn = 'gauss';
 
     /**
      *
@@ -24,9 +24,9 @@ class ProjFourphp_ProjSterea
             return;
         }
 
-        $this->sinc0 = sin($this->phic0);
-        $this->cosc0 = cos($this->phic0);
-        $this->R2 = 2.0 * $this->rc;
+        $this->sincZero = sin($this->phicZero);
+        $this->coscZero = cos($this->phicZero);
+        $this->rTwo = 2.0 * $this->rc;
 
         if (!$this->title)
             $this->title = "Oblique Stereographic Alternative";
@@ -45,10 +45,10 @@ class ProjFourphp_ProjSterea
         $sinc = sin($p->y);
         $cosc = cos($p->y);
         $cosl = cos($p->x);
-        $k = $this->kZero * $this->R2 / (1.0 + $this->sinc0 * $sinc + $this->cosc0 * $cosc * $cosl);
+        $k = $this->kZero * $this->rTwo / (1.0 + $this->sincZero * $sinc + $this->coscZero * $cosc * $cosl);
 
         $p->x = $k * $cosc * sin($p->x);
-        $p->y = $k * ($this->cosc0 * sinc - $this->sinc0 * $cosc * $cosl);
+        $p->y = $k * ($this->coscZero * sinc - $this->sincZero * $cosc * $cosl);
 
         $p->x = $this->a * $p->x + $this->xZero;
         $p->y = $this->a * $p->y + $this->yZero;
@@ -73,13 +73,13 @@ class ProjFourphp_ProjSterea
         $p->y /= $this->kZero;
 
         if (($rho = sqrt($p->x * $p->x + $p->y * $p->y))) {
-            $c = 2.0 * atan2($rho, $this->R2);
+            $c = 2.0 * atan2($rho, $this->rTwo);
             $sinc = sin($c);
             $cosc = cos($c);
-            $lat = asin($cosc * $this->sinc0 + $p->y * $sinc * $this->cosc0 / $rho);
-            $lon = atan2($p->x * $sinc, $rho * $this->cosc0 * $cosc - $p->y * $this->sinc0 * $sinc);
+            $lat = asin($cosc * $this->sincZero + $p->y * $sinc * $this->coscZero / $rho);
+            $lon = atan2($p->x * $sinc, $rho * $this->coscZero * $cosc - $p->y * $this->sincZero * $sinc);
         } else {
-            $lat = $this->phic0;
+            $lat = $this->phicZero;
             $lon = 0.;
         }
 
