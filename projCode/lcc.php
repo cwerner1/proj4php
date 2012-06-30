@@ -145,7 +145,7 @@ class ProjFourphp_ProjLcc
         }
         $theta = 0.0;
         if ($rhOne != 0) {
-            $theta = atanTwo(($con * $x), ($con * $y));
+            $theta = atan2(($con * $x), ($con * $y));
         }
         if (($rhOne != 0) || ($this->ns > 0.0)) {
             $con = 1.0 / $this->ns;

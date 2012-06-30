@@ -232,7 +232,7 @@ class ProjFourphp_ProjStere
                         $lat = asin($y * $sinc / $rh);
                     }
                     if ($cosc != 0. || $x != 0.)
-                        $lon = atanTwo($x * $sinc, $cosc * $rh);
+                        $lon = atan2($x * $sinc, $cosc * $rh);
                     break;
                 case self::$obliq:
                     if (abs($rh) <= ProjFourphp_Common::$epsln) {
@@ -242,7 +242,7 @@ class ProjFourphp_ProjStere
                     }
                     $c = $cosc - $this->sinphZero * sin($lat);
                     if ($c != 0. || $x != 0.) {
-                        $lon = atanTwo($x * $sinc * $this->cosphZero, $c * $rh);
+                        $lon = atan2($x * $sinc * $this->cosphZero, $c * $rh);
                     }
                     break;
                 case self::$nPole:
@@ -253,7 +253,7 @@ class ProjFourphp_ProjStere
                     } else {
                         $lat = asin($this->mode == self::$sPole ? -$cosc : $cosc );
                     }
-                    $lon = ($x == 0. && $y == 0.) ? 0. : atanTwo($x, $y);
+                    $lon = ($x == 0. && $y == 0.) ? 0. : atan2($x, $y);
                     break;
             }
             $p->x = ProjFourphp_Common::adjustLon($lon + $this->longZero);
@@ -263,7 +263,7 @@ class ProjFourphp_ProjStere
             switch ($this->mode) {
                 case self::$obliq:
                 case self::$equit:
-                    $tp = 2. * atanTwo($rho * $this->cosX1, $this->akmOne);
+                    $tp = 2. * atan2($rho * $this->cosX1, $this->akmOne);
                     $cosphi = cos($tp);
                     $sinphi = sin($tp);
                     if ($rho == 0.0) {
@@ -293,7 +293,7 @@ class ProjFourphp_ProjStere
                 if (abs(phi_l - lat) < $this->CONV) {
                     if ($this->mode == self::$sPole)
                         $lat = -$lat;
-                    $lon = ($x == 0. && $y == 0.) ? 0. : atanTwo($x, $y);
+                    $lon = ($x == 0. && $y == 0.) ? 0. : atan2($x, $y);
                     $p->x = ProjFourphp_Common::adjustLon($lon + $this->longZero);
                     $p->y = $lat;
                     return $p;

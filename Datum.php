@@ -293,7 +293,7 @@ class ProjFourphp_Datum
 
         $atPole = false;
         if ($x <> 0.0) {
-            $longitude = atanTwo($y, $x);
+            $longitude = atan2($y, $x);
         } else {
             if ($y > 0) {
                 $longitude = ProjFourphp_Common::$halfPi;

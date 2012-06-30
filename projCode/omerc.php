@@ -297,7 +297,7 @@ class ProjFourphp_ProjOmerc
             //if ($flag != 0)
             //return($flag);
             //~ con = cos($this->bl * us /al);
-            $theta = $this->longc - atanTwo(($s * $this->cosgam - $vl * $this->singam), $con) / $this->bl;
+            $theta = $this->longc - atan2(($s * $this->cosgam - $vl * $this->singam), $con) / $this->bl;
             $lon = ProjFourphp_Common::adjustLon($theta);
         }
         $p->x = $lon;

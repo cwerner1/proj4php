@@ -277,7 +277,7 @@ class ProjFourphp_ProjLaea
                     $phi -= ProjFourphp_Common::$halfPi;
                     break;
             }
-            $lam = ($y == 0. && ($this->mode == self::$equit || $this->mode == self::$obliq)) ? 0. : atanTwo($x, $y);
+            $lam = ($y == 0. && ($this->mode == self::$equit || $this->mode == self::$obliq)) ? 0. : atan2($x, $y);
         } else {
             /*
               $cCe;
@@ -329,7 +329,7 @@ class ProjFourphp_ProjLaea
                     }
                     break;
             }
-            $lam = atanTwo($x, $y);
+            $lam = atan2($x, $y);
             $phi = $this->authlat(asin($ab), $this->apa);
         }
 
@@ -352,11 +352,11 @@ class ProjFourphp_ProjLaea
           $temp =abs($this->latZero) - ProjFourphp::$common->HALF_PI;
           if (abs(temp) > ProjFourphp::$common->EPSLN) {
           temp = cos_z -$this->sin_lat_o * sin(lat);
-          if(temp!=0.0) lon=ProjFourphp::$common->adjust_lon($this->longZero+atanTwo($p->x*sin_z*$this->cos_lat_o,temp*Rh));
+          if(temp!=0.0) lon=ProjFourphp::$common->adjust_lon($this->longZero+atan2($p->x*sin_z*$this->cos_lat_o,temp*Rh));
           } else if ($this->latZero < 0.0) {
-          lon = ProjFourphp::$common->adjust_lon($this->longZero - atanTwo(-$p->x,$p->y));
+          lon = ProjFourphp::$common->adjust_lon($this->longZero - atan2(-$p->x,$p->y));
           } else {
-          lon = ProjFourphp::$common->adjust_lon($this->longZero + atanTwo($p->x, -$p->y));
+          lon = ProjFourphp::$common->adjust_lon($this->longZero + atan2($p->x, -$p->y));
           }
           } else {
           lat = $this->latZero;

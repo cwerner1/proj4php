@@ -129,12 +129,12 @@ class ProjFourphp_ProjGnom
         $p->y /= $this->kZero;
 
         if (($rh = sqrt($p->x * $p->x + $p->y * $p->y))) {
-            $c = atanTwo($rh, $this->rc);
+            $c = atan2($rh, $this->rc);
             $sinc = sin($c);
             $cosc = cos($c);
 
             $lat = ProjFourphp_Common::asinz($cosc * $this->sinPOneFour + ($p->y * $sinc * $this->cosPOneFour) / $rh);
-            $lon = atanTwo($p->x * sinc, rh * $this->cosPOneFour * $cosc - $p->y * $this->sinPOneFour * $sinc);
+            $lon = atan2($p->x * sinc, rh * $this->cosPOneFour * $cosc - $p->y * $this->sinPOneFour * $sinc);
             $lon =  ProjFourphp_Common::adjustLon($this->longZero + $lon);
         } else {
             $lat = $this->phic0;
