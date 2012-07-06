@@ -33,7 +33,7 @@
 class ProjFourphp_ProjTmerc
 {
 
-    private $eZero, $eOne, $eTwo, $eThree, $mlZero;
+    private $_eZero, $_eOne, $_eTwo, $_eThree, $_mlZero;
 
     /**
      * 
@@ -41,12 +41,12 @@ class ProjFourphp_ProjTmerc
     public function init()
     {
 
-        $this->eZero = ProjFourphp::$common->e0fn($this->es);
-        $this->eOne = ProjFourphp::$common->eOnefn($this->es);
-        $this->eTwo = ProjFourphp::$common->e2fn($this->es);
-        $this->eThree = ProjFourphp::$common->eThreefn($this->es);
-        $this->mlZero = $this->a *
-            ProjFourphp::$common->mlfn($this->eZero, $this->eOne, $this->eTwo, $this->eThree, $this->latZero);
+        $this->_eZero = ProjFourphp_Common::eZeroFn($this->es);
+        $this->_eOne = ProjFourphp_Common::eOnefn($this->es);
+        $this->_eTwo = ProjFourphp_Common::eTwofn($this->es);
+        $this->_eThree = ProjFourphp_Common::eThreefn($this->es);
+        $this->_mlZero = $this->a *
+            ProjFourphp_Common::mlfn($this->_eZero, $this->_eOne, $this->_eTwo, $this->_eThree, $this->latZero);
     }
 
     /**
@@ -74,10 +74,10 @@ class ProjFourphp_ProjTmerc
                 ProjFourphp::reportError("tmerc:forward: Point projects into infinity");
                 return(93);
             } else {
-                $x   = .5 * $this->a * $this->kZero * log((1.0 + $b) / (1.0 - $b));
+                $x   = .5 * $this->a * $this->kZero *
+                    log((1.0 + $b) / (1.0 - $b));
                 $con = acos($cosPhi * cos($deltaLon) / sqrt(1.0 - $b * $b));
-                if ($lat < 0)
-                    $con = - $con;
+                if ($lat < 0) $con = - $con;
                 $y   = $this->a * $this->kZero * ($con - $this->latZero);
             }
         } else {
@@ -90,15 +90,16 @@ class ProjFourphp_ProjTmerc
             $n   = $this->a / sqrt($con);
 
             $ml = $this->a *
-                ProjFourphp::$common->mlfn($this->eZero, $this->eOne, $this->eTwo, $this->eThree, $lat);
+                ProjFourphp_Common::mlfn($this->_eZero, $this->_eOne, $this->_eTwo, $this->_eThree, $lat);
 
             $x = $this->kZero * $n * $al *
                 (1.0 + $als / 6.0 *
                 (1.0 - $t + $c + $als / 20.0 *
-                (5.0 - 18.0 * $t + pow($t, 2) + 72.0 * $c - 58.0 * $this->epTwo))) +
+                (5.0 - 18.0 * $t + pow($t, 2) + 72.0 * $c
+                - 58.0 * $this->epTwo))) +
                 $this->xZero;
             $y = $this->kZero *
-                ($ml - $this->mlZero + $n * $tq *
+                ($ml - $this->_mlZero + $n * $tq *
                 ($als * (0.5 + $als / 24.0 *
                 (5.0 - $t + 9.0 * $c + 4.0 * pow($c, 2)
                 + $als / 30.0 *
@@ -130,8 +131,7 @@ class ProjFourphp_ProjTmerc
             $h    = cos($temp);
             $con  = sqrt((1.0 - $h * $h) / (1.0 + $g * $g));
             $lat  = ProjFourphp_Common::asinz($con);
-            if ($temp < 0)
-                $lat  = -$lat;
+            if ($temp < 0) $lat  = -$lat;
             if (($g == 0) && ($h == 0)) {
                 $lon = $this->longZero;
             } else {
@@ -141,16 +141,16 @@ class ProjFourphp_ProjTmerc
             $x = $p->x - $this->xZero;
             $y = $p->y - $this->yZero;
 
-            $con = ($this->mlZero + $y / $this->kZero) / $this->a;
+            $con = ($this->_mlZero + $y / $this->kZero) / $this->a;
             $phi = $con;
 
             for ($i = 0; true; $i++) {
-                $deltaPhi = (($con + $this->eOne * sin(2.0 * $phi) -
-                    $this->eTwo * sin(4.0 * $phi) + $this->eThree * sin(6.0 * $phi))
-                    / $this->eZero) - $phi;
+                $deltaPhi = (($con + $this->_eOne * sin(2.0 * $phi) -
+                    $this->_eTwo * sin(4.0 * $phi) + $this->_eThree *
+                    sin(6.0 * $phi))
+                    / $this->_eZero) - $phi;
                 $phi += $deltaPhi;
-                if (abs($deltaPhi) <= ProjFourphp_Common::$epsln)
-                    break;
+                if (abs($deltaPhi) <= ProjFourphp_Common::$epsln) break;
                 if ($i >= $maxIter) {
                     ProjFourphp::reportError("tmerc:inverse: Latitude failed to converge");
                     return(95);
@@ -173,8 +173,8 @@ class ProjFourphp_ProjTmerc
                 $lat    = $phi -
                     ($n * $tanPhi * $ds / $r) *
                     (0.5 - $ds / 24.0 *
-                    (5.0 + 3.0 * $t + 10.0 * $c - 4.0 * $cs - 9.0 * $this->epTwo -
-                    $ds / 30.0 *
+                    (5.0 + 3.0 * $t + 10.0 * $c - 4.0 * $cs -
+                    9.0 * $this->epTwo - $ds / 30.0 *
                     (61.0 + 90.0 * $t + 298.0 * $c + 45.0 * $ts - 252.0 *
                     $this->epTwo - 3.0 * $cs)));
                 $lon    = ProjFourphp_Common::adjustLon($this->longZero + ($d * (1.0 - $ds / 6.0 * (1.0 + 2.0 * $t + $c - $ds / 20.0 * (5.0 - 2.0 * $c + 28.0 * $t - 3.0 * $cs + 8.0 * $this->epTwo + 24.0 * $ts))) / $cosPhi));

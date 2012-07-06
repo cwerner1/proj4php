@@ -23,7 +23,7 @@ class ProjFourphp_Datum
     public function __construct($proj)
     {
 
-        $this->datumType = ProjFourphp_Common::$pjdWgs84;   //default setting
+        $this->datumType = ProjFourphp_Common::$pjdWgsEightFour;   //default setting
 
         if (isset($proj->datumCode) && $proj->datumCode == 'none') {
             $this->datumType = ProjFourphp_Common::$pjdNodatum;

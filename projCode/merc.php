@@ -56,7 +56,7 @@ class ProjFourphp_ProjMerc
             if ($this->sphere) {
                 $this->kZero = cos($this->latTs);
             } else {
-                $this->kZero = ProjFourphp::$common->msfnz($this->es, sin($this->latTs), cos($this->latTs));
+                $this->kZero = ProjFourphp_Common::msfnz($this->es, sin($this->latTs), cos($this->latTs));
             }
         }
     }

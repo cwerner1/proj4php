@@ -14,18 +14,16 @@ class ProjFourphp_ProjEqc
     public function init()
     {
 
-        if (!$this->xZero)
-            $this->xZero = 0;
-        if (!$this->yZero)
-            $this->yZero = 0;
-        if (!$this->latZero)
-            $this->latZero = 0;
-        if (!$this->longZero)
-            $this->longZero = 0;
-        if (!$this->latTs)
+        if (!$this->xZero) $this->xZero = 0;
+        if (!$this->yZero) $this->yZero = 0;
+        if (!$this->latZero) $this->latZero = 0;
+        if (!$this->longZero) $this->longZero = 0;
+        if (!$this->latTs) {
             $this->latTs = 0;
-        if (!$this->title)
+        }
+        if (!$this->title) {
             $this->title = "Equidistant Cylindrical (Plate Carre)";
+        }
 
         $this->rc = cos($this->latTs);
     }
@@ -38,8 +36,8 @@ class ProjFourphp_ProjEqc
         $lon = $p->x;
         $lat = $p->y;
 
-        $dlon =  ProjFourphp_Common::adjustLon($lon - $this->longZero);
-        $dlat = ProjFourphp::$common . adjust_lat($lat - $this->latZero);
+        $dlon = ProjFourphp_Common::adjustLon($lon - $this->longZero);
+        $dlat = ProjFourphp_Common::adjust_lat($lat - $this->latZero);
         $p->x = $this->xZero + ($this->a * $dlon * $this->rc);
         $p->y = $this->yZero + ($this->a * $dlat );
         return $p;
@@ -53,8 +51,8 @@ class ProjFourphp_ProjEqc
         $x = $p->x;
         $y = $p->y;
 
-        $p->x =  ProjFourphp_Common::adjustLon($this->longZero + (($x - $this->xZero) / ($this->a * $this->rc)));
-        $p->y = ProjFourphp::$common->adjustLat($this->latZero + (($y - $this->yZero) / ($this->a )));
+        $p->x = ProjFourphp_Common::adjustLon($this->longZero + (($x - $this->xZero) / ($this->a * $this->rc)));
+        $p->y = ProjFourphp_Common::adjustLat($this->latZero + (($y - $this->yZero) / ($this->a )));
         return $p;
     }
 

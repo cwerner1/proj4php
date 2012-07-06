@@ -30,9 +30,10 @@ class ProjFourphp_ProjAeqd
 
         $sinphi = sin($p->y);
         $cosphi = cos($p->y);
-        $dlon = ProjFourphp_Common::adjustLon(lon - $this->longZero);
+        $dlon   = ProjFourphp_Common::adjustLon(lon - $this->longZero);
         $coslon = cos($dlon);
-        $g = $this->sinPOneTwo * $sinphi + $this->cosPOneTwo * $cosphi * $coslon;
+        $g      = $this->sinPOneTwo * $sinphi +
+            $this->cosPOneTwo * $cosphi * $coslon;
         if (abs(abs($g) - 1.0) < ProjFourphp_Common::$epsln) {
             $ksp = 1.0;
             if ($g < 0.0) {
@@ -40,11 +41,13 @@ class ProjFourphp_ProjAeqd
                 return;
             }
         } else {
-            $z = acos($g);
+            $z   = acos($g);
             $ksp = $z / sin($z);
         }
         $p->x = $this->xZero + $this->a * $ksp * $cosphi * sin($dlon);
-        $p->y = $this->yZero + $this->a * $ksp * ($this->cosPOneTwo * $sinphi - $this->sinPOneTwo * $cosphi * $coslon);
+        $p->y = $this->yZero + $this->a * $ksp *
+            ($this->cosPOneTwo * $sinphi -
+            $this->sinPOneTwo * $cosphi * $coslon);
 
         return $p;
     }

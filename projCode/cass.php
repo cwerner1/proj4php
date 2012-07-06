@@ -1,6 +1,6 @@
 <?php
 
-/* * *****************************************************************************
+/* * ***************************************************************************
   NAME                            CASSINI
 
   PURPOSE:	Transforms input longitude and latitude to Easting and
@@ -18,7 +18,7 @@
 
   2.  Snyder, John P. and Voxland, Philip M., "An Album of Map Projections",
   U.S. Geological Survey Professional Paper 1453 , United State Government
- * ***************************************************************************** */
+ * ************************************************************************** */
 
 /**
  * Author : Julien Moquet
@@ -27,7 +27,10 @@
  *                      and Richard Greenwood rich@greenwoodma$p->com 
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
-//ProjFourphp.defs["EPSG:28191"] = "+proj=cass +lat_0=31.73409694444445 +lon_0=35.21208055555556 +x_0=170251.555 +y_0=126867.909 +a=6378300.789 +b=6356566.435 +towgs84=-275.722,94.7824,340.894,-8.001,-4.42,-11.821,1 +units=m +no_defs";
+//ProjFourphp.defs["EPSG:28191"] = "+proj=cass +lat_0=31.73409694444445 
+//+lon_0=35.21208055555556 +x_0=170251.555 +y_0=126867.909 +a=6378300.789 
+//+b=6356566.435 +towgs84=-275.722,94.7824,340.894,-8.001,-4.42,-11.821,1 
+//+units=m +no_defs";
 // Initialize the Cassini projection
 // -----------------------------------------------------------------
 
@@ -37,16 +40,16 @@ class ProjFourphp_ProjCass
     public function init()
     {
         if (!$this->sphere) {
-            $this->en = ProjFourphp::$common->pjEnfn($this->es);
+            $this->en = ProjFourphp_Common::pjEnfn($this->es);
             $this->mZero = ProjFourphp_Common::jMlfn($this->latZero, sin($this->latZero), cos($this->latZero), $this->en);
         }
     }
 
-    protected $C1 = .16666666666666666666;
-    protected $C2 = .00833333333333333333;
-    protected $C3 = .04166666666666666666;
-    protected $C4 = .33333333333333333333;
-    protected $C5 = .06666666666666666666;
+    protected $_cOne = .16666666666666666666;
+    protected $_cTwo = .00833333333333333333;
+    protected $_cThree = .04166666666666666666;
+    protected $_cFour = .33333333333333333333;
+    protected $_cFive = .06666666666666666666;
 
     /* Cassini forward equations--mapping lat,long to x,y
       ----------------------------------------------------------------------- */
@@ -76,8 +79,14 @@ class ProjFourphp_ProjCass
             $this->aOne = $lam * $this->c;
             $this->c *= $this->es * $this->c / (1 - $this->es);
             $this->aTwo = $this->aOne * $this->aOne;
-            $x = $this->n * $this->aOne * (1. - $this->aTwo * $this->t * ($this->C1 - (8. - $this->t + 8. * $this->c) * $this->aTwo * $this->C2));
-            $y -= $this->mZero - $this->n * $this->tn * $this->aTwo * (.5 + (5. - $this->t + 6. * $this->c) * $this->aTwo * $this->C3);
+            $x = $this->n * $this->aOne * 
+                (1. - $this->aTwo * $this->t * 
+                ($this->_cOne - (8. - $this->t + 8. * $this->c) *
+                    $this->aTwo * $this->_cTwo));
+            $y -= $this->mZero - 
+                $this->n * $this->tn * $this->aTwo * 
+                (.5 + (5. - $this->t + 6. * $this->c) *
+                    $this->aTwo * $this->_cThree);
         }
 
         $p->x = $this->a * $x + $this->xZero;
@@ -102,7 +111,7 @@ class ProjFourphp_ProjCass
             $lam = atan2(tan($x), cos($this->dd));
         } else {
             /* ellipsoid */
-            $phOne = ProjFourphp::$common->pjInvMlfn($this->mZero + $y, $this->es, $this->en);
+            $phOne = ProjFourphp_Common::pjInvMlfn($this->mZero + $y, $this->es, $this->en);
             $this->tn = tan($phOne);
             $this->t = $this->tn * $this->tn;
             $this->n = sin($phOne);
@@ -111,8 +120,11 @@ class ProjFourphp_ProjCass
             $this->r *= (1. - $this->es) * $this->n;
             $this->dd = $x / $this->n;
             $this->dTwo = $this->dd * $this->dd;
-            $phi = $phOne - ($this->n * $this->tn / $this->r) * $this->dTwo * (.5 - (1. + 3. * $this->t) * $this->dTwo * $this->C3);
-            $lam = $this->dd * (1. + $this->t * $this->dTwo * (-$this->C4 + (1. + 3. * $this->t) * $this->dTwo * $this->C5)) / cos($phOne);
+            $phi = $phOne - ($this->n * $this->tn / $this->r) * 
+            $this->dTwo * (.5 - (1. + 3. * $this->t) * $this->dTwo * $this->_cThree);
+            $lam = $this->dd * (1. + $this->t * $this->dTwo *
+                (-$this->_cFour + (1. + 3. * $this->t) * $this->dTwo * $this->_cFive)) 
+                / cos($phOne);
         }
         $p->x =  ProjFourphp_Common::adjustLon($this->longZero + $lam);
         $p->y = $phi;

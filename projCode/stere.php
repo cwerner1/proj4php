@@ -55,7 +55,7 @@ class ProjFourphp_ProjStere
                         $this->akmOne = 2. * $this->kZero / sqrt(pow(1 + $this->e, 1 + $this->e) * pow(1 - $this->e, 1 - $this->e));
                     } else {
                         $t = sin($this->phits);
-                        $this->akmOne = cos($this->phits) / ProjFourphp::$common->tsfnz($this->e, $this->phits, $t);
+                        $this->akmOne = cos($this->phits) / ProjFourphp_Common::tsfnz($this->e, $this->phits, $t);
                         $t *= $this->e;
                         $this->akmOne /= sqrt(1. - $t * $t);
                     }
@@ -181,7 +181,7 @@ class ProjFourphp_ProjStere
                     $sinphi = -$sinphi;
                 case self::$_nPole:
                     $x      = $this->akmOne *
-                        ProjFourphp::$common->tsfnz($this->e, $lat, $sinphi);
+                        ProjFourphp_Common::tsfnz($this->e, $lat, $sinphi);
                     $y      = - $x * $coslam;
                     break;
             }

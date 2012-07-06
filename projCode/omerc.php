@@ -7,7 +7,7 @@
  *                      and Richard Greenwood rich@greenwoodma$p->com 
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
-/* * *****************************************************************************
+/* * **************************************************************************
   NAME                       OBLIQUE MERCATOR (HOTINE)
 
   PURPOSE:	Transforms input longitude and latitude to Easting and
@@ -28,7 +28,7 @@
   2.  Snyder, John P. and Voxland, Philip M., "An Album of Map Projections",
   U.S. Geological Survey Professional Paper 1453 , United State Government
   Printing Office, Washington D.C., 1989.
- * ***************************************************************************** */
+ * ************************************************************************** */
 
 class ProjFourphp_ProjOmerc
 {
@@ -54,8 +54,8 @@ class ProjFourphp_ProjOmerc
         /* Place parameters in static storage for common use
           ------------------------------------------------- */
         $temp = $this->b / $this->a;
-        $es = 1.0 - pow($temp, 2);
-        $e = sqrt($es);
+        $es   = 1.0 - pow($temp, 2);
+        $e    = sqrt($es);
 
         $this->sinpTwoZero = sin($this->latZero);
         $this->cospTwoZero = cos($this->latZero);
@@ -63,13 +63,14 @@ class ProjFourphp_ProjOmerc
         $this->con = 1.0 - $this->es * $this->sinpTwoZero * $this->sinpTwoZero;
         $this->com = sqrt(1.0 - $es);
         $this->bl = sqrt(1.0 + $this->es * pow($this->cospTwoZero, 4.0) / (1.0 - $es));
-        $this->al = $this->a * $this->bl * $this->kZero * $this->com / $this->con;
+        $this->al = $this->a * $this->bl * $this->kZero * $this->com /
+            $this->con;
         if (abs($this->latZero) < ProjFourphp_Common::$epsln) {
             $this->ts = 1.0;
             $this->d = 1.0;
             $this->el = 1.0;
         } else {
-            $this->ts = ProjFourphp::$common->tsfnz($this->e, $this->latZero, $this->sinpTwoZero);
+            $this->ts = ProjFourphp_Common::tsfnz($this->e, $this->latZero, $this->sinpTwoZero);
             $this->con = sqrt($this->con);
             $this->d = $this->bl * $this->com / ($this->cospTwoZero * $this->con);
             if (($this->d * $this->d - 1.0) > 0.0) {
@@ -89,7 +90,9 @@ class ProjFourphp_ProjOmerc
         if ($this->mode != 0) {
             $this->g = .5 * ($this->f - 1.0 / $this->f);
             $this->gama = ProjFourphp_Common::asinz(sin($this->alpha) / $this->d);
-            $this->longc = $this->longc - ProjFourphp_Common::asinz($this->g * tan($this->gama)) / $this->bl;
+            $this->longc = $this->longc -
+                ProjFourphp_Common::asinz($this->g * tan($this->gama)) /
+                $this->bl;
 
             /* Report parameters common to format B
               ------------------------------------- */
@@ -106,31 +109,39 @@ class ProjFourphp_ProjOmerc
                 $this->cosaz = cos($this->alpha);
 
                 if ($this->latZero >= 0) {
-                    $this->u = ($this->al / $this->bl) * atan(sqrt($this->d * $this->d - 1.0) / $this->cosaz);
+                    $this->u = ($this->al / $this->bl) *
+                        atan(sqrt($this->d * $this->d - 1.0) / $this->cosaz);
                 } else {
-                    $this->u = -($this->al / $this->bl) * atan(sqrt($this->d * $this->d - 1.0) / $this->cosaz);
+                    $this->u = -($this->al / $this->bl) *
+                        atan(sqrt($this->d * $this->d - 1.0) / $this->cosaz);
                 }
             } else {
                 ProjFourphp::reportError("omerc:Init:DataError");
             }
         } else {
             $this->sinphi = sin($this->atOne);
-            $this->tsOne = ProjFourphp::$common->tsfnz($this->e, $this->latOne, $this->sinphi);
+            $this->tsOne = ProjFourphp_Common::tsfnz($this->e, $this->latOne, $this->sinphi);
             $this->sinphi = sin($this->latTwo);
-            $this->tsTwo = ProjFourphp::$common->tsfnz($this->e, $this->latTwo, $this->sinphi);
+            $this->tsTwo = ProjFourphp_Common::tsfnz($this->e, $this->latTwo, $this->sinphi);
             $this->h = pow($this->tsOne, $this->bl);
             $this->l = pow($this->tsTwo, $this->bl);
             $this->f = $this->el / $this->h;
             $this->g = .5 * ($this->f - 1.0 / $this->f);
-            $this->j = ($this->el * $this->el - $this->l * $this->h) / ($this->el * $this->el + $this->l * $this->h);
+            $this->j = ($this->el * $this->el - $this->l * $this->h) /
+                ($this->el * $this->el + $this->l * $this->h);
+
             $this->p = ($this->l - $this->h) / ($this->l + $this->h);
             $this->dlon = $this->lonOne - $this->lonTwo;
-            if ($this->dlon < -ProjFourphp_common::$pi)
+            if ($this->dlon < -ProjFourphp_common::$pi) {
                 $this->lonTwo = $this->lonTwo - 2.0 * ProjFourphp_common::$pi;
-            if ($this->dlon > ProjFourphp_common::$pi)
+            }
+            if ($this->dlon > ProjFourphp_common::$pi) {
                 $this->lonTwo = $this->lonTwo + 2.0 * ProjFourphp_common::$pi;
+            }
             $this->dlon = $this->lonOne - $this->lonTwo;
-            $this->longc = .5 * ($this->lonOne + $this->lonTwo) - atan($this->j * tan(.5 * $this->bl * $this->dlon) / $this->p) / $this->bl;
+            $this->longc = .5 * ($this->lonOne + $this->lonTwo)
+                - atan($this->j * tan(.5 * $this->bl * $this->dlon) / $this->p)
+                / $this->bl;
             $this->dlon = ProjFourphp_Common::adjustLon($this->lonOne - $this->longc);
             $this->gama = atan(sin($this->bl * $this->dlon) / $this->g);
             $this->alpha = ProjFourphp_Common::asinz($this->d * sin($this->gama));
@@ -161,9 +172,11 @@ class ProjFourphp_ProjOmerc
 
 
             if ($this->latZero >= 0) {
-                $this->u = ($this->al / $this->bl) * atan(sqrt($this->d * $this->d - 1.0) / $this->cosaz);
+                $this->u = ($this->al / $this->bl) *
+                    atan(sqrt($this->d * $this->d - 1.0) / $this->cosaz);
             } else {
-                $this->u = -($this->al / $this->bl) * atan(sqrt($this->d * $this->d - 1.0) / $this->cosaz);
+                $this->u = -($this->al / $this->bl) *
+                    atan(sqrt($this->d * $this->d - 1.0) / $this->cosaz);
             }
         }
     }
@@ -200,22 +213,24 @@ class ProjFourphp_ProjOmerc
 
         /* Forward equations
           ----------------- */
-        $sin_phi = sin($lat);
-        $dlon = ProjFourphp_Common::adjustLon($lon - $this->longc);
-        $vl = sin($this->bl * $dlon);
+        $sinPhi = sin($lat);
+        $dlon   = ProjFourphp_Common::adjustLon($lon - $this->longc);
+        $vl     = sin($this->bl * $dlon);
         if (abs(abs($lat) - ProjFourphp_Common::$halfPi) > ProjFourphp_Common::$epsln) {
-            $tsOne = ProjFourphp::$common->tsfnz($this->e, $lat, $sin_phi);
-            $q = $this->el / (pow($tsOne, $this->bl));
-            $s = .5 * ($q - 1.0 / $q);
-            $t = .5 * ($q + 1.0 / $q);
-            $ul = ($s * $this->singam - $vl * $this->cosgam) / $t;
-            $con = cos($this->bl * $dlon);
+            $tsOne = ProjFourphp_Common::tsfnz($this->e, $lat, $sinPhi);
+            $q     = $this->el / (pow($tsOne, $this->bl));
+            $s     = .5 * ($q - 1.0 / $q);
+            $t     = .5 * ($q + 1.0 / $q);
+            $ul    = ($s * $this->singam - $vl * $this->cosgam) / $t;
+            $con   = cos($this->bl * $dlon);
             if (abs(con) < .0000001) {
                 $us = $this->al * $this->bl * $dlon;
             } else {
-                $us = $this->al * atan(($s * $this->cosgam + $vl * $this->singam) / $con) / $this->bl;
-                if ($con < 0)
-                    $us = $us + ProjFourphp_common::$pi * $this->al / $this->bl;
+                $us = $this->al *
+                    atan(($s * $this->cosgam + $vl * $this->singam) / $con)
+                    / $this->bl;
+                if ($con < 0) $us = $us + ProjFourphp_common::$pi * $this->al
+                        / $this->bl;
             }
         } else {
             if ($lat >= 0) {
@@ -278,9 +293,9 @@ class ProjFourphp_ProjOmerc
         $vs = $p->x * $this->cosaz - $p->y * $this->sinaz;
         $us = $p->y * $this->cosaz + $p->x * $this->sinaz;
         $us = $us + $this->u;
-        $q = exp(-$this->bl * $vs / $this->al);
-        $s = .5 * ($q - 1.0 / $q);
-        $t = .5 * ($q + 1.0 / $q);
+        $q  = exp(-$this->bl * $vs / $this->al);
+        $s  = .5 * ($q - 1.0 / $q);
+        $t  = .5 * ($q + 1.0 / $q);
         $vl = sin($this->bl * $us / $this->al);
         $ul = ($vl * $this->cosgam + $s * $this->singam) / $t;
         if (abs(abs($ul) - 1.0) <= ProjFourphp_Common::$epsln) {
@@ -291,14 +306,16 @@ class ProjFourphp_ProjOmerc
                 $lat = -ProjFourphp_Common::$halfPi;
             }
         } else {
-            $con = 1.0 / $this->bl;
+            $con   = 1.0 / $this->bl;
             $tsOne = pow(($this->el / sqrt((1.0 + $ul) / (1.0 - $ul))), $con);
-            $lat = ProjFourphp::$common->phi2z($this->e, $tsOne);
+            $lat   = ProjFourphp::$common->phi2z($this->e, $tsOne);
             //if ($flag != 0)
             //return($flag);
             //~ con = cos($this->bl * us /al);
-            $theta = $this->longc - atan2(($s * $this->cosgam - $vl * $this->singam), $con) / $this->bl;
-            $lon = ProjFourphp_Common::adjustLon($theta);
+            $theta = $this->longc -
+                atan2(($s * $this->cosgam - $vl * $this->singam), $con)
+                / $this->bl;
+            $lon   = ProjFourphp_Common::adjustLon($theta);
         }
         $p->x = $lon;
         $p->y = $lat;

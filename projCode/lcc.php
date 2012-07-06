@@ -65,15 +65,15 @@ class ProjFourphp_ProjLcc
 
         $sinOne = sin($this->latOne);
         $cosOne = cos($this->latOne);
-        $msOne = ProjFourphp::$common->msfnz($this->e, $sinOne, $cosOne);
-        $tsOne = ProjFourphp::$common->tsfnz($this->e, $this->latOne, $sinOne);
+        $msOne = ProjFourphp_Common::msfnz($this->e, $sinOne, $cosOne);
+        $tsOne = ProjFourphp_Common::tsfnz($this->e, $this->latOne, $sinOne);
 
         $sinTwo = sin($this->latTwo);
         $cosTwo = cos($this->latTwo);
-        $msTwo = ProjFourphp::$common->msfnz($this->e, $sinTwo, $cosTwo);
-        $tsTwo = ProjFourphp::$common->tsfnz($this->e, $this->latTwo, $sinTwo);
+        $msTwo = ProjFourphp_Common::msfnz($this->e, $sinTwo, $cosTwo);
+        $tsTwo = ProjFourphp_Common::tsfnz($this->e, $this->latTwo, $sinTwo);
 
-        $tsZero = ProjFourphp::$common->tsfnz($this->e, $this->latZero, sin($this->latZero));
+        $tsZero = ProjFourphp_Common::tsfnz($this->e, $this->latZero, sin($this->latZero));
 
         if (abs($this->latOne - $this->latTwo) > ProjFourphp_Common::$epsln) {
             $this->ns = log($msOne / $msTwo) / log($tsOne / $tsTwo);
@@ -107,7 +107,7 @@ class ProjFourphp_ProjLcc
         $con = abs(abs($lat) - ProjFourphp_Common::$halfPi);
 
         if ($con > ProjFourphp_Common::$epsln) {
-            $ts = ProjFourphp::$common->tsfnz($this->e, $lat, sin($lat));
+            $ts = ProjFourphp_Common::tsfnz($this->e, $lat, sin($lat));
             $rhOne = $this->a * $this->fZero * pow($ts, $this->ns);
         } else {
             $con = $lat * $this->ns;
