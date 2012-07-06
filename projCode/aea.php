@@ -1,6 +1,6 @@
 <?php
 
-/* * *****************************************************************************
+/* * **************************************************************************
   NAME                     ALBERS CONICAL EQUAL AREA
 
   PURPOSE:	Transforms input longitude and latitude to Easting and Northing
@@ -21,7 +21,7 @@
   2.  Snyder, John P. and Voxland, Philip M., "An Album of Map Projections",
   U.S. Geological Survey Professional Paper 1453 , United State Government
   Printing Office, Washington D.C., 1989.
- * ***************************************************************************** */
+ * ************************************************************************** */
 
 /**
  * Author : Julien Moquet
@@ -73,7 +73,9 @@ class ProjFourphp_ProjAea
         }
 
         $this->c = $this->msOne * $this->msOne + $this->nsZero * $this->qsOne;
-        $this->rh = $this->a * sqrt($this->c - $this->nsZero * $this->qsZero) / $this->nsZero;
+        $this->rh = $this->a *
+            sqrt($this->c - $this->nsZero * $this->qsZero)
+            / $this->nsZero;
     }
 
     /**
@@ -91,11 +93,11 @@ class ProjFourphp_ProjAea
         $this->sinPhi = sin($lat);
         $this->cosPhi = cos($lat);
 
-        $qs = ProjFourphp_Common::qsfnz($this->eThree, $this->sinPhi, $this->cosPhi);
+        $qs    = ProjFourphp_Common::qsfnz($this->eThree, $this->sinPhi, $this->cosPhi);
         $rhOne = $this->a * sqrt($this->c - $this->nsZero * $qs) / $this->nsZero;
         $theta = $this->nsZero * ProjFourphp_Common::adjustLon($lon - $this->longZero);
-        $x = rhOne * sin($theta) + $this->xZero;
-        $y = $this->rh - $rhOne * cos($theta) + $this->yZero;
+        $x     = rhOne * sin($theta) + $this->xZero;
+        $y     = $this->rh - $rhOne * cos($theta) + $this->yZero;
 
         $p->x = $x;
         $p->y = $y;
@@ -116,10 +118,10 @@ class ProjFourphp_ProjAea
 
         if ($this->nsZero >= 0) {
             $rhOne = sqrt($p->x * $p->x + $p->y * $p->y);
-            $con = 1.0;
+            $con   = 1.0;
         } else {
             $rhOne = -sqrt($p->x * $p->x + $p->y * $p->y);
-            $con = -1.0;
+            $con   = -1.0;
         }
 
         $theta = 0.0;
@@ -128,10 +130,11 @@ class ProjFourphp_ProjAea
         }
 
         $con = $rhOne * $this->nsZero / $this->a;
-        $qs = ($this->c - $con * $con) / $this->nsZero;
+        $qs  = ($this->c - $con * $con) / $this->nsZero;
 
         if ($this->eThree >= 1e-10) {
-            $con = 1 - .5 * (1.0 - $this->es) * log((1.0 - $this->eThree) / (1.0 + $this->eThree)) / $this->eThree;
+            $con = 1 - .5 * (1.0 - $this->es) *
+                log((1.0 - $this->eThree) / (1.0 + $this->eThree)) / $this->eThree;
             if (abs(abs($con) - abs($qs)) > .0000000001) {
                 $lat = $this->phi1z($this->eThree, $qs);
             } else {
@@ -165,19 +168,19 @@ class ProjFourphp_ProjAea
 
         $phi = ProjFourphp_Common::asinz(.5 * $qs);
 
-        if ($eccent < ProjFourphp_Common::$epsln)
-            return $phi;
+        if ($eccent < ProjFourphp_Common::$epsln) return $phi;
 
         $eccnts = $eccent * $eccent;
-        for ($i = 1; $i <= 25; ++$i) {
+        for ($i      = 1; $i <= 25; ++$i) {
             $sinphi = sin($phi);
             $cosphi = cos($phi);
-            $con = $eccent * $sinphi;
-            $com = 1.0 - $con * $con;
-            $dphi = .5 * $com * $com / $cosphi * ($qs / (1.0 - $eccnts) - $sinphi / $com + .5 / $eccent * log((1.0 - $con) / (1.0 + $con)));
-            $phi = $phi + $dphi;
-            if (abs($dphi) <= 1e-7)
-                return $phi;
+            $con    = $eccent * $sinphi;
+            $com    = 1.0 - $con * $con;
+            $dphi   = .5 * $com * $com / $cosphi
+                * ($qs / (1.0 - $eccnts) - $sinphi / $com + .5 /
+                $eccent * log((1.0 - $con) / (1.0 + $con)));
+            $phi    = $phi + $dphi;
+            if (abs($dphi) <= 1e-7) return $phi;
         }
 
         ProjFourphp::reportError("aea:phi1z:Convergence error");

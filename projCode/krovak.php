@@ -11,7 +11,8 @@
 
   lon_0 = longitude of centre of the projection
 
- * * = azimuth (true) of the centre line passing through the centre of the projection
+ * * = azimuth (true) of the centre line passing through the centre of the
+ *  projection
 
  * * = latitude of pseudo standard parallel
 
@@ -47,20 +48,29 @@ class ProjFourphp_ProjKrovak
         }
         $this->sFourtyFive = 0.785398163397448;    /* 45° */
         $this->sNinty = 2 * $this->sFourtyFive;
-        $this->fiZero = $this->latZero;    /* Latitude of projection centre 49° 30' */
+        $this->fiZero = $this->latZero;
+        /* Latitude of projection centre 49° 30' */
         /*  Ellipsoid Bessel 1841 a = 6377397.155m 1/f = 299.1528128,
-          e2=0.006674372230614;
+          eTwo=0.006674372230614;
          */
-        $this->e2 = $this->es;       /* 0.006674372230614; */
-        $this->e = sqrt($this->e2);
-        $this->alfa = sqrt(1. + ($this->e2 * pow(cos($this->fiZero), 4)) / (1. - $this->e2));
+        $this->eTwo = $this->es;       /* 0.006674372230614; */
+        $this->e = sqrt($this->eTwo);
+
+        $sqrt = 1. + ($this->eTwo * pow(cos($this->fiZero), 4))
+            / (1. - $this->eTwo);
+        $this->alfa = sqrt($sqrt);
         $this->uq = 1.04216856380474;      /* DU(2, 59, 42, 42.69689) */
         $this->uZero = asin(sin($this->fiZero) / $this->alfa);
-        $this->g = pow((1. + $this->e * sin($this->fiZero)) / (1. - $this->e * sin($this->fiZero)), $this->alfa * $this->e / 2.);
-        $this->k = tan($this->uZero / 2. + $this->sFourtyFive) / pow(tan($this->fiZero / 2. + $this->sFourtyFive), $this->alfa) * $this->g;
+        $this->g = pow((1. + $this->e * sin($this->fiZero)) /
+            (1. - $this->e * sin($this->fiZero)), $this->alfa * $this->e / 2.);
+        $this->k = tan($this->uZero / 2. + $this->sFourtyFive) /
+            pow(tan($this->fiZero / 2. + $this->sFourtyFive), $this->alfa)
+            * $this->g;
         $this->kOne = $this->kZero;
-        $this->nZero = $this->a * sqrt(1. - $this->e2) / (1. - $this->e2 * pow(sin($this->fiZero), 2));
-        $this->sZero = 1.37008346281555;       /* Latitude of pseudo standard parallel 78° 30'00" N */
+        $this->nZero = $this->a * sqrt(1. - $this->eTwo) /
+            (1. - $this->eTwo * pow(sin($this->fiZero), 2));
+        $this->sZero = 1.37008346281555;       /*
+         * Latitude of pseudo standard parallel 78° 30'00" N */
         $this->n = sin($this->sZero);
         $this->roZero = $this->kOne * $this->nZero / tan($this->sZero);
         $this->ad = $this->sNinty - $this->uq;
@@ -77,18 +87,22 @@ class ProjFourphp_ProjKrovak
     public function forward($p)
     {
 
-        $lon = $p->x;
-        $lat = $p->y;
-        $deltaLon = ProjFourphp_Common::adjustLon($lon - $this->longZero); // Delta longitude
+        $lon      = $p->x;
+        $lat      = $p->y;
+        $deltaLon = ProjFourphp_Common::adjustLon($lon - $this->longZero);
+        // Delta longitude
 
         /* Transformation */
-        $gfi = pow(((1. + $this->e * sin($lat)) / (1. - $this->e * sin($lat))), ($this->alfa * $this->e / 2.));
-        $u = 2. * (atan($this->k * pow(tan($lat / 2. + $this->sFourtyFive), $this->alfa) / $gfi) - $this->sFourtyFive);
+        $pow    = ((1. + $this->e * sin($lat)) / (1. - $this->e * sin($lat)));
+        $gfi    = pow($pow, ($this->alfa * $this->e / 2.));
+        $u      = 2. * (
+            atan($this->k * pow(tan($lat / 2. + $this->sFourtyFive), $this->alfa) / $gfi) - $this->sFourtyFive);
         $deltav = - $deltaLon * $this->alfa;
-        $s = asin(cos($this->ad) * sin($u) + sin($this->ad) * cos($u) * cos($deltav));
-        $d = asin(cos($u) * sin($deltav) / cos($s));
-        $eps = $this->n * $d;
-        $ro = $this->roZero * pow(tan($this->sZero / 2. + $this->sFourtyFive), $this->n) / pow(tan($s / 2. + $this->sFourtyFive), $this->n);
+        $s      = asin(cos($this->ad) * sin($u) + sin($this->ad) * cos($u) * cos($deltav));
+        $d      = asin(cos($u) * sin($deltav) / cos($s));
+        $eps    = $this->n * $d;
+        $ro     = $this->roZero *
+            pow(tan($this->sZero / 2. + $this->sFourtyFive), $this->n) / pow(tan($s / 2. + $this->sFourtyFive), $this->n);
         /* x and y are reverted! */
         //$p->y = ro * cos(eps) / a;
         //$p->x = ro * sin(eps) / a;
@@ -123,25 +137,26 @@ class ProjFourphp_ProjKrovak
             $p->x *= -1.0;
         }
 
-        $ro = sqrt($p->x * $p->x + $p->y * $p->y);
-        $eps = atan2($p->y, $p->x);
-        $d = $eps / sin($this->sZero);
-        $s = 2. * (atan(pow($this->roZero / $ro, 1. / $this->n) * tan($this->sZero / 2. + $this->sFourtyFive)) - $this->sFourtyFive);
-        $u = asin(cos($this->ad) * sin(s) - sin($this->ad) * cos(s) * cos(d));
+        $ro     = sqrt($p->x * $p->x + $p->y * $p->y);
+        $eps    = atan2($p->y, $p->x);
+        $d      = $eps / sin($this->sZero);
+        $s      = 2. *
+            (atan(pow($this->roZero / $ro, 1. / $this->n) * tan($this->sZero / 2. + $this->sFourtyFive))
+            - $this->sFourtyFive);
+        $u      = asin(cos($this->ad) * sin(s) - sin($this->ad) * cos(s) * cos(d));
         $deltav = asin(cos($s) * sin($d) / cos($u));
         $p->x = $this->longZero - $deltav / $this->alfa;
 
         /* ITERATION FOR $lat */
         $fiOne = $u;
-        $ok = 0;
-        $iter = 0;
+        $ok    = 0;
+        $iter  = 0;
         do {
             $p->y = 2. * ( atan(pow($this->k, -1. / $this->alfa) *
-                            pow(tan($u / 2. + $this->sFourtyFive), 1. / $this->alfa) *
-                            pow((1. + $this->e * sin($fiOne)) / (1. - $this->e * sin($fiOne)), $this->e / 2.)
-                    ) - $this->sFourtyFive);
-            if (abs($fiOne - $p->y) < 0.0000000001)
-                $ok = 1;
+                    pow(tan($u / 2. + $this->sFourtyFive), 1 / $this->alfa) *
+                    pow((1. + $this->e * sin($fiOne)) / (1. - $this->e * sin($fiOne)), $this->e / 2.)
+                ) - $this->sFourtyFive);
+            if (abs($fiOne - $p->y) < 0.0000000001) $ok    = 1;
             $fiOne = $p->y;
             $iter += 1;
         } while ($ok == 0 && $iter < 15);

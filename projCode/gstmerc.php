@@ -14,20 +14,23 @@ class ProjFourphp_ProjGstmerc
     {
 
         // array of:  a, b, lonZero, latZero, kZero, xZero, yZero
-        $temp = $this->b / $this->a;
+        $temp   = $this->b / $this->a;
         $this->e = sqrt(1.0 - $temp * $temp);
         $this->lc = $this->longZero;
         $this->rs = sqrt(1.0 + $this->e * $this->e * pow(cos($this->latZero), 4.0) / (1.0 - $this->e * $this->e));
-        $sinz = sin($this->latZero);
-        $pc = asin($sinz / $this->rs);
+        $sinz   = sin($this->latZero);
+        $pc     = asin($sinz / $this->rs);
         $sinzpc = sin($pc);
-        $this->cp = ProjFourphp::$common->latiso(0.0, $pc, $sinzpc) - $this->rs * ProjFourphp::$common->latiso($this->e, $this->latZero, $sinz);
-        $this->nTwo = $this->kZero * $this->a * sqrt(1.0 - $this->e * $this->e) / (1.0 - $this->e * $this->e * $sinz * $sinz);
+        $this->cp = ProjFourphp_Common::latiso(0.0, $pc, $sinzpc) -
+            $this->rs *
+            ProjFourphp_Common::latiso($this->e, $this->latZero, $sinz);
+        $this->nTwo = $this->kZero * $this->a *
+            sqrt(1.0 - $this->e * $this->e) /
+            (1.0 - $this->e * $this->e * $sinz * $sinz);
         $this->xs = $this->xZero;
         $this->ys = $this->yZero - $this->nTwo * $pc;
 
-        if (!$this->title)
-            $this->title = "Gauss Schreiber transverse mercator";
+        if (!$this->title) $this->title = "Gauss Schreiber transverse mercator";
     }
 
     // forward equations--mapping lat,long to x,y
@@ -38,12 +41,12 @@ class ProjFourphp_ProjGstmerc
         $lon = $p->x;
         $lat = $p->y;
 
-        $L = $this->rs * ($lon - $this->lc);
-        $Ls = $this->cp + ($this->rs * ProjFourphp::$common->latiso($this->e, $lat, sin($lat)));
-        $latOne = asin(sin($L) / ProjFourphp::$common . cosh($Ls));
-        $lsOne = ProjFourphp::$common . latiso(0.0, $latOne, sin($latOne));
+        $l      = $this->rs * ($lon - $this->lc);
+        $ls     = $this->cp + ($this->rs * ProjFourphp_Common::latiso($this->e, $lat, sin($lat)));
+        $latOne = asin(sin($l) / ProjFourphp_Common:: cosh($ls));
+        $lsOne  = ProjFourphp_Common::atiso(0.0, $latOne, sin($latOne));
         $p->x = $this->xs + ($this->nTwo * $lsOne);
-        $p->y = $this->ys + ($this->nTwo * atan(ProjFourphp::$common->sinh($Ls) / cos($L)));
+        $p->y = $this->ys + ($this->nTwo * atan(ProjFourphp_Common::sinh($ls) / cos($l)));
         return $p;
     }
 
@@ -55,11 +58,11 @@ class ProjFourphp_ProjGstmerc
         $x = $p->x;
         $y = $p->y;
 
-        $L = atan(ProjFourphp::$common . sinh(($x - $this->xs) / $this->nTwo) / cos(($y - $this->ys) / $this->nTwo));
-        $latOne = asin(sin(($y - $this->ys) / $this->nTwo) / ProjFourphp::$common . cosh(($x - $this->xs) / $this->nTwo));
-        $LC = ProjFourphp::$common . latiso(0.0, $latOne, sin($latOne));
-        $p->x = $this->lc + $L / $this->rs;
-        $p->y = ProjFourphp::$common . invlatiso($this->e, ($LC - $this->cp) / $this->rs);
+        $l      = atan(ProjFourphp_Common::sinh(($x - $this->xs) / $this->nTwo) / cos(($y - $this->ys) / $this->nTwo));
+        $latOne = asin(sin(($y - $this->ys) / $this->nTwo) / ProjFourphp_Common::cosh(($x - $this->xs) / $this->nTwo));
+        $lc     = ProjFourphp_Common::latiso(0.0, $latOne, sin($latOne));
+        $p->x = $this->lc + $l / $this->rs;
+        $p->y = ProjFourphp_Common::invlatiso($this->e, ($lc - $this->cp) / $this->rs);
         return $p;
     }
 

@@ -50,8 +50,8 @@ class ProjFourphp_ProjSinu
             $this->n = 1.;
             $this->m = 0.;
             $this->es = 0;
-            $this->C_y = sqrt(($this->m + 1.) / $this->n);
-            $this->C_x = $this->C_y / ($this->m + 1.);
+            $this->cY = sqrt(($this->m + 1.) / $this->n);
+            $this->cX = $this->cY / ($this->m + 1.);
         }
     }
 
@@ -75,15 +75,14 @@ class ProjFourphp_ProjSinu
             } else {
                 $k = $this->n * sin($lat);
                 for ($i = ProjFourphp_Common::$maxIter; $i; --$i) {
-                    $V = ($this->m * $lat + sin($lat) - $k) /
+                    $v = ($this->m * $lat + sin($lat) - $k) /
                         ($this->m + cos($lat));
-                    $lat -= $V;
-                    if (abs($V) < ProjFourphp_Common::$epsln)
-                        break;
+                    $lat -= $v;
+                    if (abs($v) < ProjFourphp_Common::$epsln) break;
                 }
             }
-            $x = $this->a * $this->C_x * $lon * ($this->m + cos($lat));
-            $y = $this->a * $this->C_y * $lat;
+            $x = $this->a * $this->cX * $lon * ($this->m + cos($lat));
+            $y = $this->a * $this->cY * $lat;
         } else {
 
             $s = sin($lat);
@@ -117,9 +116,13 @@ class ProjFourphp_ProjSinu
 
         if (isset($this->sphere)) {
 
-            $p->y /= $this->C_y;
-            $lat = $this->m ? asin(($this->m * $p->y + sin($p->y)) / $this->n) : ( $this->n != 1. ? asin(sin($p->y) / $this->n) : $p->y );
-            $lon = $p->x / ($this->C_x * ($this->m + cos($p->y)));
+            $p->y /= $this->cY;
+            if ($this->m) {
+                $lat = asin(($this->m * $p->y + sin($p->y)) / $this->n);
+            } else {
+                $lat = $p->y;
+            }
+            $lon = $p->x / ($this->cX * ($this->m + cos($p->y)));
         } else {
             $lat = ProjFourphp::$common->pjInvMlfn($p->y / $this->a, $this->es, $this->en);
             $s   = abs($lat);

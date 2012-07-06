@@ -7,7 +7,7 @@
  *                      and Richard Greenwood rich@greenwoodma$p->com 
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
-/* * ***************************************************************************
+/* * **************************************************************************
   NAME                             GNOMONIC
 
   PURPOSE:	Transforms input longitude and latitude to Easting and
@@ -27,7 +27,7 @@
   2.  Wolfram Mathworld "Gnomonic Projection"
   http://mathworld.wolfram.com/GnomonicProjection.html
   Accessed: 12th November 2009
- * **************************************************************************** */
+ * ************************************************************************* */
 
 class ProjFourphp_ProjGnom
 {
@@ -47,7 +47,7 @@ class ProjFourphp_ProjGnom
         $this->cosPOneFour = cos($this->latZero);
 
         // Approximation for projecting points to the horizon (infinity)
-        $this->infinity_dist = 1000 * $this->a;
+        $this->infinityDist = 1000 * $this->a;
         $this->rc = 1;
     }
 
@@ -66,22 +66,25 @@ class ProjFourphp_ProjGnom
           $g;
          */
 
-        $lon = $p->x;
-        $lat = $p->y;
+        $lon  = $p->x;
+        $lat  = $p->y;
         /* Forward equations
           ----------------- */
-        $dlon =  ProjFourphp_Common::adjustLon($lon - $this->longZero);
+        $dlon = ProjFourphp_Common::adjustLon($lon - $this->longZero);
 
         $sinphi = sin($lat);
         $cosphi = cos($lat);
 
         $coslon = cos($dlon);
-        $g = $this->sinPOneFour * $sinphi + $this->cosPOneFour * $cosphi * $coslon;
-        $ksp = 1.0;
+        $g      = $this->sinPOneFour * $sinphi +
+            $this->cosPOneFour * $cosphi * $coslon;
+        $ksp    = 1.0;
 
         if ((g > 0) || (abs(g) <= ProjFourphp_Common::$epsln)) {
             $x = $this->xZero + $this->a * $ksp * $cosphi * sin($dlon) / $g;
-            $y = $this->yZero + $this->a * $ksp * ($this->cosPOneFour * $sinphi - $this->sinPOneFour * $cosphi * $coslon) / $g;
+            $y = $this->yZero + $this->a *
+                $ksp * ($this->cosPOneFour * $sinphi -
+                $this->sinPOneFour * $cosphi * $coslon) / $g;
         } else {
             ProjFourphp::reportError("orthoFwdPointError");
 
@@ -92,8 +95,10 @@ class ProjFourphp_ProjGnom
             // This is a reasonable approximation for short shapes and lines that 
             // straddle the horizon.
 
-            $x = $this->xZero + $this->infinity_dist * $cosphi * sin($dlon);
-            $y = $this->yZero + $this->infinity_dist * ($this->cosPOneFour * $sinphi - $this->sinPOneFour * $cosphi * $coslon);
+            $x = $this->xZero + $this->infinityDist * $cosphi * sin($dlon);
+            $y = $this->yZero + $this->infinityDist *
+                ($this->cosPOneFour * $sinphi -
+                $this->sinPOneFour * $cosphi * $coslon);
         }
 
         $p->x = $x;
@@ -129,13 +134,13 @@ class ProjFourphp_ProjGnom
         $p->y /= $this->kZero;
 
         if (($rh = sqrt($p->x * $p->x + $p->y * $p->y))) {
-            $c = atan2($rh, $this->rc);
+            $c    = atan2($rh, $this->rc);
             $sinc = sin($c);
             $cosc = cos($c);
 
             $lat = ProjFourphp_Common::asinz($cosc * $this->sinPOneFour + ($p->y * $sinc * $this->cosPOneFour) / $rh);
             $lon = atan2($p->x * sinc, rh * $this->cosPOneFour * $cosc - $p->y * $this->sinPOneFour * $sinc);
-            $lon =  ProjFourphp_Common::adjustLon($this->longZero + $lon);
+            $lon = ProjFourphp_Common::adjustLon($this->longZero + $lon);
         } else {
             $lat = $this->phicZero;
             $lon = 0.0;

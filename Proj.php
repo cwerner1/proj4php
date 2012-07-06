@@ -24,7 +24,8 @@ class ProjFourphp_Proj
 
     /**
      * Property: projName
-     * The projection class for $this projection, e.g. lcc (lambert conformal conic,
+     * The projection class for $this projection, e.g. lcc (lambert conformal 
+     * conic,
      * or merc for mercator).  These are exactly equivalent to their ProjFour 
      * counterparts.
      */
@@ -45,13 +46,13 @@ class ProjFourphp_Proj
      * Property: datum
      * The datum specified for the projection
      */
-    public $datum = null;
+    public $datum        = null;
 
     /**
      * Property: xZero
      * The x coordinate origin
      */
-    public $xZero = 0;
+    public $xZero        = 0;
 
     /**
      * Property: yZero
@@ -65,7 +66,6 @@ class ProjFourphp_Proj
      * are required.
      */
     public $localCS = false;
-
     /**
      *
      * @var type 
@@ -77,7 +77,8 @@ class ProjFourphp_Proj
      * Constructor for ProjFourphp::Proj objects
      *
      * Parameters:
-     * $srsCode - a code for map projection definition parameters.  These are usually
+     * $srsCode - a code for map projection definition parameters.  
+     * These are usually
      * (but not always) EPSG codes.
      */
     public function __construct($srsCode)
@@ -87,9 +88,9 @@ class ProjFourphp_Proj
 
         //check to see if $this is a WKT string
         if ((strpos($srsCode, 'GEOGCS') !== false) ||
-                (strpos($srsCode, 'GEOCCS') !== false) ||
-                (strpos($srsCode, 'PROJCS') !== false) ||
-                (strpos($srsCode, 'LOCAL_CS') !== false)) {
+            (strpos($srsCode, 'GEOCCS') !== false) ||
+            (strpos($srsCode, 'PROJCS') !== false) ||
+            (strpos($srsCode, 'LOCAL_CS') !== false)) {
             $this->parseWKT($srsCode);
             $this->deriveConstants();
             $this->loadProjCode($this->projName);
@@ -101,8 +102,8 @@ class ProjFourphp_Proj
             //urn:ORIGINATOR:def:crs:CODESPACE:VERSION:ID
             $urn = explode(':', $srsCode);
             if (($urn[1] == 'ogc' || $urn[1] == 'x-ogc') &&
-                    ($urn[2] == 'def') &&
-                    ($urn[3] == 'crs')) {
+                ($urn[2] == 'def') &&
+                ($urn[3] == 'crs')) {
                 $srsCode = $urn[4] . ':' . $urn[strlen($urn) - 1];
             }
         } else if (strpos($srsCode, 'http://') === 0) {
@@ -142,7 +143,8 @@ class ProjFourphp_Proj
     /**
      * Function: loadProjDefinition
      *    Loads the coordinate system initialization string if required.
-     *    Note that dynamic loading happens asynchronously so an application must 
+     *    Note that dynamic loading happens asynchronously so an application
+     *  must 
      *    wait for the readyToUse property is set to true.
      *    To prevent dynamic loading, include the defs through a script tag in
      *    your application.
@@ -157,7 +159,8 @@ class ProjFourphp_Proj
             return;
         }
         //else check for def on the server
-        $filename = dirname(__FILE__) . '/defs/' . strtoupper($this->srsAuth) . $this->srsProjNumber . '.php';
+        $filename = dirname(__FILE__) . '/defs/' . strtoupper($this->srsAuth) .
+            $this->srsProjNumber . '.php';
 
         try
         {
@@ -181,7 +184,8 @@ class ProjFourphp_Proj
     {
 
         //else load from web service
-        $url = ProjFourphp::$defsLookupService . '/' . $this->srsAuth . '/' . $this->srsProjNumber . '/projFour/';
+        $url = ProjFourphp::$defsLookupService . '/' . $this->srsAuth . '/' .
+            $this->srsProjNumber . '/projFour/';
         try
         {
             ProjFourphp::$defs[strtoupper($this->srsAuth) . ":" . $this->srsProjNumber] = ProjFourphp::loadScript($url);
@@ -221,7 +225,8 @@ class ProjFourphp_Proj
     public function defsFailed()
     {
         ProjFourphp::reportError('failed to load projection definition for: ' . $this->srsCode);
-        ProjFourphp::$defs[$this->srsCode] = ProjFourphp::$defs['WGS84'];  //set it to something so it can at least continue
+        ProjFourphp::$defs[$this->srsCode] = ProjFourphp::$defs['WGS84'];
+        //set it to something so it can at least continue
         $this->defsLoaded();
     }
 
@@ -306,8 +311,8 @@ class ProjFourphp_Proj
         // initiate depending class
         if (false !== ($dependsOn = isset($this->projection->_dependsOn) && !empty($this->projection->_dependsOn) ? $this->projection->_dependsOn : false)) {
             ProjFourphp::extend(ProjFourphp::$proj[$dependsOn], $this->projection) &&
-                    ProjFourphp::$proj[$dependsOn]->init() &&
-                    ProjFourphp::extend($this->projection, ProjFourphp::$proj[$dependsOn]);
+                ProjFourphp::$proj[$dependsOn]->init() &&
+                ProjFourphp::extend($this->projection, ProjFourphp::$proj[$dependsOn]);
         }
 
         $this->readyToUse = true;
@@ -349,14 +354,18 @@ class ProjFourphp_Proj
     public function parseWKT($wkt)
     {
 
-        if (false === ($match = preg_match($this->_wktRE, $wkt, $wktMatch)))
+        if (false === ($match = preg_match($this->_wktRE, $wkt, $wktMatch))) {
             return;
+        }
 
-        $wktObject = $wktMatch[1];
+        $wktObject  = $wktMatch[1];
         $wktContent = $wktMatch[2];
-        $wktTemp = explode(",", $wktContent);
-
-        $wktName = (strtoupper($wktObject) == "TOWGS84") ? "TOWGS84" : array_shift($wktTemp);
+        $wktTemp    = explode(",", $wktContent);
+        if (strtoupper($wktObject) == "TOWGS84") {
+            $wktName = "TOWGS84";
+        } else {
+            $wktName = array_shift($wktTemp);
+        }
         $wktName = preg_replace('/^\"/', "", $wktName);
         $wktName = preg_replace('/\"$/', "", $wktName);
 
@@ -370,7 +379,7 @@ class ProjFourphp_Proj
 
         $wktArray = array();
         $bkCount = 0;
-        $obj = "";
+        $obj     = "";
 
         foreach ($wktTemp as $token) {
 
@@ -397,8 +406,7 @@ class ProjFourphp_Proj
             case 'GEOGCS':
                 $this->projName = 'longlat';
                 $this->geocsCode = $wktName;
-                if (!$this->srsCode)
-                    $this->srsCode = $wktName;
+                if (!$this->srsCode) $this->srsCode = $wktName;
                 break;
             case 'PROJCS':
                 $$this->srsCode = $wktName;
@@ -420,16 +428,18 @@ class ProjFourphp_Proj
                 $this->rf = floatval(array_shift($wktArray));
                 break;
             case 'PRIMEM':
-                $this->fromGreenwich = floatval(array_shift($wktArray)); //to radians?
+                $this->fromGreenwich = floatval(array_shift($wktArray));
+                //to radians?
                 break;
             case 'UNIT':
                 $this->units = $wktName;
                 $this->unitsPerMeter = floatval(array_shift($wktArray));
                 break;
             case 'PARAMETER':
-                $name = strtolower($wktName);
+                $name  = strtolower($wktName);
                 $value = floatval(array_shift($wktArray));
-                //there may be many variations on the wktName values, add in case
+                //there may be many variations on the wktName values, 
+                //add in case
                 //statements as required
                 switch ($name) {
                     case 'false_easting':
@@ -454,11 +464,11 @@ class ProjFourphp_Proj
                 }
                 break;
             case 'TOWGS84':
-                $this->datum_params = $wktArray;
+                $this->datumParams = $wktArray;
                 break;
             //DGR 2010-11-12: AXIS
             case 'AXIS':
-                $name = strtolower($wktName);
+                $name  = strtolower($wktName);
                 $value = array_shift($wktArray);
                 switch ($value) {
                     case 'EAST' : $value = 'e';
@@ -501,7 +511,8 @@ class ProjFourphp_Proj
 
     /**
      * Function: parseDefs
-     * Parses the PROJ.4 initialization string and sets the associated properties.
+     * Parses the PROJ.4 initialization string and sets the associated 
+     * properties.
      *
      */
     public function parseDefs()
@@ -514,83 +525,108 @@ class ProjFourphp_Proj
             return;
         }
         $paramArray = explode("+", $this->defData);
-        for ($prop = 0; $prop < sizeof($paramArray); $prop++) {
-            if (strlen($paramArray[$prop]) == 0)
-                continue;
-            $property = explode("=", $paramArray[$prop]);
+        for ($prop       = 0; $prop < sizeof($paramArray); $prop++) {
+            if (strlen($paramArray[$prop]) == 0) continue;
+            $property  = explode("=", $paramArray[$prop]);
             $paramName = strtolower($property[0]);
             if (sizeof($property) >= 2) {
                 $paramVal = $property[1];
             }
 
             switch (trim($paramName)) {  // trim out spaces
-                case "": break;   // throw away nameless parameter
-                case "title": $this->title = $paramVal;
+                case "":
+                    break;   // throw away nameless parameter
+                case "title":
+                    $this->title = $paramVal;
                     break;
-                case "proj": $this->projName = trim($paramVal);
+                case "proj":
+                    $this->projName = trim($paramVal);
                     break;
-                case "units": $this->units = trim($paramVal);
+                case "units":
+                    $this->units = trim($paramVal);
                     break;
-                case "datum": $this->datumCode = trim($paramVal);
+                case "datum":
+                    $this->datumCode = trim($paramVal);
                     break;
                 case "nadgrids": $this->nagrids = trim($paramVal);
                     break;
-                case "ellps": $this->ellps = trim($paramVal);
+                case "ellps":
+                    $this->ellps = trim($paramVal);
                     break;
-                case "a": $this->a = floatval($paramVal);
+                case "a":
+                    $this->a = floatval($paramVal);
                     break;  // semi-major radius
-                case "b": $this->b = floatval($paramVal);
+                case "b":
+                    $this->b = floatval($paramVal);
                     break;  // semi-minor radius
                 // DGR 2007-11-20
-                case "rf": $this->rf = floatval(paramVal);
+                case "rf":
+                    $this->rf = floatval(paramVal);
                     break; // inverse flattening rf= a/(a-b)
-                case "lat_0": $this->latZero = $paramVal * ProjFourphp_Common::$dToR;
+                case "lat_0":
+                    $this->latZero = $paramVal * ProjFourphp_Common::$dToR;
                     break;        // phiZero, central latitude
-                case "lat_1": $this->latOne = $paramVal * ProjFourphp_Common::$dToR;
+                case "lat_1":
+                    $this->latOne = $paramVal * ProjFourphp_Common::$dToR;
                     break;        //standard parallel 1
-                case "lat_2": $this->latTwo = $paramVal * ProjFourphp_Common::$dToR;
+                case "lat_2":
+                    $this->latTwo = $paramVal * ProjFourphp_Common::$dToR;
                     break;        //standard parallel 2
-                case "latTs": $this->latTs = $paramVal * ProjFourphp_Common::$dToR;
+                case "latTs":
+                    $this->latTs = $paramVal * ProjFourphp_Common::$dToR;
                     break;      // used in merc and eqc
-                case "lon_0": $this->longZero = $paramVal * ProjFourphp_Common::$dToR;
+                case "lon_0":
+                    $this->longZero = $paramVal * ProjFourphp_Common::$dToR;
                     break;       // lamZero, central longitude
-                case "alpha": $this->alpha = floatval($paramVal) * ProjFourphp_Common::$dToR;
+                case "alpha":
+                    $this->alpha = floatval($paramVal) * ProjFourphp_Common::$dToR;
                     break;  //for somerc projection
-                case "lonc": $this->longc = paramVal * ProjFourphp_Common::$dToR;
+                case "lonc":
+                    $this->longc = paramVal * ProjFourphp_Common::$dToR;
                     break;       //for somerc projection
-                case "x_0": $this->xZero = floatval($paramVal);
+                case "x_0":
+                    $this->xZero = floatval($paramVal);
                     break;  // false easting
-                case "y_0": $this->yZero = floatval($paramVal);
+                case "y_0":
+                    $this->yZero = floatval($paramVal);
                     break;  // false northing
-                case "k_0": $this->kZero = floatval($paramVal);
+                case "k_0":
+                    $this->kZero = floatval($paramVal);
                     break;  // projection scale factor
-                case "k": $this->kZero = floatval($paramVal);
+                case "k":
+                    $this->kZero = floatval($paramVal);
                     break;  // both forms returned
-                case "r_a": $this->R_A = true;
+                case "r_a":
+                    $this->rA = true;
                     break;                 // sphere--area of ellipsoid
-                case "zone": $this->zone = intval($paramVal, 10);
+                case "zone":
+                    $this->zone = intval($paramVal, 10);
                     break;  // UTM Zone
-                case "south": $this->utmSouth = true;
+                case "south":
+                    $this->utmSouth = true;
                     break;  // UTM north/south
-                case "towgs84": $this->datum_params = explode(",", $paramVal);
+                case "towgs84":
+                    $this->datumParams = explode(",", $paramVal);
                     break;
-                case "toMeter": $this->toMeter = floatval($paramVal);
+                case "toMeter":
+                    $this->toMeter = floatval($paramVal);
                     break; // cartesian scaling
-                case "fromGreenwich": $this->fromGreenwich = $paramVal * ProjFourphp_Common::$dToR;
+                case "fromGreenwich":
+                    $this->fromGreenwich = $paramVal * ProjFourphp_Common::$dToR;
                     break;
                 // DGR 2008-07-09 : if pm is not a well-known prime meridian take
                 // the value instead of 0.0, then convert to radians
-                case "pm": $paramVal = trim($paramVal);
+                case "pm": $paramVal  = trim($paramVal);
                     $this->fromGreenwich = ProjFourphp::$primeMeridian[$paramVal] ? ProjFourphp::$primeMeridian[$paramVal] : floatval($paramVal);
                     $this->fromGreenwich *= ProjFourphp_Common::$dToR;
                     break;
                 // DGR 2010-11-12: axis
-                case "axis": $paramVal = trim($paramVal);
+                case "axis": $paramVal  = trim($paramVal);
                     $legalAxis = "ewnsud";
                     if (strlen(paramVal) == 3 &&
-                            strpos($legalAxis, substr($paramVal, 0, 1)) !== false &&
-                            strpos($legalAxis, substr($paramVal, 1, 1)) !== false &&
-                            strpos($legalAxis, substr($paramVal, 2, 1)) !== false) {
+                        strpos($legalAxis, substr($paramVal, 0, 1)) !== false &&
+                        strpos($legalAxis, substr($paramVal, 1, 1)) !== false &&
+                        strpos($legalAxis, substr($paramVal, 2, 1)) !== false) {
                         $this->axis = $paramVal;
                     } //FIXME: be silent ?
                     break;
@@ -603,28 +639,29 @@ class ProjFourphp_Proj
 
     /**
      * Function: deriveConstants
-     * Sets several derived constant values and initialization of datum and ellipse parameters.
+     * Sets several derived constant values and initialization of datum and 
+     * ellipse parameters.
      *
      */
     public function deriveConstants()
     {
 
-        if (isset($this->nagrids) && $this->nagrids == '@null')
+        if (isset($this->nagrids) && $this->nagrids == '@null') {
             $this->datumCode = 'none';
+        }
 
         if (isset($this->datumCode) && $this->datumCode != 'none') {
 
             $datumDef = ProjFourphp::$datum[$this->datumCode];
 
             if (is_array($datumDef)) {
-                $this->datum_params = array_key_exists('towgs84', $datumDef) ? explode(',', $datumDef['towgs84']) : null;
+                $this->datumParams = array_key_exists('towgs84', $datumDef) ? explode(',', $datumDef['towgs84']) : null;
                 $this->ellps = $datumDef['ellipse'];
                 $this->datumName = array_key_exists('datumName', $datumDef) ? $datumDef['datumName'] : $this->datumCode;
             }
         }
         if (!isset($this->a)) {    // do we have an ellipsoid?
-            if (!isset($this->ellps) || strlen($this->ellps) == 0 || !array_key_exists($this->ellps, ProjFourphp::$ellipsoid))
-                $ellipse = ProjFourphp::$ellipsoid['WGS84'];
+            if (!isset($this->ellps) || strlen($this->ellps) == 0 || !array_key_exists($this->ellps, ProjFourphp::$ellipsoid)) $ellipse = ProjFourphp::$ellipsoid['WGS84'];
             else {
                 $ellipse = ProjFourphp::$ellipsoid[$this->ellps];
             }
@@ -632,9 +669,9 @@ class ProjFourphp_Proj
             ProjFourphp::extend($this, $ellipse);
         }
 
-        if (isset($this->rf) && !isset($this->b))
+        if (isset($this->rf) && !isset($this->b)) {
             $this->b = (1.0 - 1.0 / $this->rf) * $this->a;
-
+        }
         if ((isset($this->rf) && $this->rf === 0) || abs($this->a - $this->b) < ProjFourphp_Common::$epsln) {
             $this->sphere = true;
             $this->b = $this->a;
@@ -643,15 +680,26 @@ class ProjFourphp_Proj
         $this->b2 = $this->b * $this->b;          // used in geocentric
         $this->es = ($this->aTwo - $this->b2) / $this->aTwo;  // e ^ 2
         $this->e = sqrt($this->es);        // eccentricity
-        if (isset($this->R_A)) {
-            $this->a *= 1. - $this->es * ( ProjFourphp_Common::$sixth + $this->es * ( ProjFourphp_Common::$ra4 + $this->es * ProjFourphp_Common::$ra6));
+        if (isset($this->rA)) {
+            $this->a *= 1. - $this->es *
+                ( ProjFourphp_Common::$sixth + $this->es *
+                ( ProjFourphp_Common::$raFour +
+                $this->es * ProjFourphp_Common::$raSix));
             $this->aTwo = $this->a * $this->a;
             $this->b2 = $this->b * $this->b;
             $this->es = 0.0;
         }
-        $this->epTwo = ($this->aTwo - $this->b2) / $this->b2; // used in geocentric
-        if (!isset($this->kZero))
-            $this->kZero = 1.0;    //default value
+        $this->epTwo = ($this->aTwo - $this->b2) / $this->b2;
+        //// used in geocentric
+        if (!isset($this->kZero)) $this->kZero = 1.0;    //default value
+
+
+
+
+
+
+
+
 
 
             

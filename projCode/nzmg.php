@@ -8,7 +8,7 @@
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
 /*
- * *****************************************************************************
+ * ***************************************************************************
   NAME                            NEW ZEALAND MAP GRID
 
   PURPOSE:	Transforms input longitude and latitude to Easting and
@@ -29,7 +29,8 @@
   IMPLEMENTATION NOTES
 
   The two references use different symbols for the calculated values. This
-  implementation uses the variable names similar to the symbols in reference [1].
+  implementation uses the variable names similar to the symbols in reference
+ *  [1].
 
   The alogrithm uses different units for delta latitude and delta longitude.
   The delta latitude is assumed to be in units of seconds of arc x 10^-5.
@@ -59,17 +60,21 @@
   addition:       (a + bi) + (c + di) = (a + c) + (b + d)i
   subtraction:    (a + bi) - (c + di) = (a - c) + (b - d)i
   multiplication: (a + bi) x (c + di) = (ac - bd) + (bc + ad)i
-  division:       (a + bi) / (c + di) = [(ac + bd)/(cc + dd)] + [(bc - ad)/(cc + dd)]i
+  division:       (a + bi) / (c + di) = [(ac + bd)/(cc + dd)] +
+ *  [(bc - ad)/(cc + dd)]i
 
-  The algorithm needs to calculate summations of simple and complex numbers. This is
+  The algorithm needs to calculate summations of simple and complex
+ *  numbers. This is
   implemented using a for-loop, pre-loading the summed value to zero.
 
-  The algorithm needs to calculate theta^2, theta^3, etc while doing a summation.
+  The algorithm needs to calculate theta^2, theta^3, etc while doing a
+ *  summation.
   There are three possible implementations:
   - use pow in the summation loop - except for complex numbers
   - precalculate the values before running the loop
   - calculate theta^n = theta^(n-1) * theta during the loop
-  This implementation uses the third option for both real and complex arithmetic.
+  This implementation uses the third option for both real and complex 
+ * arithmetic.
 
   For example
   psi_n = 1;
@@ -93,12 +98,14 @@
   NZGD49 long, lat:      169.172062       -46.651295  degrees
 
   Note that these test vectors convert from NZMG metres to lat/long referenced
-  to NZGD49, not the more usual WGS84. The difference is about 70m N/S and about
+  to NZGD49, not the more usual WGS84. The difference is about 70m N/S 
+ * and about
   10m E/W.
 
   These test vectors are provided in reference [1]. Many more test
   vectors are available in
-  http://www.linz.govt.nz/docs/topography/topographicdata/placenamesdatabase/nznamesmar08.zip
+  http://www.linz.govt.nz/docs/topography/topographicdata/
+ * placenamesdatabase/nznamesmar08.zip
   which is a catalog of names on the 260-series maps.
 
 
@@ -114,9 +121,10 @@
 
   LICENSE
   Copyright: Stephen Irons 2008
-  Released under terms of the LGPL as per: http://www.gnu.org/copyleft/lesser.html
+  Released under terms of the LGPL as per:
+ *  http://www.gnu.org/copyleft/lesser.html
 
- * ***************************************************************************** */
+ * ************************************************************************ */
 
 /**
   Initialize New Zealand Map Grip projection
@@ -137,22 +145,22 @@ class ProjFourphp_ProjNzmg
      */
     public function init()
     {
-        $this->A = array();
-        $this->A[1] = +0.6399175073;
-        $this->A[2] = -0.1358797613;
-        $this->A[3] = +0.063294409;
-        $this->A[4] = -0.02526853;
-        $this->A[5] = +0.0117879;
-        $this->A[6] = -0.0055161;
-        $this->A[7] = +0.0026906;
-        $this->A[8] = -0.001333;
-        $this->A[9] = +0.00067;
-        $this->A[10] = -0.00034;
+        $this->a = array();
+        $this->a[1] = +0.6399175073;
+        $this->a[2] = -0.1358797613;
+        $this->a[3] = +0.063294409;
+        $this->a[4] = -0.02526853;
+        $this->a[5] = +0.0117879;
+        $this->a[6] = -0.0055161;
+        $this->a[7] = +0.0026906;
+        $this->a[8] = -0.001333;
+        $this->a[9] = +0.00067;
+        $this->a[10] = -0.00034;
 
         $this->bRe = array();
         $this->bIm = array();
         $this->bRe[1] = +0.7557853228;
-        $this->bIm[1] = 0.0;
+        $this->bIm[1] = 0.0;                       
         $this->bRe[2] = +0.249204646;
         $this->bIm[2] = +0.003371507;
         $this->bRe[3] = -0.001541739;
@@ -179,16 +187,16 @@ class ProjFourphp_ProjNzmg
         $this->cRe[6] = +1.9660549;
         $this->cIm[6] = +2.5127645;
 
-        $this->D = array();
-        $this->D[1] = +1.5627014243;
-        $this->D[2] = +0.5185406398;
-        $this->D[3] = -0.03333098;
-        $this->D[4] = -0.1052906;
-        $this->D[5] = -0.0368594;
-        $this->D[6] = +0.007317;
-        $this->D[7] = +0.01220;
-        $this->D[8] = +0.00394;
-        $this->D[9] = -0.0013;
+        $this->d = array();
+        $this->d[1] = +1.5627014243;
+        $this->d[2] = +0.5185406398;
+        $this->d[3] = -0.03333098;
+        $this->d[4] = -0.1052906;
+        $this->d[5] = -0.0368594;
+        $this->d[6] = +0.007317;
+        $this->d[7] = +0.01220;
+        $this->d[8] = +0.00394;
+        $this->d[9] = -0.0013;
     }
 
     /**
@@ -204,8 +212,9 @@ class ProjFourphp_ProjNzmg
         $deltaLat = $lat - $this->latZero;
         $deltaLon = $lon - $this->longZero;
 
-        // 1. Calculate d_phi and d_psi    ...                          // and d_lambda
-        // For this algorithm, delta_latitude is in seconds of arc x 10-5, so we need to scale to those units. Longitude is radians.
+        // 1. Calculate d_phi and d_psi    ...   // and d_lambda
+        // For this algorithm, delta_latitude is in seconds of arc x 10-5,
+        //  so we need to scale to those units. Longitude is radians.
         $dPhi = $deltaLat / ProjFourphp::$common->secToRad * 1E-5;
         $dLambda = $deltaLon;
         $dPhiN = 1;  // d_phi^0
@@ -213,7 +222,7 @@ class ProjFourphp_ProjNzmg
         $dPsi = 0;
         for ($n = 1; $n <= 10; $n++) {
             $dPhiN = $dPhiN * $dPhi;
-            $dPsi = $dPsi + $this->A[$n] * $dPhiN;
+            $dPsi = $dPsi + $this->a[$n] * $dPhiN;
         }
 
         // 2. Calculate theta
@@ -264,22 +273,23 @@ class ProjFourphp_ProjNzmg
         $zNRe = 1;
         $zNIm = 0;  // z^0
         $zNReOne;
-        $zNIm1;
+        $zNImOne;
 
         $thRe = 0;
         $thIm = 0;
         for ($n = 1; $n <= 6; $n++) {
             $zNReOne = $zNRe * $zRe - $zNIm * $zIm;
-            $zNIm1 = $zNIm * $zRe + $zNRe * $zIm;
+            $zNImOne = $zNIm * $zRe + $zNRe * $zIm;
             $zNRe = $zNReOne;
-            $zNIm = $zNIm1;
+            $zNIm = $zNImOne;
             $thRe = $thRe + $this->cRe[$n] * $zNRe - $this->cIm[$n] * $zNIm;
             $thIm = $thIm + $this->cIm[$n] * $zNRe + $this->cRe[$n] * $zNIm;
         }
 
         // 2b. Iterate to refine the accuracy of the calculation
         //        0 iterations gives km accuracy
-        //        1 iteration gives m accuracy -- good enough for most mapping applications
+        //        1 iteration gives m accuracy -- good enough for most
+        //         mapping applications
         //        2 iterations bives mm accuracy
         for ($i = 0; $i < $this->iterations; $i++) {
             $thNRe = $thRe;
@@ -294,8 +304,10 @@ class ProjFourphp_ProjNzmg
                 $thNImOne = $thNIm * $thRe + $thNRe * $thIm;
                 $thNRe = $thNReOne;
                 $thNIm = $thNImOne;
-                $numRe = $numRe + ($n - 1) * ($this->bRe[$n] * $thNRe - $this->bIm[$n] * $thNIm);
-                $numIm = $numIm + (n - 1) * ($this->bIm[$n] * $thNRe + $this->bRe[$n] * $thNIm);
+                $numRe = $numRe + ($n - 1) *
+                ($this->bRe[$n] * $thNRe - $this->bIm[$n] * $thNIm);
+                $numIm = $numIm + (n - 1) * 
+                ($this->bIm[$n] * $thNRe + $this->bRe[$n] * $thNIm);
             }
 
             $thNRe = 1;
@@ -307,8 +319,10 @@ class ProjFourphp_ProjNzmg
                 $thNImOne = $thNIm * $thRe + $thNRe * $thIm;
                 $thNRe = $thNReOne;
                 $thNIm = $thNImOne;
-                $denRe = $denRe + $n * ($this->bRe[$n] * $thNRe - $this->bIm[$n] * $thNIm);
-                $denIm = $denIm + $n * ($this->bIm[n] * $thNRe + $this->bRe[$n] * $thNIm);
+                $denRe = $denRe + $n * ($this->bRe[$n] * $thNRe - 
+                    $this->bIm[$n] * $thNIm);
+                $denIm = $denIm + $n * ($this->bIm[n] * $thNRe +
+                    $this->bRe[$n] * $thNIm);
             }
 
             // Complex division
@@ -325,11 +339,12 @@ class ProjFourphp_ProjNzmg
         $dPhi = 0;
         for ($n = 1; $n <= 9; $n++) {
             $dPsiN = $dPsiN * $dPsi;
-            $dPhi = $dPhi + $this->D[$n] * $dPsiN;
+            $dPhi = $dPhi + $this->d[$n] * $dPsiN;
         }
 
         // 4. Calculate latitude and longitude
-        // d_phi is calcuated in second of arc * 10^-5, so we need to scale back to radians. d_lambda is in radians.
+        // d_phi is calcuated in second of arc * 10^-5, so we 
+        // need to scale back to radians. d_lambda is in radians.
         $lat = $this->latZero + ($dPhi * ProjFourphp::$common->secToRad * 1E5);
         $lon = $this->longZero + $dLambda;
 

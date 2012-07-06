@@ -20,10 +20,10 @@ class ProjFourphp_ProjGauss
         $cphi = cos($this->latZero);
         $cphi *= $cphi;
         $this->rc = sqrt(1.0 - $this->es) / (1.0 - $this->es * $sphi * $sphi);
-        $this->C = sqrt(1.0 + $this->es * $cphi * $cphi / (1.0 - $this->es));
-        $this->phicZero = asin($sphi / $this->C);
-        $this->ratexp = 0.5 * $this->C * $this->e;
-        $this->K = tan(0.5 * $this->phicZero + ProjFourphp::$common->fortPi) / (pow(tan(0.5 * $this->latZero + ProjFourphp::$common->fortPi), $this->C) * ProjFourphp::$common->srat($this->e * $sphi, $this->ratexp));
+        $this->c = sqrt(1.0 + $this->es * $cphi * $cphi / (1.0 - $this->es));
+        $this->phicZero = asin($sphi / $this->c);
+        $this->ratexp = 0.5 * $this->c * $this->e;
+        $this->k = tan(0.5 * $this->phicZero + ProjFourphp_Common::$fortPi) / (pow(tan(0.5 * $this->latZero + ProjFourphp::$common->fortPi), $this->c) * ProjFourphp::$common->srat($this->e * $sphi, $this->ratexp));
     }
 
     /**
@@ -36,8 +36,9 @@ class ProjFourphp_ProjGauss
         $lon = $p->x;
         $lat = $p->y;
 
-        $p->y = 2.0 * atan($this->K * pow(tan(0.5 * $lat + ProjFourphp::$common->fortPi), $this->C) * ProjFourphp::$common->srat($this->e * sin($lat), $this->ratexp)) - ProjFourphp_Common::$halfPi;
-        $p->x = $this->C * $lon;
+        $p->y = 2.0 *
+            atan($this->k * pow(tan(0.5 * $lat + ProjFourphp_Common::$fortPi), $this->c * ProjFourphp_Common::srat($this->e * sin($lat), $this->ratexp)) - ProjFourphp_Common::$halfPi);
+        $p->x = $this->c * $lon;
 
         return $p;
     }
@@ -50,15 +51,15 @@ class ProjFourphp_ProjGauss
     public function inverse($p)
     {
 
-        $DEL_TOL = 1e-14;
-        $lon = $p->x / $this->C;
-        $lat = $p->y;
-        $num = pow(tan(0.5 * $lat + ProjFourphp::$common . FORTPI) / $this->K, 1. / $this->C);
+        $delTol = 1e-14;
+        $lon    = $p->x / $this->c;
+        $lat    = $p->y;
+        $num    = pow(tan(0.5 * $lat + ProjFourphp_Common::$fortPi) / $this->k, 1. / $this->c);
 
-        for ($i = ProjFourphp::$common . MAX_ITER; $i > 0; --$i) {
-            $lat = 2.0 * atan($num * ProjFourphp::$common->srat($this->e * sin($p->y), -0.5 * $this->e)) - ProjFourphp_Common::$halfPi;
-            if (abs($lat - $p->y) < $DEL_TOL)
-                break;
+        for ($i = ProjFourphp_Common::$maxIter; $i > 0; --$i) {
+            $lat = 2.0 *
+                atan($num * ProjFourphp_Common::srat($this->e * sin($p->y), -0.5 * $this->e)) - ProjFourphp_Common::$halfPi;
+            if (abs($lat - $p->y) < $delTol) break;
             $p->y = $lat;
         }
 
