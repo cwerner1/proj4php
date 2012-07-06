@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pmd version="1.3.0" timestamp="2012-07-06T23:31:54+02:00">
+  <file name="/home/christian/Arbeit/BaustellenParser/library/ProjFourphp/Common.php">
+    <violation beginline="181" endline="181" rule="UnusedLocalVariable" ruleset="Unused Code Rules" externalInfoUrl="http://phpmd.org/rules/unusedcode.html#unusedlocalvariable" priority="3">
+      Avoid unused local variables such as '$sign'.
+    </violation>
+    <violation beginline="189" endline="189" rule="UnusedLocalVariable" ruleset="Unused Code Rules" externalInfoUrl="http://phpmd.org/rules/unusedcode.html#unusedlocalvariable" priority="3">
+      Avoid unused local variables such as '$sign'.
+    </violation>
+    <violation beginline="261" endline="261" rule="UnusedLocalVariable" ruleset="Unused Code Rules" externalInfoUrl="http://phpmd.org/rules/unusedcode.html#unusedlocalvariable" priority="3">
+      Avoid unused local variables such as '$pjMlfn'.
+    </violation>
+  </file>
+  <file name="/home/christian/Arbeit/BaustellenParser/library/ProjFourphp/Datum.php">
+    <violation beginline="13" endline="410" rule="ExcessiveClassComplexity" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#excessiveclasscomplexity" class="ProjFourphp_Datum" priority="3">
+      The class ProjFourphp_Datum has an overall complexity of 61 which is very high. The configured complexity threshold is 50.
+    </violation>
+    <violation beginline="23" endline="63" rule="CyclomaticComplexity" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#cyclomaticcomplexity" class="ProjFourphp_Datum" method="__construct" priority="3">
+      The method __construct() has a Cyclomatic Complexity of 14. The configured cyclomatic complexity threshold is 10.
+    </violation>
+    <violation beginline="23" endline="63" rule="NPathComplexity" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#npathcomplexity" class="ProjFourphp_Datum" method="__construct" priority="3">
+      The method __construct() has an NPath complexity of 294. The configured NPath complexity threshold is 200.
+    </violation>
+    <violation beginline="71" endline="99" rule="CyclomaticComplexity" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#cyclomaticcomplexity" class="ProjFourphp_Datum" method="compare_datums" priority="3">
+      The method compare_datums() has a Cyclomatic Complexity of 16. The configured cyclomatic complexity threshold is 10.
+    </violation>
+    <violation beginline="157" endline="256" rule="ExcessiveMethodLength" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#excessivemethodlength" class="ProjFourphp_Datum" method="geocentricToGeodetic" priority="3">
+      The method geocentricToGeodetic() has 100 lines of code. Current threshold is set to 100. Avoid really long methods.
+    </violation>
+    <violation beginline="266" endline="345" rule="CyclomaticComplexity" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#cyclomaticcomplexity" class="ProjFourphp_Datum" method="geocentricToGeodeticNoniter" priority="3">
+      The method geocentricToGeodeticNoniter() has a Cyclomatic Complexity of 10. The configured cyclomatic complexity threshold is 10.
+    </violation>
+  </file>
+  <file name="/home/christian/Arbeit/BaustellenParser/library/ProjFourphp/Proj.php">
+    <violation beginline="10" endline="714" rule="ExcessiveClassComplexity" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#excessiveclasscomplexity" class="ProjFourphp_Proj" priority="3">
+      The class ProjFourphp_Proj has an overall complexity of 141 which is very high. The configured complexity threshold is 50.
+    </violation>
+    <violation beginline="84" endline="141" rule="CyclomaticComplexity" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#cyclomaticcomplexity" class="ProjFourphp_Proj" method="__construct" priority="3">
+      The method __construct() has a Cyclomatic Complexity of 16. The configured cyclomatic complexity threshold is 10.
+    </violation>
+    <violation beginline="354" endline="510" rule="CyclomaticComplexity" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#cyclomaticcomplexity" class="ProjFourphp_Proj" method="parseWKT" priority="3">
+      The method parseWKT() has a Cyclomatic Complexity of 38. The configured cyclomatic complexity threshold is 10.
+    </violation>
+    <violation beginline="354" endline="510" rule="NPathComplexity" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#npathcomplexity" class="ProjFourphp_Proj" method="parseWKT" priority="3">
+      The method parseWKT() has an NPath complexity of 2040. The configured NPath complexity threshold is 200.
+    </violation>
+    <violation beginline="354" endline="510" rule="ExcessiveMethodLength" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#excessivemethodlength" class="ProjFourphp_Proj" method="parseWKT" priority="3">
+      The method parseWKT() has 157 lines of code. Current threshold is set to 100. Avoid really long methods.
+    </violation>
+    <violation beginline="357" endline="357" rule="UnusedLocalVariable" ruleset="Unused Code Rules" externalInfoUrl="http://phpmd.org/rules/unusedcode.html#unusedlocalvariable" priority="3">
+      Avoid unused local variables such as '$match'.
+    </violation>
+    <violation beginline="518" endline="638" rule="CyclomaticComplexity" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#cyclomaticcomplexity" class="ProjFourphp_Proj" method="parseDefs" priority="3">
+      The method parseDefs() has a Cyclomatic Complexity of 40. The configured cyclomatic complexity threshold is 10.
+    </violation>
+    <violation beginline="518" endline="638" rule="NPathComplexity" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#npathcomplexity" class="ProjFourphp_Proj" method="parseDefs" priority="3">
+      The method parseDefs() has an NPath complexity of 314. The configured NPath complexity threshold is 200.
+    </violation>
+    <violation beginline="518" endline="638" rule="ExcessiveMethodLength" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#excessivemethodlength" class="ProjFourphp_Proj" method="parseDefs" priority="3">
+      The method parseDefs() has 121 lines of code. Current threshold is set to 100. Avoid really long methods.
+    </violation>
+    <violation beginline="646" endline="712" rule="CyclomaticComplexity" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#cyclomaticcomplexity" class="ProjFourphp_Proj" method="deriveConstants" priority="3">
+      The method deriveConstants() has a Cyclomatic Complexity of 20. The configured cyclomatic complexity threshold is 10.
+    </violation>
+    <violation beginline="646" endline="712" rule="NPathComplexity" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#npathcomplexity" class="ProjFourphp_Proj" method="deriveConstants" priority="3">
+      The method deriveConstants() has an NPath complexity of 40320. The configured NPath complexity threshold is 200.
+    </violation>
+  </file>
+  <file name="/home/christian/Arbeit/BaustellenParser/library/ProjFourphp/projCode/gnom.php">
+    <violation beginline="41" endline="41" rule="UnusedFormalParameter" ruleset="Unused Code Rules" externalInfoUrl="http://phpmd.org/rules/unusedcode.html#unusedformalparameter" priority="3">
+      Avoid unused parameters such as '$def'.
+    </violation>
+  </file>
+  <file name="/home/christian/Arbeit/BaustellenParser/library/ProjFourphp/projCode/laea.php">
+    <violation beginline="39" endline="405" rule="ExcessiveClassComplexity" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#excessiveclasscomplexity" class="ProjFourphp_ProjLaea" priority="3">
+      The class ProjFourphp_ProjLaea has an overall complexity of 59 which is very high. The configured complexity threshold is 50.
+    </violation>
+    <violation beginline="56" endline="99" rule="CyclomaticComplexity" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#cyclomaticcomplexity" class="ProjFourphp_ProjLaea" method="init" priority="3">
+      The method init() has a Cyclomatic Complexity of 10. The configured cyclomatic complexity threshold is 10.
+    </violation>
+    <violation beginline="104" endline="233" rule="CyclomaticComplexity" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#cyclomaticcomplexity" class="ProjFourphp_ProjLaea" method="forward" priority="3">
+      The method forward() has a Cyclomatic Complexity of 25. The configured cyclomatic complexity threshold is 10.
+    </violation>
+    <violation beginline="104" endline="233" rule="NPathComplexity" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#npathcomplexity" class="ProjFourphp_ProjLaea" method="forward" priority="3">
+      The method forward() has an NPath complexity of 302. The configured NPath complexity threshold is 200.
+    </violation>
+    <violation beginline="104" endline="233" rule="ExcessiveMethodLength" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#excessivemethodlength" class="ProjFourphp_ProjLaea" method="forward" priority="3">
+      The method forward() has 130 lines of code. Current threshold is set to 100. Avoid really long methods.
+    </violation>
+    <violation beginline="238" endline="369" rule="CyclomaticComplexity" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#cyclomaticcomplexity" class="ProjFourphp_ProjLaea" method="inverse" priority="3">
+      The method inverse() has a Cyclomatic Complexity of 22. The configured cyclomatic complexity threshold is 10.
+    </violation>
+    <violation beginline="238" endline="369" rule="NPathComplexity" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#npathcomplexity" class="ProjFourphp_ProjLaea" method="inverse" priority="3">
+      The method inverse() has an NPath complexity of 370. The configured NPath complexity threshold is 200.
+    </violation>
+    <violation beginline="238" endline="369" rule="ExcessiveMethodLength" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#excessivemethodlength" class="ProjFourphp_ProjLaea" method="inverse" priority="3">
+      The method inverse() has 132 lines of code. Current threshold is set to 100. Avoid really long methods.
+    </violation>
+  </file>
+  <file name="/home/christian/Arbeit/BaustellenParser/library/ProjFourphp/projCode/omerc.php">
+    <violation beginline="38" endline="182" rule="CyclomaticComplexity" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#cyclomaticcomplexity" class="ProjFourphp_ProjOmerc" method="init" priority="3">
+      The method init() has a Cyclomatic Complexity of 19. The configured cyclomatic complexity threshold is 10.
+    </violation>
+    <violation beginline="38" endline="182" rule="NPathComplexity" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#npathcomplexity" class="ProjFourphp_ProjOmerc" method="init" priority="3">
+      The method init() has an NPath complexity of 4352. The configured NPath complexity threshold is 200.
+    </violation>
+    <violation beginline="38" endline="182" rule="ExcessiveMethodLength" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#excessivemethodlength" class="ProjFourphp_ProjOmerc" method="init" priority="3">
+      The method init() has 145 lines of code. Current threshold is set to 100. Avoid really long methods.
+    </violation>
+    <violation beginline="58" endline="58" rule="UnusedLocalVariable" ruleset="Unused Code Rules" externalInfoUrl="http://phpmd.org/rules/unusedcode.html#unusedlocalvariable" priority="3">
+      Avoid unused local variables such as '$e'.
+    </violation>
+  </file>
+  <file name="/home/christian/Arbeit/BaustellenParser/library/ProjFourphp/projCode/ortho.php">
+    <violation beginline="38" endline="38" rule="UnusedFormalParameter" ruleset="Unused Code Rules" externalInfoUrl="http://phpmd.org/rules/unusedcode.html#unusedformalparameter" priority="3">
+      Avoid unused parameters such as '$def'.
+    </violation>
+  </file>
+  <file name="/home/christian/Arbeit/BaustellenParser/library/ProjFourphp/projCode/stere.php">
+    <violation beginline="11" endline="313" rule="ExcessiveClassComplexity" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#excessiveclasscomplexity" class="ProjFourphp_ProjStere" priority="3">
+      The class ProjFourphp_ProjStere has an overall complexity of 58 which is very high. The configured complexity threshold is 50.
+    </violation>
+    <violation beginline="38" endline="91" rule="CyclomaticComplexity" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#cyclomaticcomplexity" class="ProjFourphp_ProjStere" method="init" priority="3">
+      The method init() has a Cyclomatic Complexity of 16. The configured cyclomatic complexity threshold is 10.
+    </violation>
+    <violation beginline="38" endline="91" rule="NPathComplexity" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#npathcomplexity" class="ProjFourphp_ProjStere" method="init" priority="3">
+      The method init() has an NPath complexity of 650. The configured NPath complexity threshold is 200.
+    </violation>
+    <violation beginline="99" endline="195" rule="CyclomaticComplexity" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#cyclomaticcomplexity" class="ProjFourphp_ProjStere" method="forward" priority="3">
+      The method forward() has a Cyclomatic Complexity of 15. The configured cyclomatic complexity threshold is 10.
+    </violation>
+    <violation beginline="203" endline="311" rule="CyclomaticComplexity" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#cyclomaticcomplexity" class="ProjFourphp_ProjStere" method="inverse" priority="3">
+      The method inverse() has a Cyclomatic Complexity of 26. The configured cyclomatic complexity threshold is 10.
+    </violation>
+    <violation beginline="203" endline="311" rule="ExcessiveMethodLength" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#excessivemethodlength" class="ProjFourphp_ProjStere" method="inverse" priority="3">
+      The method inverse() has 109 lines of code. Current threshold is set to 100. Avoid really long methods.
+    </violation>
+  </file>
+  <file name="/home/christian/Arbeit/BaustellenParser/library/ProjFourphp/projCode/tmerc.php">
+    <violation beginline="119" endline="191" rule="CyclomaticComplexity" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#cyclomaticcomplexity" class="ProjFourphp_ProjTmerc" method="inverse" priority="3">
+      The method inverse() has a Cyclomatic Complexity of 10. The configured cyclomatic complexity threshold is 10.
+    </violation>
+  </file>
+  <file name="/home/christian/Arbeit/BaustellenParser/library/ProjFourphp/projCode/vandg.php">
+    <violation beginline="100" endline="100" rule="UnusedLocalVariable" ruleset="Unused Code Rules" externalInfoUrl="http://phpmd.org/rules/unusedcode.html#unusedlocalvariable" priority="3">
+      Avoid unused local variables such as '$sq'.
+    </violation>
+    <violation beginline="169" endline="169" rule="UnusedLocalVariable" ruleset="Unused Code Rules" externalInfoUrl="http://phpmd.org/rules/unusedcode.html#unusedlocalvariable" priority="3">
+      Avoid unused local variables such as '$y'.
+    </violation>
+  </file>
+  <file name="/home/christian/Arbeit/BaustellenParser/library/ProjFourphp/projFourphp.php">
+    <violation beginline="20" endline="622" rule="ExcessiveClassComplexity" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#excessiveclasscomplexity" class="ProjFourphp" priority="3">
+      The class ProjFourphp has an overall complexity of 64 which is very high. The configured complexity threshold is 50.
+    </violation>
+    <violation beginline="128" endline="289" rule="ExcessiveMethodLength" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#excessivemethodlength" class="ProjFourphp" method="initEllipsoid" priority="3">
+      The method initEllipsoid() has 162 lines of code. Current threshold is set to 100. Avoid really long methods.
+    </violation>
+    <violation beginline="338" endline="426" rule="CyclomaticComplexity" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#cyclomaticcomplexity" class="ProjFourphp" method="transform" priority="3">
+      The method transform() has a Cyclomatic Complexity of 21. The configured cyclomatic complexity threshold is 10.
+    </violation>
+    <violation beginline="338" endline="426" rule="NPathComplexity" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#npathcomplexity" class="ProjFourphp" method="transform" priority="3">
+      The method transform() has an NPath complexity of 6336. The configured NPath complexity threshold is 200.
+    </violation>
+    <violation beginline="433" endline="502" rule="CyclomaticComplexity" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#cyclomaticcomplexity" class="ProjFourphp" method="datum_transform" priority="3">
+      The method datum_transform() has a Cyclomatic Complexity of 14. The configured cyclomatic complexity threshold is 10.
+    </violation>
+    <violation beginline="513" endline="566" rule="CyclomaticComplexity" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#cyclomaticcomplexity" class="ProjFourphp" method="adjust_axis" priority="3">
+      The method adjust_axis() has a Cyclomatic Complexity of 16. The configured cyclomatic complexity threshold is 10.
+    </violation>
+    <violation beginline="513" endline="566" rule="NPathComplexity" ruleset="Code Size Rules" package="+global" externalInfoUrl="http://phpmd.org/rules/codesize.html#npathcomplexity" class="ProjFourphp" method="adjust_axis" priority="3">
+      The method adjust_axis() has an NPath complexity of 545. The configured NPath complexity threshold is 200.
+    </violation>
+    <violation beginline="559" endline="559" rule="UnusedLocalVariable" ruleset="Unused Code Rules" externalInfoUrl="http://phpmd.org/rules/unusedcode.html#unusedlocalvariable" priority="3">
+      Avoid unused local variables such as '$exceptionsMsg'.
+    </violation>
+    <violation beginline="584" endline="584" rule="UnusedFormalParameter" ruleset="Unused Code Rules" externalInfoUrl="http://phpmd.org/rules/unusedcode.html#unusedformalparameter" priority="3">
+      Avoid unused parameters such as '$onload'.
+    </violation>
+    <violation beginline="584" endline="584" rule="UnusedFormalParameter" ruleset="Unused Code Rules" externalInfoUrl="http://phpmd.org/rules/unusedcode.html#unusedformalparameter" priority="3">
+      Avoid unused parameters such as '$onfail'.
+    </violation>
+    <violation beginline="584" endline="584" rule="UnusedFormalParameter" ruleset="Unused Code Rules" externalInfoUrl="http://phpmd.org/rules/unusedcode.html#unusedformalparameter" priority="3">
+      Avoid unused parameters such as '$loadCheck'.
+    </violation>
+  </file>
+</pmd>

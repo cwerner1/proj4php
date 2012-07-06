@@ -1,6 +1,5 @@
-<?php
 
-include_once("ProjFourphp/projFourphp.php");
+//include_once("ProjFourphp/projFourphp.php");
 return;
 
 $error = false;
@@ -73,7 +72,7 @@ if (ProjFourphp::$defs[$tgtProjection] == ProjFourphp::$defs['WGS84'] && $tgtPro
 if ($error === true) {
     if ($format == 'json') {
         echo "{\"status\":\"error\", \"erreur\": {\"code\": 2, \"message\": \"Wrong parameters.\"} }";
-        exit;
+        //exit;
     } else {
         echo "<reponse>";
         echo "  <erreur>";
