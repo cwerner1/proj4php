@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * @package Proj4
+ */
 ProjFourphp::$defs["EPSG:21781"] = "+title=CH1903 / LV03 " .
     "+proj=somerc +lat_0=46.95240555555556 +lon_0=7.439583333333333 " .
     "+x_0=600000 +y_0=200000 +ellps=bessel " .

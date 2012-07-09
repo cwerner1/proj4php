@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * @package Proj4
+ */
 ProjFourphp::$defs["EPSG:26591"] = "+title= Monte Mario (Rome) /" .
     " Italy zone 1 EPSG:26591 +proj=tmerc +lat_0=0 +lon_0=-3.45233333333333 " .
     "+fromGreenwich=12.45233333333333 +k=0.999600 +x_0=1500000 +y_0=0 " .

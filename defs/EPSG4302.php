@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Proj4
+ */
 
 ProjFourphp::$defs["EPSG:4302"] = "+title=Trinidad 1903 EPSG:4302 " .
     "(7 param datum shift) +proj=longlat +a=6378293.63683822 " .

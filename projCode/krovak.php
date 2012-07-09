@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Proj4
+ */
 
 /**
   NOTES: According to EPSG the full Krovak projection method should have
