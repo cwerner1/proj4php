@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project name="name-of-project" default="build">
+<project name="Proj4" default="build-parallel">
     <target name="build"
          depends="prepare,lint,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdox,phpunit,phpcb"/>
 
@@ -115,11 +115,14 @@
     </target>
 
     <target name="phpdox" description="Generate API documentation using phpDox">
-        <exec executable="phpdox"/>
+        <exec executable="phpdox" >
+            <arg value="-f" />
+            <arg value="${basedir}/build/phpdox.xml" />
+        </exec>
     </target>
 
     <target name="phpunit" description="Run unit tests with PHPUnit">
-	<exec dir="${basedir}/tests" executable="phpunit" failonerror="true">
+        <exec dir="${basedir}/tests" executable="phpunit" failonerror="true">
             <arg value="-c" />
             <arg value="${basedir}/tests/phpunit.xml" />
         </exec>
