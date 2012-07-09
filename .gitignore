@@ -3,4 +3,4 @@
 /build/coverage/
 /build/api/
 /build/phpdox/
-
+/build/pdepend/
