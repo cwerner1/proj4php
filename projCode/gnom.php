@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package Proj4
  */
@@ -51,7 +52,7 @@ class ProjFourphp_ProjGnom
 
         // Approximation for projecting points to the horizon (infinity)
         $this->infinityDist = 1000 * $this->a;
-        $this->rc = 1;
+        $this->rc           = 1;
     }
 
     /* Gnomonic forward equations--mapping lat,long to x,y
@@ -95,7 +96,8 @@ class ProjFourphp_ProjGnom
             // We still need to return a reasonable point, so we project 
             // to infinity, on a bearing 
             // equivalent to the northern hemisphere equivalent
-            // This is a reasonable approximation for short shapes and lines that 
+            // This is a reasonable approximation for short shapes and lines 
+            // that 
             // straddle the horizon.
 
             $x = $this->xZero + $this->infinityDist * $cosphi * sin($dlon);
@@ -141,8 +143,10 @@ class ProjFourphp_ProjGnom
             $sinc = sin($c);
             $cosc = cos($c);
 
-            $lat = ProjFourphp_Common::asinz($cosc * $this->sinPOneFour + ($p->y * $sinc * $this->cosPOneFour) / $rh);
-            $lon = atan2($p->x * sinc, rh * $this->cosPOneFour * $cosc - $p->y * $this->sinPOneFour * $sinc);
+            $lat =
+                ProjFourphp_Common::asinz($cosc * $this->sinPOneFour + ($p->y * $sinc * $this->cosPOneFour) / $rh);
+            $lon =
+                atan2($p->x * sinc, rh * $this->cosPOneFour * $cosc - $p->y * $this->sinPOneFour * $sinc);
             $lon = ProjFourphp_Common::adjustLon($this->longZero + $lon);
         } else {
             $lat = $this->phicZero;

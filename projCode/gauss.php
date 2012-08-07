@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package Proj4
  */
@@ -19,14 +20,19 @@ class ProjFourphp_ProjGauss
     public function init()
     {
 
-        $sphi = sin($this->latZero);
-        $cphi = cos($this->latZero);
+        $sphi           = sin($this->latZero);
+        $cphi           = cos($this->latZero);
         $cphi *= $cphi;
-        $this->rc = sqrt(1.0 - $this->es) / (1.0 - $this->es * $sphi * $sphi);
-        $this->c = sqrt(1.0 + $this->es * $cphi * $cphi / (1.0 - $this->es));
+        $this->rc       =
+            sqrt(1.0 - $this->es) / (1.0 - $this->es * $sphi * $sphi);
+        $this->c        =
+            sqrt(1.0 + $this->es * $cphi * $cphi / (1.0 - $this->es));
         $this->phicZero = asin($sphi / $this->c);
-        $this->ratexp = 0.5 * $this->c * $this->e;
-        $this->k = tan(0.5 * $this->phicZero + ProjFourphp_Common::$fortPi) / (pow(tan(0.5 * $this->latZero + ProjFourphp::$common->fortPi), $this->c) * ProjFourphp::$common->srat($this->e * $sphi, $this->ratexp));
+        $this->ratexp   = 0.5 * $this->c * $this->e;
+        $this->k        =
+            tan(0.5 * $this->phicZero + ProjFourphp_Common::$fortPi) / (
+            pow(tan(0.5 * $this->latZero + ProjFourphp::$common->fortPi), $this->c)
+            * ProjFourphp::$common->srat($this->e * $sphi, $this->ratexp));
     }
 
     /**
@@ -60,7 +66,7 @@ class ProjFourphp_ProjGauss
         $num    = pow(tan(0.5 * $lat + ProjFourphp_Common::$fortPi) / $this->k, 1. / $this->c);
 
         for ($i = ProjFourphp_Common::$maxIter; $i > 0; --$i) {
-            $lat = 2.0 *
+            $lat  = 2.0 *
                 atan($num * ProjFourphp_Common::srat($this->e * sin($p->y), -0.5 * $this->e)) - ProjFourphp_Common::$halfPi;
             if (abs($lat - $p->y) < $delTol) break;
             $p->y = $lat;

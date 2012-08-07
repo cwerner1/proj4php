@@ -67,7 +67,8 @@ class ProjFourphp_ProjEqdc
         /* format B
           --------- */
         if ($this->mode != 0) {
-            if (abs($this->latOne + $this->latTwo) < ProjFourphp_Common::$epsln) {
+            if (abs($this->latOne + $this->latTwo)
+                < ProjFourphp_Common::$epsln) {
                 ProjFourphp::reportError("eqdc:Init:EqualLatitudes");
                 //return(81);
             }
@@ -158,7 +159,9 @@ class ProjFourphp_ProjEqdc
 
         $phi = $ml;
         for ($i = 0; $i < 15; $i++) {
-            $dphi = ($ml + $eOne * sin(2.0 * $phi) - $eTwo * sin(4.0 * $phi) + $eThree * sin(6.0 * $phi)) / $eZero - $phi;
+            $dphi =
+                ($ml + $eOne * sin(2.0 * $phi) - $eTwo * sin(4.0 * $phi) +
+                $eThree * sin(6.0 * $phi)) / $eZero - $phi;
             $phi += $dphi;
             if (abs($dphi) <= .0000000001) {
                 return $phi;
