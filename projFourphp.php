@@ -370,7 +370,7 @@ class ProjFourphp
           if( ($source->srsProjNumber == "900913" && $dest->datumCode != "WGS84"
          * )
           ||
-          ($dest->srsProjNumber == "900913" && $source->datumCode != "WGS84") ) {
+          ($dest->srsProjNumber == "900913" && $source->datumCode != "WGS84")) {
           #dbg('Workaround for Spherical Mercator', false);
           $wgs84 = ProjFourphp::$wgs84; // DONT KNOW WHAT YET
           $this->transform( $source, $wgs84, $point );

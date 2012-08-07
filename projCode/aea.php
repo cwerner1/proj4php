@@ -108,7 +108,8 @@ class ProjFourphp_ProjAea
         $rhOne =
             $this->a * sqrt($this->c - $this->nsZero * $qs) / $this->nsZero;
         $theta =
-            $this->nsZero * ProjFourphp_Common::adjustLon($lon - $this->longZero);
+            $this->nsZero *
+            ProjFourphp_Common::adjustLon($lon - $this->longZero);
         $x     = rhOne * sin($theta) + $this->xZero;
         $y     = $this->rh - $rhOne * cos($theta) + $this->yZero;
 
@@ -159,11 +160,11 @@ class ProjFourphp_ProjAea
                 }
             }
         } else {
-            $lat = $this->phi1z($this->eThree, $qs);
+            $lat    = $this->phi1z($this->eThree, $qs);
         }
-
-        $lon =
-            ProjFourphp_Common::adjustLon($theta / $this->nsZero + $this->longZero);
+        $lonPre = $theta / $this->nsZero + $this->longZero;
+        $lon    =
+            ProjFourphp_Common::adjustLon($lonPre);
 
         $p->x = $lon;
         $p->y = $lat;
