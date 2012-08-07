@@ -1,7 +1,9 @@
 <?php
+
 /**
  * @package Proj4
  */
+
 /**
  * Author : Julien Moquet
  * 
@@ -28,10 +30,9 @@ class ProjFourphp_ProjSterea
 
         $this->sincZero = sin($this->phicZero);
         $this->coscZero = cos($this->phicZero);
-        $this->rTwo = 2.0 * $this->rc;
+        $this->rTwo     = 2.0 * $this->rc;
 
-        if (!$this->title)
-            $this->title = "Oblique Stereographic Alternative";
+        if (!$this->title) $this->title = "Oblique Stereographic Alternative";
     }
 
     /**
@@ -42,12 +43,14 @@ class ProjFourphp_ProjSterea
     public function forward($p)
     {
 
-        $p->x = ProjFourphp_Common::adjustLon($p->x - $this->longZero); /* adjust del longitude */
-        $p = ProjFourphp::$proj['gauss']->forward($p);
+        $p->x = ProjFourphp_Common::adjustLon($p->x - $this->longZero);
+        /* adjust del longitude */
+        $p    = ProjFourphp::$proj['gauss']->forward($p);
         $sinc = sin($p->y);
         $cosc = cos($p->y);
         $cosl = cos($p->x);
-        $k = $this->kZero * $this->rTwo / (1.0 + $this->sincZero * $sinc + $this->coscZero * $cosc * $cosl);
+        $k    = $this->kZero * $this->rTwo
+            / (1.0 + $this->sincZero * $sinc + $this->coscZero * $cosc * $cosl);
 
         $p->x = $k * $cosc * sin($p->x);
         $p->y = $k * ($this->coscZero * sinc - $this->sincZero * $cosc * $cosl);
@@ -75,11 +78,13 @@ class ProjFourphp_ProjSterea
         $p->y /= $this->kZero;
 
         if (($rho = sqrt($p->x * $p->x + $p->y * $p->y))) {
-            $c = 2.0 * atan2($rho, $this->rTwo);
+            $c    = 2.0 * atan2($rho, $this->rTwo);
             $sinc = sin($c);
             $cosc = cos($c);
-            $lat = asin($cosc * $this->sincZero + $p->y * $sinc * $this->coscZero / $rho);
-            $lon = atan2($p->x * $sinc, $rho * $this->coscZero * $cosc - $p->y * $this->sincZero * $sinc);
+            $lat  =
+                asin($cosc * $this->sincZero + $p->y * $sinc * $this->coscZero / $rho);
+            $lon  =
+                atan2($p->x * $sinc, $rho * $this->coscZero * $cosc - $p->y * $this->sincZero * $sinc);
         } else {
             $lat = $this->phicZero;
             $lon = 0.;
@@ -87,8 +92,9 @@ class ProjFourphp_ProjSterea
 
         $p->x = $lon;
         $p->y = $lat;
-        $p = ProjFourphp::$proj['gauss']->inverse($p);
-        $p->x = ProjFourphp_Common::adjustLon($p->x + $this->longZero); /* adjust longitude to CM */
+        $p    = ProjFourphp::$proj['gauss']->inverse($p);
+        $p->x = ProjFourphp_Common::adjustLon($p->x + $this->longZero);
+        /* adjust longitude to CM */
 
         return $p;
     }

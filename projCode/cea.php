@@ -1,9 +1,9 @@
 <?php
+
 /**
  * @package Proj4
  */
-
-/* * *****************************************************************************
+/* * ***************************************************************************
   NAME                    LAMBERT CYLINDRICAL EQUAL AREA
 
   PURPOSE:	Transforms input longitude and latitude to Easting and
@@ -18,7 +18,8 @@
   R. Marsden              August 2009
   Winwaed Software Tech LLC, http://www.winwaed.com
 
-  This function was adapted from the Miller Cylindrical Projection in the ProjFourphp
+  This function was adapted from the Miller Cylindrical Projection in the
+ * ProjFourphp
   library.
 
   Note: This implementation assumes a Spherical Earth. The (commented) code
@@ -36,7 +37,7 @@
 
   2.  Snyder, John P., "Flattening the Earth - Two Thousand Years of Map
   Projections", Univ. Chicago Press, 1993
- * ***************************************************************************** */
+ * ************************************************************************** */
 
 /**
  * Author : Julien Moquet
@@ -66,9 +67,9 @@ class ProjFourphp_ProjCea
 
         /* Forward equations
           ----------------- */
-        $dlon =  ProjFourphp_Common::adjustLon($lon - $this->longZero);
-        $x = $this->xZero + $this->a * $dlon * cos($this->latTs);
-        $y = $this->yZero + $this->a * sin($lat) / cos($this->latTs);
+        $dlon = ProjFourphp_Common::adjustLon($lon - $this->longZero);
+        $x    = $this->xZero + $this->a * $dlon * cos($this->latTs);
+        $y    = $this->yZero + $this->a * sin($lat) / cos($this->latTs);
         /* Elliptical Forward Transform
           Not implemented due to a lack of a matchign inverse function
           {
@@ -96,7 +97,8 @@ class ProjFourphp_ProjCea
         $p->x -= $this->xZero;
         $p->y -= $this->yZero;
 
-        $p->x =  ProjFourphp_Common::adjustLon($this->longZero + ($p->x / $this->a) / cos($this->latTs));
+        $p->x =
+            ProjFourphp_Common::adjustLon($this->longZero + ($p->x / $this->a) / cos($this->latTs));
         $p->y = asin(($p->y / $this->a) * cos($this->latTs));
 
         return $p;

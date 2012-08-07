@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package Proj4
  */
@@ -44,8 +45,8 @@ class ProjFourphp_ProjAeqd
                 return;
             }
         } else {
-            $z   = acos($g);
-            $ksp = $z / sin($z);
+            $z    = acos($g);
+            $ksp  = $z / sin($z);
         }
         $p->x = $this->xZero + $this->a * $ksp * $cosphi * sin($dlon);
         $p->y = $this->yZero + $this->a * $ksp *
@@ -81,21 +82,27 @@ class ProjFourphp_ProjAeqd
         if (abs($rh) <= ProjFourphp_Common::$epsln) {
             $lat = $this->latZero;
         } else {
-            $lat = ProjFourphp_Common::asinz($cosz * $this->sinPOneTwo + ($p->y * $sinz * $this->cosPOneTwo) / $rh);
+            $lat =
+                ProjFourphp_Common::asinz($cosz * $this->sinPOneTwo + ($p->y * $sinz * $this->cosPOneTwo) / $rh);
             $con = abs($this->latZero) - ProjFourphp_Common::$halfPi;
             if (abs($con) <= ProjFourphp_Common::$epsln) {
                 if ($this->latZero >= 0.0) {
-                    $lon = ProjFourphp_Common::adjustLon($this->longZero + atan2($p->x, -$p->y));
+                    $lon =
+                        ProjFourphp_Common::adjustLon($this->longZero + atan2($p->x, -$p->y));
                 } else {
-                    $lon = ProjFourphp_Common::adjustLon($this->longZero - atan2(-$p->x, $p->y));
+                    $lon =
+                        ProjFourphp_Common::adjustLon($this->longZero - atan2(-$p->x, $p->y));
                 }
             } else {
                 $con = $cosz - $this->sinPOneTwo * sin($lat);
-                if ((abs($con) < ProjFourphp_Common::$epsln) && (abs($p->x) < ProjFourphp_Common::$epsln)) {
+                if ((abs($con) <
+                    ProjFourphp_Common::$epsln)
+                    && (abs($p->x) < ProjFourphp_Common::$epsln)) {
                     //no-op, just keep the lon value as is
                 } else {
                     #$temp = atan2( ($p->x * $sinz * $this->cosPOneTwo ), ($con * $rh ) ); // $temp is unused !?!
-                    $lon = ProjFourphp_Common::adjustLon($this->longZero + atan2(($p->x * $sinz * $this->cosPOneTwo), ($con * $rh)));
+                    $lon =
+                        ProjFourphp_Common::adjustLon($this->longZero + atan2(($p->x * $sinz * $this->cosPOneTwo), ($con * $rh)));
                 }
             }
         }

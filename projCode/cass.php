@@ -1,8 +1,8 @@
 <?php
+
 /**
  * @package Proj4
  */
-
 /* * ***************************************************************************
   NAME                            CASSINI
 
@@ -43,16 +43,17 @@ class ProjFourphp_ProjCass
     public function init()
     {
         if (!$this->sphere) {
-            $this->en = ProjFourphp_Common::pjEnfn($this->es);
-            $this->mZero = ProjFourphp_Common::jMlfn($this->latZero, sin($this->latZero), cos($this->latZero), $this->en);
+            $this->en    = ProjFourphp_Common::pjEnfn($this->es);
+            $this->mZero =
+                ProjFourphp_Common::jMlfn($this->latZero, sin($this->latZero), cos($this->latZero), $this->en);
         }
     }
 
-    protected $_cOne = .16666666666666666666;
-    protected $_cTwo = .00833333333333333333;
+    protected $_cOne   = .16666666666666666666;
+    protected $_cTwo   = .00833333333333333333;
     protected $_cThree = .04166666666666666666;
-    protected $_cFour = .33333333333333333333;
-    protected $_cFive = .06666666666666666666;
+    protected $_cFour  = .33333333333333333333;
+    protected $_cFive  = .06666666666666666666;
 
     /* Cassini forward equations--mapping lat,long to x,y
       ----------------------------------------------------------------------- */
@@ -66,30 +67,30 @@ class ProjFourphp_ProjCass
         #$y;
         $lam = $p->x;
         $phi = $p->y;
-        $lam =  ProjFourphp_Common::adjustLon($lam - $this->longZero);
+        $lam = ProjFourphp_Common::adjustLon($lam - $this->longZero);
 
         if ($this->sphere) {
             $x = asin(cos($phi) * sin($lam));
             $y = atan2(tan($phi), cos($lam)) - $this->phiZero;
         } else {
             //ellipsoid
-            $this->n = sin($phi);
-            $this->c = cos($phi);
-            $y = $this->pj_mlfn($phi, $this->n, $this->c, $this->en);
-            $this->n = 1. / sqrt(1. - $this->es * $this->n * $this->n);
-            $this->tn = tan($phi);
-            $this->t = $this->tn * $this->tn;
+            $this->n    = sin($phi);
+            $this->c    = cos($phi);
+            $y          = $this->pj_mlfn($phi, $this->n, $this->c, $this->en);
+            $this->n    = 1. / sqrt(1. - $this->es * $this->n * $this->n);
+            $this->tn   = tan($phi);
+            $this->t    = $this->tn * $this->tn;
             $this->aOne = $lam * $this->c;
             $this->c *= $this->es * $this->c / (1 - $this->es);
             $this->aTwo = $this->aOne * $this->aOne;
-            $x = $this->n * $this->aOne * 
-                (1. - $this->aTwo * $this->t * 
+            $x          = $this->n * $this->aOne *
+                (1. - $this->aTwo * $this->t *
                 ($this->_cOne - (8. - $this->t + 8. * $this->c) *
-                    $this->aTwo * $this->_cTwo));
-            $y -= $this->mZero - 
-                $this->n * $this->tn * $this->aTwo * 
+                $this->aTwo * $this->_cTwo));
+            $y -= $this->mZero -
+                $this->n * $this->tn * $this->aTwo *
                 (.5 + (5. - $this->t + 6. * $this->c) *
-                    $this->aTwo * $this->_cThree);
+                $this->aTwo * $this->_cThree);
         }
 
         $p->x = $this->a * $x + $this->xZero;
@@ -110,27 +111,30 @@ class ProjFourphp_ProjCass
 
         if ($this->sphere) {
             $this->dd = $y + $this->latZero;
-            $phi = asin(sin($this->dd) * cos($x));
-            $lam = atan2(tan($x), cos($this->dd));
+            $phi      = asin(sin($this->dd) * cos($x));
+            $lam      = atan2(tan($x), cos($this->dd));
         } else {
             /* ellipsoid */
-            $phOne = ProjFourphp_Common::pjInvMlfn($this->mZero + $y, $this->es, $this->en);
-            $this->tn = tan($phOne);
-            $this->t = $this->tn * $this->tn;
-            $this->n = sin($phOne);
-            $this->r = 1. / (1. - $this->es * $this->n * $this->n);
-            $this->n = sqrt($this->r);
+            $phOne      =
+                ProjFourphp_Common::pjInvMlfn($this->mZero + $y, $this->es, $this->en);
+            $this->tn   = tan($phOne);
+            $this->t    = $this->tn * $this->tn;
+            $this->n    = sin($phOne);
+            $this->r    = 1. / (1. - $this->es * $this->n * $this->n);
+            $this->n    = sqrt($this->r);
             $this->r *= (1. - $this->es) * $this->n;
-            $this->dd = $x / $this->n;
+            $this->dd   = $x / $this->n;
             $this->dTwo = $this->dd * $this->dd;
-            $phi = $phOne - ($this->n * $this->tn / $this->r) * 
-            $this->dTwo * (.5 - (1. + 3. * $this->t) * $this->dTwo * $this->_cThree);
-            $lam = $this->dd * (1. + $this->t * $this->dTwo *
-                (-$this->_cFour + (1. + 3. * $this->t) * $this->dTwo * $this->_cFive)) 
+            $phi        = $phOne - ($this->n * $this->tn / $this->r) *
+                $this->dTwo * (.5 - (1. + 3. * $this->t) * $this->dTwo
+                * $this->_cThree);
+            $lam        = $this->dd * (1. + $this->t * $this->dTwo *
+                (-$this->_cFour + (1. + 3. * $this->t) * $this->dTwo
+                * $this->_cFive))
                 / cos($phOne);
         }
-        $p->x =  ProjFourphp_Common::adjustLon($this->longZero + $lam);
-        $p->y = $phi;
+        $p->x       = ProjFourphp_Common::adjustLon($this->longZero + $lam);
+        $p->y       = $phi;
 
         return $p;
     }

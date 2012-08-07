@@ -1,8 +1,8 @@
 <?php
+
 /**
  * @package Proj4
  */
-
 /**
  * Author : Julien Moquet
  * 
@@ -44,11 +44,12 @@ class ProjFourphp_ProjTmerc
     public function init()
     {
 
-        $this->_eZero = ProjFourphp_Common::eZeroFn($this->es);
-        $this->_eOne = ProjFourphp_Common::eOnefn($this->es);
-        $this->_eTwo = ProjFourphp_Common::eTwofn($this->es);
+        $this->_eZero  = ProjFourphp_Common::eZeroFn($this->es);
+        $this->_eOne   = ProjFourphp_Common::eOnefn($this->es);
+        $this->_eTwo   = ProjFourphp_Common::eTwofn($this->es);
         $this->_eThree = ProjFourphp_Common::eThreefn($this->es);
-        $this->_mlZero = $this->a *
+        $this->_mlZero =
+            $this->a *
             ProjFourphp_Common::mlfn($this->_eZero, $this->_eOne, $this->_eTwo, $this->_eThree, $this->latZero);
     }
 
@@ -180,9 +181,11 @@ class ProjFourphp_ProjTmerc
                     9.0 * $this->epTwo - $ds / 30.0 *
                     (61.0 + 90.0 * $t + 298.0 * $c + 45.0 * $ts - 252.0 *
                     $this->epTwo - 3.0 * $cs)));
-                $lon    = ProjFourphp_Common::adjustLon($this->longZero + ($d * (1.0 - $ds / 6.0 * (1.0 + 2.0 * $t + $c - $ds / 20.0 * (5.0 - 2.0 * $c + 28.0 * $t - 3.0 * $cs + 8.0 * $this->epTwo + 24.0 * $ts))) / $cosPhi));
+                $lon    =
+                    ProjFourphp_Common::adjustLon($this->longZero + ($d * (1.0 - $ds / 6.0 * (1.0 + 2.0 * $t + $c - $ds / 20.0 * (5.0 - 2.0 * $c + 28.0 * $t - 3.0 * $cs + 8.0 * $this->epTwo + 24.0 * $ts))) / $cosPhi));
             } else {
-                $lat = ProjFourphp_Common::$halfPi * ProjFourphp::$common->sign($y);
+                $lat = ProjFourphp_Common::$halfPi *
+                    ProjFourphp::$common->sign($y);
                 $lon = $this->longZero;
             }
         }

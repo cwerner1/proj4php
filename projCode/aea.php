@@ -1,8 +1,8 @@
 <?php
+
 /**
  * @package Proj4
  */
-
 /* * **************************************************************************
   NAME                     ALBERS CONICAL EQUAL AREA
 
@@ -47,35 +47,42 @@ class ProjFourphp_ProjAea
             ProjFourphp::reportError("aeaInitEqualLatitudes");
             return;
         }
-        $this->temp = $this->b / $this->a;
-        $this->es = 1.0 - pow($this->temp, 2);
+        $this->temp   = $this->b / $this->a;
+        $this->es     = 1.0 - pow($this->temp, 2);
         $this->eThree = sqrt($this->es);
 
         $this->sinPo = sin($this->latOne);
         $this->cosPo = cos($this->latOne);
-        $this->tOne = $this->sinPo;
-        $this->con = $this->sinPo;
-        $this->msOne = ProjFourphp_Common::msfnz($this->eThree, $this->sinPo, $this->cosPo);
-        $this->qsOne = ProjFourphp_Common::qsfnz($this->eThree, $this->sinPo, $this->cosPo);
+        $this->tOne  = $this->sinPo;
+        $this->con   = $this->sinPo;
+        $this->msOne =
+            ProjFourphp_Common::msfnz($this->eThree, $this->sinPo, $this->cosPo);
+        $this->qsOne =
+            ProjFourphp_Common::qsfnz($this->eThree, $this->sinPo, $this->cosPo);
 
         $this->sinPo = sin($this->latTwo);
         $this->cosPo = cos($this->latTwo);
-        $this->tTwo = $this->sinPo;
-        $this->msTwo = ProjFourphp_Common::msfnz($this->eThree, $this->sinPo, $this->cosPo);
-        $this->qsTwo = ProjFourphp_Common::qsfnz($this->eThree, $this->sinPo, $this->cosPo);
+        $this->tTwo  = $this->sinPo;
+        $this->msTwo =
+            ProjFourphp_Common::msfnz($this->eThree, $this->sinPo, $this->cosPo);
+        $this->qsTwo =
+            ProjFourphp_Common::qsfnz($this->eThree, $this->sinPo, $this->cosPo);
 
-        $this->sinPo = sin($this->latZero);
-        $this->cosPo = cos($this->latZero);
-        $this->t3 = $this->sinPo;
-        $this->qsZero = ProjFourphp_Common::qsfnz($this->eThree, $this->sinPo, $this->cosPo);
+        $this->sinPo  = sin($this->latZero);
+        $this->cosPo  = cos($this->latZero);
+        $this->t3     = $this->sinPo;
+        $this->qsZero =
+            ProjFourphp_Common::qsfnz($this->eThree, $this->sinPo, $this->cosPo);
 
         if (abs($this->latOne - $this->latTwo) > ProjFourphp_Common::$epsln) {
-            $this->nsZero = ($this->msOne * $this->msOne - $this->msTwo * $this->msTwo) / ($this->qsTwo - $this->qsOne);
+            $this->nsZero =
+                ($this->msOne * $this->msOne - $this->msTwo * $this->msTwo)
+                / ($this->qsTwo - $this->qsOne);
         } else {
             $this->nsZero = $this->con;
         }
 
-        $this->c = $this->msOne * $this->msOne + $this->nsZero * $this->qsOne;
+        $this->c  = $this->msOne * $this->msOne + $this->nsZero * $this->qsOne;
         $this->rh = $this->a *
             sqrt($this->c - $this->nsZero * $this->qsZero)
             / $this->nsZero;
@@ -96,9 +103,12 @@ class ProjFourphp_ProjAea
         $this->sinPhi = sin($lat);
         $this->cosPhi = cos($lat);
 
-        $qs    = ProjFourphp_Common::qsfnz($this->eThree, $this->sinPhi, $this->cosPhi);
-        $rhOne = $this->a * sqrt($this->c - $this->nsZero * $qs) / $this->nsZero;
-        $theta = $this->nsZero * ProjFourphp_Common::adjustLon($lon - $this->longZero);
+        $qs    =
+            ProjFourphp_Common::qsfnz($this->eThree, $this->sinPhi, $this->cosPhi);
+        $rhOne =
+            $this->a * sqrt($this->c - $this->nsZero * $qs) / $this->nsZero;
+        $theta =
+            $this->nsZero * ProjFourphp_Common::adjustLon($lon - $this->longZero);
         $x     = rhOne * sin($theta) + $this->xZero;
         $y     = $this->rh - $rhOne * cos($theta) + $this->yZero;
 
@@ -137,7 +147,8 @@ class ProjFourphp_ProjAea
 
         if ($this->eThree >= 1e-10) {
             $con = 1 - .5 * (1.0 - $this->es) *
-                log((1.0 - $this->eThree) / (1.0 + $this->eThree)) / $this->eThree;
+                log((1.0 - $this->eThree) / (1.0 + $this->eThree))
+                / $this->eThree;
             if (abs(abs($con) - abs($qs)) > .0000000001) {
                 $lat = $this->phi1z($this->eThree, $qs);
             } else {
@@ -151,7 +162,8 @@ class ProjFourphp_ProjAea
             $lat = $this->phi1z($this->eThree, $qs);
         }
 
-        $lon = ProjFourphp_Common::adjustLon($theta / $this->nsZero + $this->longZero);
+        $lon =
+            ProjFourphp_Common::adjustLon($theta / $this->nsZero + $this->longZero);
 
         $p->x = $lon;
         $p->y = $lat;
@@ -160,7 +172,8 @@ class ProjFourphp_ProjAea
     }
 
     /**
-     * Function to compute phi1, the latitude for the inverse of the Albers Conical Equal-Area projection.
+     * Function to compute phi1, the latitude for the inverse of the Albers 
+     * Conical Equal-Area projection.
      *
      * @param type $eccent
      * @param type $qs
@@ -174,7 +187,7 @@ class ProjFourphp_ProjAea
         if ($eccent < ProjFourphp_Common::$epsln) return $phi;
 
         $eccnts = $eccent * $eccent;
-        for ($i      = 1; $i <= 25; ++$i) {
+        for ($i = 1; $i <= 25; ++$i) {
             $sinphi = sin($phi);
             $cosphi = cos($phi);
             $con    = $eccent * $sinphi;

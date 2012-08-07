@@ -1,8 +1,8 @@
 <?php
+
 /**
  * @package Proj4
  */
-
 /**
  * Author : Julien Moquet
  * 
@@ -27,7 +27,7 @@
   2.  Snyder, John P. and Voxland, Philip M., "An Album of Map Projections",
   U.S. Geological Survey Professional Paper 1453 , United State Government
   Printing Office, Washington D.C., 1989.
- * ***************************************************************************** */
+ * ************************************************************************** */
 
 /**
   Initialize Transverse Mercator projection
@@ -36,7 +36,7 @@ class ProjFourphp_ProjUtm
 {
 
     public $dependsOn = 'tmerc';
-    public $utmSouth = false; // UTM north/south
+    public $utmSouth  = false; // UTM north/south
 
     /**
      *
@@ -51,11 +51,12 @@ class ProjFourphp_ProjUtm
             return;
         }
 
-        $this->latZero = 0.0;
-        $this->longZero = ((6 * abs($this->zone)) - 183) * ProjFourphp::$common->dToR;
-        $this->xZero = 500000.0;
-        $this->yZero = $this->utmSouth ? 10000000.0 : 0.0;
-        $this->kZero = 0.9996;
+        $this->latZero  = 0.0;
+        $this->longZero
+            = ((6 * abs($this->zone)) - 183) * ProjFourphp::$common->dToR;
+        $this->xZero    = 500000.0;
+        $this->yZero    = $this->utmSouth ? 10000000.0 : 0.0;
+        $this->kZero    = 0.9996;
     }
 
     /**

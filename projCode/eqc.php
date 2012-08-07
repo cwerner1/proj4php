@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package Proj4
  */
@@ -17,9 +18,9 @@ class ProjFourphp_ProjEqc
     public function init()
     {
 
-        if (!$this->xZero) $this->xZero = 0;
-        if (!$this->yZero) $this->yZero = 0;
-        if (!$this->latZero) $this->latZero = 0;
+        if (!$this->xZero) $this->xZero    = 0;
+        if (!$this->yZero) $this->yZero    = 0;
+        if (!$this->latZero) $this->latZero  = 0;
         if (!$this->longZero) $this->longZero = 0;
         if (!$this->latTs) {
             $this->latTs = 0;
@@ -54,8 +55,10 @@ class ProjFourphp_ProjEqc
         $x = $p->x;
         $y = $p->y;
 
-        $p->x = ProjFourphp_Common::adjustLon($this->longZero + (($x - $this->xZero) / ($this->a * $this->rc)));
-        $p->y = ProjFourphp_Common::adjustLat($this->latZero + (($y - $this->yZero) / ($this->a )));
+        $p->x =
+            ProjFourphp_Common::adjustLon($this->longZero + (($x - $this->xZero) / ($this->a * $this->rc)));
+        $p->y =
+            ProjFourphp_Common::adjustLat($this->latZero + (($y - $this->yZero) / ($this->a )));
         return $p;
     }
 

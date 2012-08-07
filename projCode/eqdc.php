@@ -1,7 +1,9 @@
 <?php
+
 /**
  * @package Proj4
  */
+
 /**
  * Author : Julien Moquet
  * 
@@ -45,21 +47,22 @@ class ProjFourphp_ProjEqdc
 
         /* Place parameters in static storage for common use
           ------------------------------------------------- */
-        if (!$this->mode)
-            $this->mode = 0; //chosen default mode
-        $this->temp = $this->b / $this->a;
-        $this->es = 1.0 - pow($this->temp, 2);
-        $this->e = sqrt($this->es);
-        $this->eZero = ProjFourphp_Common::eZeroFn($this->es);
-        $this->eOne = ProjFourphp_Common::eOnefn($this->es);
-        $this->eTwo = ProjFourphp_Common::eTwofn($this->es);
+        if (!$this->mode) $this->mode   = 0; //chosen default mode
+        $this->temp   = $this->b / $this->a;
+        $this->es     = 1.0 - pow($this->temp, 2);
+        $this->e      = sqrt($this->es);
+        $this->eZero  = ProjFourphp_Common::eZeroFn($this->es);
+        $this->eOne   = ProjFourphp_Common::eOnefn($this->es);
+        $this->eTwo   = ProjFourphp_Common::eTwofn($this->es);
         $this->eThree = ProjFourphp_Common::eThreefn($this->es);
 
         $this->sinphi = sin($this->latOne);
         $this->cosphi = cos($this->latOne);
 
-        $this->msOne = ProjFourphp_Common::msfnz($this->e, $this->sinphi, $this->cosphi);
-        $this->mlOne = ProjFourphp_Common::mlfn($this->eZero, $this->eOne, $this->eTwo, $this->eThree, $this->latOne);
+        $this->msOne =
+            ProjFourphp_Common::msfnz($this->e, $this->sinphi, $this->cosphi);
+        $this->mlOne =
+            ProjFourphp_Common::mlfn($this->eZero, $this->eOne, $this->eTwo, $this->eThree, $this->latOne);
 
         /* format B
           --------- */
@@ -71,19 +74,25 @@ class ProjFourphp_ProjEqdc
             $this->sinphi = sin($this->latTwo);
             $this->cosphi = cos($this->latTwo);
 
-            $this->msTwo = ProjFourphp_Common::msfnz($this->e, $this->sinphi, $this->cosphi);
-            $this->mlTwo = ProjFourphp_Common::mlfn($this->eZero, $this->eOne, $this->eTwo, $this->eThree, $this->latTwo);
-            if (abs($this->latOne - $this->latTwo) >= ProjFourphp_Common::$epsln) {
-                $this->ns = ($this->msOne - $this->msTwo) / ($this->mlTwo - $this->mlOne);
+            $this->msTwo =
+                ProjFourphp_Common::msfnz($this->e, $this->sinphi, $this->cosphi);
+            $this->mlTwo =
+                ProjFourphp_Common::mlfn($this->eZero, $this->eOne, $this->eTwo, $this->eThree, $this->latTwo);
+            if (abs($this->latOne - $this->latTwo)
+                >= ProjFourphp_Common::$epsln) {
+                $this->ns =
+                    ($this->msOne - $this->msTwo)
+                    / ($this->mlTwo - $this->mlOne);
             } else {
                 $this->ns = $this->sinphi;
             }
         } else {
-            $this->ns = $this->sinphi;
+            $this->ns     = $this->sinphi;
         }
-        $this->g = $this->mlOne + $this->msOne / $this->ns;
-        $this->mlZero = ProjFourphp_Common::mlfn($this->eZero, $this->eOne, $this->eTwo, $this->eThree, $this->latZero);
-        $this->rh = $this->a * ($this->g - $this->mlZero);
+        $this->g      = $this->mlOne + $this->msOne / $this->ns;
+        $this->mlZero =
+            ProjFourphp_Common::mlfn($this->eZero, $this->eOne, $this->eTwo, $this->eThree, $this->latZero);
+        $this->rh     = $this->a * ($this->g - $this->mlZero);
     }
 
     /* Equidistant Conic forward equations--mapping lat,long to x,y
@@ -96,12 +105,14 @@ class ProjFourphp_ProjEqdc
 
         /* Forward equations
           ----------------- */
-        $ml = ProjFourphp_Common::mlfn($this->eZero, $this->eOne, $this->eTwo, $this->eThree, $lat);
+        $ml    =
+            ProjFourphp_Common::mlfn($this->eZero, $this->eOne, $this->eTwo, $this->eThree, $lat);
         $rhOne = $this->a * ($this->g - $ml);
-        $theta = $this->ns *  ProjFourphp_Common::adjustLon($lon - $this->longZero);
+        $theta =
+            $this->ns * ProjFourphp_Common::adjustLon($lon - $this->longZero);
 
-        $x = $this->xZero + $rhOne * sin($theta);
-        $y = $this->yZero + $this->rh - $rhOne * cos($theta);
+        $x    = $this->xZero + $rhOne * sin($theta);
+        $y    = $this->yZero + $this->rh - $rhOne * cos($theta);
         $p->x = $x;
         $p->y = $y;
 
@@ -119,17 +130,18 @@ class ProjFourphp_ProjEqdc
 
         if ($this->ns >= 0) {
             $rhOne = sqrt($p->x * $p->x + $p->y * $p->y);
-            $con = 1.0;
+            $con   = 1.0;
         } else {
             $rhOne = -sqrt($p->x * $p->x + $p->y * $p->y);
-            $con = -1.0;
+            $con   = -1.0;
         }
         $theta = 0.0;
-        if ($rhOne != 0.0)
-            $theta = atan2($con * $p->x, $con * $p->y);
-        $ml = $this->g - $rhOne / $this->a;
-        $lat = static::phi3z($ml, $this->eZero, $this->eOne, $this->eTwo, $this->eThree);
-        $lon =  ProjFourphp_Common::adjustLon($this->longZero + $theta / $this->ns);
+        if ($rhOne != 0.0) $theta = atan2($con * $p->x, $con * $p->y);
+        $ml    = $this->g - $rhOne / $this->a;
+        $lat   =
+            static::phi3z($ml, $this->eZero, $this->eOne, $this->eTwo, $this->eThree);
+        $lon   =
+            ProjFourphp_Common::adjustLon($this->longZero + $theta / $this->ns);
 
         $p->x = $lon;
         $p->y = $lat;

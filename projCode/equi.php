@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package Proj4
  */
@@ -37,9 +38,9 @@ class ProjFourphp_ProjEqui
 
     public function init()
     {
-        if (!$this->xZero) $this->xZero = 0;
-        if (!$this->yZero) $this->yZero = 0;
-        if (!$this->latZero) $this->latZero = 0;
+        if (!$this->xZero) $this->xZero    = 0;
+        if (!$this->yZero) $this->yZero    = 0;
+        if (!$this->latZero) $this->latZero  = 0;
         if (!$this->longZero) $this->longZero = 0;
         ///$this->tTwo;
     }
@@ -59,8 +60,8 @@ class ProjFourphp_ProjEqui
 
         $this->tOne = $x;
         $this->tTwo = cos($this->latZero);
-        $p->x = $x;
-        $p->y = $y;
+        $p->x       = $x;
+        $p->y       = $y;
         return $p;
     }
 
@@ -77,7 +78,8 @@ class ProjFourphp_ProjEqui
         if (abs($lat) > ProjFourphp_Common::$halfPi) {
             ProjFourphp::reportError("equi:Inv:DataError");
         }
-        $lon = ProjFourphp_Common::adjustLon($this->longZero + $p->x / ($this->a * cos($this->latZero)));
+        $lon  =
+            ProjFourphp_Common::adjustLon($this->longZero + $p->x / ($this->a * cos($this->latZero)));
         $p->x = $lon;
         $p->y = $lat;
     }

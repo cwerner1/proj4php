@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package Proj4
  */
@@ -77,9 +78,11 @@ class ProjFourphp_ProjVandg
             $x     = $this->xZero + static::$radius * $dlon;
             $y     = $this->yZero;
         }
-        $theta = ProjFourphp_common::asinz(2.0 * abs($lat / ProjFourphp_common::$pi));
+        $theta =
+            ProjFourphp_common::asinz(2.0 * abs($lat / ProjFourphp_common::$pi));
         if ((abs($dlon) <= ProjFourphp_Common::$epsln) ||
-            (abs(abs($lat) - ProjFourphp_Common::$halfPi) <= ProjFourphp_Common::$epsln)) {
+            (abs(abs($lat) - ProjFourphp_Common::$halfPi)
+            <= ProjFourphp_Common::$epsln)) {
             $x = $this->xZero;
             if ($lat >= 0) {
                 $y = $this->yZero + ProjFourphp_common::$pi *
@@ -90,7 +93,9 @@ class ProjFourphp_ProjVandg
             }
             //  return(OK);
         }
-        $al    = .5 * abs((ProjFourphp_common::$pi / $dlon) - ($dlon / ProjFourphp_common::$pi));
+        $al    = .5 *
+            abs((ProjFourphp_common::$pi / $dlon)
+                - ($dlon / ProjFourphp_common::$pi));
         $asq   = $al * $al;
         $sinth = sin($theta);
         $costh = cos($theta);
@@ -99,8 +104,10 @@ class ProjFourphp_ProjVandg
         $gsq = $g * $g;
         $m   = $g * (2.0 / $sinth - 1.0);
         $msq = $m * $m;
-        $con = ProjFourphp_common::$pi * static::$radius * ($al * ($g - $msq) +
-            sqrt($asq * ($g - $sq) * ($g - $msq) - ($msq + $asq) * ($gsq - $msq))
+        $con =
+            ProjFourphp_common::$pi * static::$radius * ($al * ($g - $msq) +
+            sqrt($asq * ($g - $sq) * ($g - $msq)
+                - ($msq + $asq) * ($gsq - $msq))
             ) / ($msq + $asq);
         if ($dlon < 0) {
             $con = -$con;
