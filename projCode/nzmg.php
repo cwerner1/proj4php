@@ -1,8 +1,8 @@
 <?php
+
 /**
  * @package Proj4
  */
-
 /**
  * Author : Julien Moquet
  * 
@@ -76,7 +76,7 @@
   - use pow in the summation loop - except for complex numbers
   - precalculate the values before running the loop
   - calculate theta^n = theta^(n-1) * theta during the loop
-  This implementation uses the third option for both real and complex 
+  This implementation uses the third option for both real and complex
  * arithmetic.
 
   For example
@@ -101,7 +101,7 @@
   NZGD49 long, lat:      169.172062       -46.651295  degrees
 
   Note that these test vectors convert from NZMG metres to lat/long referenced
-  to NZGD49, not the more usual WGS84. The difference is about 70m N/S 
+  to NZGD49, not the more usual WGS84. The difference is about 70m N/S
  * and about
   10m E/W.
 
@@ -118,8 +118,10 @@
   NZGD49   EPSG:4272
 
   http://spatialreference.org/ defines these as
-  ProjFourphp.defs["EPSG:4272"] = "+proj=longlat +ellps=intl +datum=nzgd49 +no_defs ";
-  ProjFourphp.defs["EPSG:27200"] = "+proj=nzmg +lat_0=-41 +lon_0=173 +x_0=2510000 +y_0=6023150 +ellps=intl +datum=nzgd49 +units=m +no_defs ";
+  ProjFourphp.defs["EPSG:4272"] = "+proj=longlat +ellps=intl +datum=nzgd49
+ * +no_defs ";
+  ProjFourphp.defs["EPSG:27200"] = "+proj=nzmg +lat_0=-41 +lon_0=173
+ * +x_0=2510000 +y_0=6023150 +ellps=intl +datum=nzgd49 +units=m +no_defs ";
 
 
   LICENSE
@@ -149,21 +151,21 @@ class ProjFourphp_ProjNzmg
     public function init()
     {
         $this->a = array();
-        $this->a[1] = +0.6399175073;
-        $this->a[2] = -0.1358797613;
-        $this->a[3] = +0.063294409;
-        $this->a[4] = -0.02526853;
-        $this->a[5] = +0.0117879;
-        $this->a[6] = -0.0055161;
-        $this->a[7] = +0.0026906;
-        $this->a[8] = -0.001333;
-        $this->a[9] = +0.00067;
+        $this->a[1]  = +0.6399175073;
+        $this->a[2]  = -0.1358797613;
+        $this->a[3]  = +0.063294409;
+        $this->a[4]  = -0.02526853;
+        $this->a[5]  = +0.0117879;
+        $this->a[6]  = -0.0055161;
+        $this->a[7]  = +0.0026906;
+        $this->a[8]  = -0.001333;
+        $this->a[9]  = +0.00067;
         $this->a[10] = -0.00034;
 
         $this->bRe = array();
         $this->bIm = array();
         $this->bRe[1] = +0.7557853228;
-        $this->bIm[1] = 0.0;                       
+        $this->bIm[1] = 0.0;
         $this->bRe[2] = +0.249204646;
         $this->bIm[2] = +0.003371507;
         $this->bRe[3] = -0.001541739;
@@ -218,14 +220,14 @@ class ProjFourphp_ProjNzmg
         // 1. Calculate d_phi and d_psi    ...   // and d_lambda
         // For this algorithm, delta_latitude is in seconds of arc x 10-5,
         //  so we need to scale to those units. Longitude is radians.
-        $dPhi = $deltaLat / ProjFourphp::$common->secToRad * 1E-5;
+        $dPhi    = $deltaLat / ProjFourphp::$common->secToRad * 1E-5;
         $dLambda = $deltaLon;
-        $dPhiN = 1;  // d_phi^0
+        $dPhiN   = 1;  // d_phi^0
 
         $dPsi = 0;
         for ($n = 1; $n <= 10; $n++) {
             $dPhiN = $dPhiN * $dPhi;
-            $dPsi = $dPsi + $this->a[$n] * $dPhiN;
+            $dPsi  = $dPsi + $this->a[$n] * $dPhiN;
         }
 
         // 2. Calculate theta
@@ -243,10 +245,10 @@ class ProjFourphp_ProjNzmg
         for ($n = 1; $n <= 6; $n++) {
             $thNReOne = $thNRe * $thRe - $thNIm * $thIm;
             $thNImOne = $thNIm * $thRe + $thNRe * $thIm;
-            $thNRe = $thNReOne;
-            $thNIm = $thNImOne;
-            $zRe = $zRe + $this->bRe[$n] * $thNRe - $this->bIm[$n] * $thNIm;
-            $zIm = $zIm + $this->bIm[$n] * $thNRe + $this->bRe[$n] * $thNIm;
+            $thNRe    = $thNReOne;
+            $thNIm    = $thNImOne;
+            $zRe      = $zRe + $this->bRe[$n] * $thNRe - $this->bIm[$n] * $thNIm;
+            $zIm      = $zIm + $this->bIm[$n] * $thNRe + $this->bRe[$n] * $thNIm;
         }
 
         // 4. Calculate easting and northing
@@ -283,10 +285,10 @@ class ProjFourphp_ProjNzmg
         for ($n = 1; $n <= 6; $n++) {
             $zNReOne = $zNRe * $zRe - $zNIm * $zIm;
             $zNImOne = $zNIm * $zRe + $zNRe * $zIm;
-            $zNRe = $zNReOne;
-            $zNIm = $zNImOne;
-            $thRe = $thRe + $this->cRe[$n] * $zNRe - $this->cIm[$n] * $zNIm;
-            $thIm = $thIm + $this->cIm[$n] * $zNRe + $this->cRe[$n] * $zNIm;
+            $zNRe    = $zNReOne;
+            $zNIm    = $zNImOne;
+            $thRe    = $thRe + $this->cRe[$n] * $zNRe - $this->cIm[$n] * $zNIm;
+            $thIm    = $thIm + $this->cIm[$n] * $zNRe + $this->cRe[$n] * $zNIm;
         }
 
         // 2b. Iterate to refine the accuracy of the calculation
@@ -305,12 +307,12 @@ class ProjFourphp_ProjNzmg
             for ($n = 2; $n <= 6; $n++) {
                 $thNReOne = $thNRe * th_re - $thNIm * $thIm;
                 $thNImOne = $thNIm * $thRe + $thNRe * $thIm;
-                $thNRe = $thNReOne;
-                $thNIm = $thNImOne;
-                $numRe = $numRe + ($n - 1) *
-                ($this->bRe[$n] * $thNRe - $this->bIm[$n] * $thNIm);
-                $numIm = $numIm + (n - 1) * 
-                ($this->bIm[$n] * $thNRe + $this->bRe[$n] * $thNIm);
+                $thNRe    = $thNReOne;
+                $thNIm    = $thNImOne;
+                $numRe    = $numRe + ($n - 1) *
+                    ($this->bRe[$n] * $thNRe - $this->bIm[$n] * $thNIm);
+                $numIm    = $numIm + (n - 1) *
+                    ($this->bIm[$n] * $thNRe + $this->bRe[$n] * $thNIm);
             }
 
             $thNRe = 1;
@@ -320,29 +322,30 @@ class ProjFourphp_ProjNzmg
             for ($n = 2; $n <= 6; $n++) {
                 $thNReOne = $thNRe * $thRe - $thNIm * $thIm;
                 $thNImOne = $thNIm * $thRe + $thNRe * $thIm;
-                $thNRe = $thNReOne;
-                $thNIm = $thNImOne;
-                $denRe = $denRe + $n * ($this->bRe[$n] * $thNRe - 
+                $thNRe    = $thNReOne;
+                $thNIm    = $thNImOne;
+                $denRe    = $denRe + $n * ($this->bRe[$n] * $thNRe -
                     $this->bIm[$n] * $thNIm);
-                $denIm = $denIm + $n * ($this->bIm[n] * $thNRe +
+                $denIm    = $denIm + $n * ($this->bIm[n] * $thNRe +
                     $this->bRe[$n] * $thNIm);
             }
 
             // Complex division
             $denTwo = $denRe * $denRe + $denIm * $denIm;
-            $thRe = ($numRe * $denRe + $numIm * $denIm) / $denTwo;
-            $thIm = ($numIm * $denRe - $numRe * $denIm) / $denTwo;
+            $thRe   = ($numRe * $denRe + $numIm * $denIm) / $denTwo;
+            $thIm   = ($numIm * $denRe - $numRe * $denIm) / $denTwo;
         }
 
-        // 3. Calculate d_phi              ...                                    // and d_lambda
-        $dPsi = $thRe;
+        // 3. Calculate d_phi              ...                                 
+        //    // and d_lambda
+        $dPsi    = $thRe;
         $dLambda = $thIm;
-        $dPsiN = 1;  // d_psi^0
+        $dPsiN   = 1;  // d_psi^0
 
         $dPhi = 0;
         for ($n = 1; $n <= 9; $n++) {
             $dPsiN = $dPsiN * $dPsi;
-            $dPhi = $dPhi + $this->d[$n] * $dPsiN;
+            $dPhi  = $dPhi + $this->d[$n] * $dPsiN;
         }
 
         // 4. Calculate latitude and longitude

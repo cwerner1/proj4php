@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package Proj4
  */
@@ -10,7 +11,7 @@
  *                      and Richard Greenwood rich@greenwoodma$p->com 
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
-/* * *****************************************************************************
+/* * *************************************************************************
   NAME                             ORTHOGRAPHIC
 
   PURPOSE:	Transforms input longitude and latitude to Easting and
@@ -31,7 +32,7 @@
   2.  Snyder, John P. and Voxland, Philip M., "An Album of Map Projections",
   U.S. Geological Survey Professional Paper 1453 , United State Government
   Printing Office, Washington D.C., 1989.
- * ***************************************************************************** */
+ * ************************************************************************** */
 
 class ProjFourphp_ProjOrtho
 {
@@ -74,12 +75,16 @@ class ProjFourphp_ProjOrtho
         $cosphi = cos($lat);
 
         $coslon = cos($dlon);
-        $g = $this->sinPOneFour * sinphi + $this->cosPOneFour * $cosphi * $coslon;
-        $ksp = 1.0;
+        $g      =
+            $this->sinPOneFour * sinphi + $this->cosPOneFour * $cosphi * $coslon;
+        $ksp    = 1.0;
 
         if (($g > 0) || (abs($g) <= ProjFourphp_Common::$epsln)) {
             $x = $this->a * $ksp * $cosphi * sin($dlon);
-            $y = $this->yZero + $this->a * $ksp * ($this->cosPOneFour * $sinphi - $this->sinPOneFour * $cosphi * $coslon);
+            $y =
+                $this->yZero + $this->a * $ksp *
+                ($this->cosPOneFour * $sinphi
+                - $this->sinPOneFour * $cosphi * $coslon);
         } else {
             ProjFourphp::reportError("orthoFwdPointError");
         }
@@ -126,13 +131,16 @@ class ProjFourphp_ProjOrtho
         if (abs($rh) <= ProjFourphp_Common::$epsln) {
             $lat = $this->latZero;
         }
-        $lat = ProjFourphp::$common . asinz($cosz * $this->sinPOneFour + ($p->y * $sinz * $this->cosPOneFour) / $rh);
+        $lat =
+            ProjFourphp_Commen::asinz($cosz * $this->sinPOneFour + ($p->y * $sinz * $this->cosPOneFour) / $rh);
         $con = abs($this->latZero) - ProjFourphp_Common::$halfPi;
         if (abs(con) <= ProjFourphp_Common::$epsln) {
             if ($this->latZero >= 0) {
-                $lon = ProjFourphp_Common::adjustLon($this->longZero + atan2($p->x, -$p->y));
+                $lon =
+                    ProjFourphp_Common::adjustLon($this->longZero + atan2($p->x, -$p->y));
             } else {
-                $lon = ProjFourphp_Common::adjustLon($this->longZero - atan2(-$p->x, $p->y));
+                $lon =
+                    ProjFourphp_Common::adjustLon($this->longZero - atan2(-$p->x, $p->y));
             }
         }
         $con = $cosz - $this->sinPOneFour * sin($lat);

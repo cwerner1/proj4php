@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package Proj4
  */
@@ -10,7 +11,7 @@
  *                      and Richard Greenwood rich@greenwoodma$p->com 
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
-/* * *****************************************************************************
+/* * **************************************************************************
   NAME                    MILLER CYLINDRICAL
 
   PURPOSE:	Transforms input longitude and latitude to Easting and
@@ -37,7 +38,7 @@
 
   3.  "Software Documentation for GCTP General Cartographic Transformation
   Package", U.S. Geological Survey National Mapping Division, May 1982.
- * ***************************************************************************** */
+ * ************************************************************************** */
 
 class ProjFourphp_ProjMill
 {
@@ -61,8 +62,11 @@ class ProjFourphp_ProjMill
         /* Forward equations
           ----------------- */
         $dlon = ProjFourphp_Common::adjustLon($lon - $this->longZero);
-        $x = $this->xZero + $this->a * $dlon;
-        $y = $this->yZero + $this->a * log(tan((ProjFourphp_common::$pi / 4.0) + ($lat / 2.5))) * 1.25;
+        $x    = $this->xZero + $this->a * $dlon;
+        $y    =
+            $this->yZero
+            + $this->a * log(tan((ProjFourphp_common::$pi / 4.0)
+                    + ($lat / 2.5))) * 1.25;
 
         $p->x = $x;
         $p->y = $y;
@@ -79,8 +83,10 @@ class ProjFourphp_ProjMill
         $p->x -= $this->xZero;
         $p->y -= $this->yZero;
 
-        $lon = ProjFourphp_Common::adjustLon($this->longZero + $p->x / $this->a);
-        $lat = 2.5 * (atan(exp(0.8 * $p->y / $this->a)) - ProjFourphp_common::$pi / 4.0);
+        $lon =
+            ProjFourphp_Common::adjustLon($this->longZero + $p->x / $this->a);
+        $lat = 2.5 * (atan(exp(0.8 * $p->y / $this->a))
+            - ProjFourphp_common::$pi / 4.0);
 
         $p->x = $lon;
         $p->y = $lat;

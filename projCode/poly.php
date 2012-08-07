@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package Proj4
  */
@@ -29,7 +30,7 @@ function phi4z($eccent, $eZero, $eOne, $eTwo, $eThree, $a, $b, &$c, $phi)
      */
 
     $phi = $a;
-    for ($i   = 1; $i <= 15; $i++) {
+    for ($i = 1; $i <= 15; $i++) {
         $sinphi   = sin($phi);
         $tanphi   = tan($phi);
         $c        = $tanphi * sqrt(1.0 - $eccent * $sinphi * $sinphi);
@@ -107,15 +108,16 @@ class ProjFourphp_ProjPoly
 
         /* Place parameters in static storage for common use
           ------------------------------------------------- */
-        $this->temp = $this->b / $this->a;
-        $this->es = 1.0 - pow($this->temp, 2); // devait etre dans tmerc.js
+        $this->temp   = $this->b / $this->a;
+        $this->es     = 1.0 - pow($this->temp, 2); // devait etre dans tmerc.js
         // mais n y est pas donc je commente sinon retour de valeurs nulles 
-        $this->e = sqrt($this->es);
-        $this->eZero = ProjFourphp_Common::eZeroFn($this->es);
-        $this->eOne = ProjFourphp_Common::eOnefn($this->es);
-        $this->eTwo = ProjFourphp_Common::eTwofn($this->es);
+        $this->e      = sqrt($this->es);
+        $this->eZero  = ProjFourphp_Common::eZeroFn($this->es);
+        $this->eOne   = ProjFourphp_Common::eOnefn($this->es);
+        $this->eTwo   = ProjFourphp_Common::eTwofn($this->es);
         $this->eThree = ProjFourphp_Common::eThreefn($this->es);
-        $this->mlZero = ProjFourphp_Common::mlfn($this->eZero, $this->eOne, $this->eTwo, $this->eThree, $this->latZero); //si que des zeros le calcul ne se fait pas
+        $this->mlZero =
+            ProjFourphp_Common::mlfn($this->eZero, $this->eOne, $this->eTwo, $this->eThree, $this->latZero); //si que des zeros le calcul ne se fait pas
         //if (!$this->mlZero) {$this->mlZero=0;}
     }
 
@@ -149,11 +151,15 @@ class ProjFourphp_ProjPoly
             $sinphi = sin($lat);
             $cosphi = cos($lat);
 
-            $ml = ProjFourphp_Common::mlfn($this->eZero, $this->eOne, $this->eTwo, $this->eThree, $lat);
+            $ml =
+                ProjFourphp_Common::mlfn($this->eZero, $this->eOne, $this->eTwo, $this->eThree, $lat);
             $ms = ProjFourphp_Common::msfnz($this->e, $sinphi, $cosphi);
 
             $x = $this->xZero + $this->a * $ms * sin($sinphi) / $sinphi;
-            $y = $this->yZero + $this->a * ($ml - $this->mlZero + $ms * (1.0 - cos($sinphi)) / $sinphi);
+            $y =
+                $this->yZero +
+                $this->a * ($ml - $this->mlZero + $ms * (1.0 - cos($sinphi))
+                / $sinphi);
         }
 
         $p->x = $x;
@@ -191,9 +197,11 @@ class ProjFourphp_ProjPoly
             $lat = 0.0;
         } else {
             $b    = $al * $al + ($p->x / $this->a) * ($p->x / $this->a);
-            $iflg = phi4z($this->es, $this->eZero, $this->eOne, $this->eTwo, $this->eThree, $this->al, $b, $c, $lat);
+            $iflg =
+                phi4z($this->es, $this->eZero, $this->eOne, $this->eTwo, $this->eThree, $this->al, $b, $c, $lat);
             if ($iflg != 1) return($iflg);
-            $lon  = ProjFourphp_Common::adjustLon((ProjFourphp_Common::asinz($p->x * $c / $this->a) / sin($lat)) + $this->longZero);
+            $lon  =
+                ProjFourphp_Common::adjustLon((ProjFourphp_Common::asinz($p->x * $c / $this->a) / sin($lat)) + $this->longZero);
         }
 
         $p->x = $lon;

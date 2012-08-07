@@ -1,7 +1,9 @@
 <?php
+
 /**
  * @package Proj4
  */
+
 /**
  * Author : Julien Moquet
  * 
@@ -9,7 +11,7 @@
  *                      and Richard Greenwood rich@greenwoodma$p->com 
  * License: LGPL as per: http://www.gnu.org/copyleft/lesser.html 
  */
-/* * *****************************************************************************
+/* * ***************************************************************************
   NAME                  		SINUSOIDAL
 
   PURPOSE:	Transforms input longitude and latitude to Easting and
@@ -33,7 +35,7 @@
 
   2.  "Software Documentation for GCTP General Cartographic Transformation
   Package", U.S. Geological Survey National Mapping Division, May 1982.
- * ***************************************************************************** */
+ * ************************************************************************** */
 
 class ProjFourphp_ProjSinu
 {
@@ -49,8 +51,8 @@ class ProjFourphp_ProjSinu
         if (!$this->sphere) {
             $this->en = ProjFourphp::$common->pjEnfn($this->es);
         } else {
-            $this->n = 1.;
-            $this->m = 0.;
+            $this->n  = 1.;
+            $this->m  = 0.;
             $this->es = 0;
             $this->cY = sqrt(($this->m + 1.) / $this->n);
             $this->cX = $this->cY / ($this->m + 1.);
@@ -126,15 +128,19 @@ class ProjFourphp_ProjSinu
             }
             $lon = $p->x / ($this->cX * ($this->m + cos($p->y)));
         } else {
-            $lat = ProjFourphp::$common->pjInvMlfn($p->y / $this->a, $this->es, $this->en);
+            $lat =
+                ProjFourphp::$common->pjInvMlfn($p->y / $this->a, $this->es, $this->en);
             $s   = abs($lat);
 
             if ($s < ProjFourphp_Common::$halfPi) {
                 $s    = sin($lat);
-                $temp = $this->longZero + $p->x * sqrt(1. - $this->es * $s * $s) / ($this->a * cos($lat));
+                $temp =
+                    $this->longZero + $p->x * sqrt(1. - $this->es * $s * $s) /
+                    ($this->a * cos($lat));
                 //temp = $this->longZero + $p->x / ($this->a * cos($lat));
                 $lon  = ProjFourphp_Common::adjustLon($temp);
-            } else if (($s - ProjFourphp_Common::$epsln) < ProjFourphp_Common::$halfPi) {
+            } else if (($s - ProjFourphp_Common::$epsln)
+                < ProjFourphp_Common::$halfPi) {
                 $lon = $this->longZero;
             }
         }

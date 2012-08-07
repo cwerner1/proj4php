@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package Proj4
  */
@@ -45,7 +46,7 @@ class ProjFourphp_ProjOmerc
         }
         if (!$this->lonOne) {
             $this->lonOne = 0;
-            $this->mode = 1;
+            $this->mode   = 1;
         }
         if (!$this->lonTwo) {
             $this->lonTwo = 0;
@@ -65,17 +66,19 @@ class ProjFourphp_ProjOmerc
 
         $this->con = 1.0 - $this->es * $this->sinpTwoZero * $this->sinpTwoZero;
         $this->com = sqrt(1.0 - $es);
-        $this->bl = sqrt(1.0 + $this->es * pow($this->cospTwoZero, 4.0) / (1.0 - $es));
-        $this->al = $this->a * $this->bl * $this->kZero * $this->com /
+        $this->bl  =
+            sqrt(1.0 + $this->es * pow($this->cospTwoZero, 4.0) / (1.0 - $es));
+        $this->al  = $this->a * $this->bl * $this->kZero * $this->com /
             $this->con;
         if (abs($this->latZero) < ProjFourphp_Common::$epsln) {
             $this->ts = 1.0;
-            $this->d = 1.0;
+            $this->d  = 1.0;
             $this->el = 1.0;
         } else {
-            $this->ts = ProjFourphp_Common::tsfnz($this->e, $this->latZero, $this->sinpTwoZero);
+            $this->ts  =
+                ProjFourphp_Common::tsfnz($this->e, $this->latZero, $this->sinpTwoZero);
             $this->con = sqrt($this->con);
-            $this->d = $this->bl * $this->com / ($this->cospTwoZero * $this->con);
+            $this->d   = $this->bl * $this->com / ($this->cospTwoZero * $this->con);
             if (($this->d * $this->d - 1.0) > 0.0) {
                 if ($this->latZero >= 0.0) {
                     $this->f = $this->d + sqrt($this->d * $this->d - 1.0);
@@ -83,7 +86,7 @@ class ProjFourphp_ProjOmerc
                     $this->f = $this->d - sqrt($this->d * $this->d - 1.0);
                 }
             } else {
-                $this->f = $this->d;
+                $this->f  = $this->d;
             }
             $this->el = $this->f * pow($this->ts, $this->bl);
         }
@@ -91,8 +94,9 @@ class ProjFourphp_ProjOmerc
         //$this->longc=52.60353916666667;
 
         if ($this->mode != 0) {
-            $this->g = .5 * ($this->f - 1.0 / $this->f);
-            $this->gama = ProjFourphp_Common::asinz(sin($this->alpha) / $this->d);
+            $this->g     = .5 * ($this->f - 1.0 / $this->f);
+            $this->gama  =
+                ProjFourphp_Common::asinz(sin($this->alpha) / $this->d);
             $this->longc = $this->longc -
                 ProjFourphp_Common::asinz($this->g * tan($this->gama)) /
                 $this->bl;
@@ -104,7 +108,8 @@ class ProjFourphp_ProjOmerc
             // cenlat(lat_origin);
 
             $this->con = abs($this->latZero);
-            if (($this->con > ProjFourphp_Common::$epsln) && (abs($this->con - ProjFourphp_Common::$halfPi) > ProjFourphp_Common::$epsln)) {
+            if (($this->con
+                > ProjFourphp_Common::$epsln) && (abs($this->con - ProjFourphp_Common::$halfPi) > ProjFourphp_Common::$epsln)) {
                 $this->singam = sin($this->gama);
                 $this->cosgam = cos($this->gama);
 
@@ -123,17 +128,19 @@ class ProjFourphp_ProjOmerc
             }
         } else {
             $this->sinphi = sin($this->atOne);
-            $this->tsOne = ProjFourphp_Common::tsfnz($this->e, $this->latOne, $this->sinphi);
+            $this->tsOne  =
+                ProjFourphp_Common::tsfnz($this->e, $this->latOne, $this->sinphi);
             $this->sinphi = sin($this->latTwo);
-            $this->tsTwo = ProjFourphp_Common::tsfnz($this->e, $this->latTwo, $this->sinphi);
-            $this->h = pow($this->tsOne, $this->bl);
-            $this->l = pow($this->tsTwo, $this->bl);
-            $this->f = $this->el / $this->h;
-            $this->g = .5 * ($this->f - 1.0 / $this->f);
-            $this->j = ($this->el * $this->el - $this->l * $this->h) /
+            $this->tsTwo  =
+                ProjFourphp_Common::tsfnz($this->e, $this->latTwo, $this->sinphi);
+            $this->h      = pow($this->tsOne, $this->bl);
+            $this->l      = pow($this->tsTwo, $this->bl);
+            $this->f      = $this->el / $this->h;
+            $this->g      = .5 * ($this->f - 1.0 / $this->f);
+            $this->j      = ($this->el * $this->el - $this->l * $this->h) /
                 ($this->el * $this->el + $this->l * $this->h);
 
-            $this->p = ($this->l - $this->h) / ($this->l + $this->h);
+            $this->p    = ($this->l - $this->h) / ($this->l + $this->h);
             $this->dlon = $this->lonOne - $this->lonTwo;
             if ($this->dlon < -ProjFourphp_common::$pi) {
                 $this->lonTwo = $this->lonTwo - 2.0 * ProjFourphp_common::$pi;
@@ -141,27 +148,33 @@ class ProjFourphp_ProjOmerc
             if ($this->dlon > ProjFourphp_common::$pi) {
                 $this->lonTwo = $this->lonTwo + 2.0 * ProjFourphp_common::$pi;
             }
-            $this->dlon = $this->lonOne - $this->lonTwo;
-            $this->longc = .5 * ($this->lonOne + $this->lonTwo)
+            $this->dlon   = $this->lonOne - $this->lonTwo;
+            $this->longc  = .5 * ($this->lonOne + $this->lonTwo)
                 - atan($this->j * tan(.5 * $this->bl * $this->dlon) / $this->p)
                 / $this->bl;
-            $this->dlon = ProjFourphp_Common::adjustLon($this->lonOne - $this->longc);
-            $this->gama = atan(sin($this->bl * $this->dlon) / $this->g);
-            $this->alpha = ProjFourphp_Common::asinz($this->d * sin($this->gama));
+            $this->dlon   =
+                ProjFourphp_Common::adjustLon($this->lonOne - $this->longc);
+            $this->gama   = atan(sin($this->bl * $this->dlon) / $this->g);
+            $this->alpha  =
+                ProjFourphp_Common::asinz($this->d * sin($this->gama));
 
             /* Report parameters common to format A
               ------------------------------------- */
-            if (abs($this->latOne - $this->latTwo) <= ProjFourphp_Common::$epsln) {
+            if (abs($this->latOne - $this->latTwo)
+                <= ProjFourphp_Common::$epsln) {
                 ProjFourphp::reportError("omercInitDataError");
                 //return(202);
             } else {
                 $this->con = abs($this->latOne);
             }
-            if (($this->con <= ProjFourphp_Common::$epsln) || (abs($this->con - ProjFourphp_Common::$halfPi) <= ProjFourphp_Common::$epsln)) {
+            if (($this->con <= ProjFourphp_Common::$epsln)
+                || (abs($this->con - ProjFourphp_Common::$halfPi)
+                <= ProjFourphp_Common::$epsln)) {
                 ProjFourphp::reportError("omercInitDataError");
                 //return(202);
             } else {
-                if (abs(abs($this->latZero) - ProjFourphp_Common::$halfPi) <= ProjFourphp_Common::$epsln) {
+                if (abs(abs($this->latZero) - ProjFourphp_Common::$halfPi)
+                    <= ProjFourphp_Common::$epsln) {
                     ProjFourphp::reportError("omercInitDataError");
                     //return(202);
                 }
@@ -219,7 +232,8 @@ class ProjFourphp_ProjOmerc
         $sinPhi = sin($lat);
         $dlon   = ProjFourphp_Common::adjustLon($lon - $this->longc);
         $vl     = sin($this->bl * $dlon);
-        if (abs(abs($lat) - ProjFourphp_Common::$halfPi) > ProjFourphp_Common::$epsln) {
+        if (abs(abs($lat) - ProjFourphp_Common::$halfPi)
+            > ProjFourphp_Common::$epsln) {
             $tsOne = ProjFourphp_Common::tsfnz($this->e, $lat, $sinPhi);
             $q     = $this->el / (pow($tsOne, $this->bl));
             $s     = .5 * ($q - 1.0 / $q);
@@ -248,8 +262,8 @@ class ProjFourphp_ProjOmerc
             ProjFourphp::reportError("omercFwdInfinity");
             //return(205);
         }
-        $vs = .5 * $this->al * log((1.0 - $ul) / (1.0 + $ul)) / $this->bl;
-        $us = $us - $this->u;
+        $vs   = .5 * $this->al * log((1.0 - $ul) / (1.0 + $ul)) / $this->bl;
+        $us   = $us - $this->u;
         $p->x = $this->xZero + $vs * $this->cosaz + $us * $this->sinaz;
         $p->y = $this->yZero + $us * $this->cosaz - $vs * $this->sinaz;
 
@@ -320,8 +334,8 @@ class ProjFourphp_ProjOmerc
                 / $this->bl;
             $lon   = ProjFourphp_Common::adjustLon($theta);
         }
-        $p->x = $lon;
-        $p->y = $lat;
+        $p->x  = $lon;
+        $p->y  = $lat;
         return $p;
     }
 

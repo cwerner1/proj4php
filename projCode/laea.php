@@ -1,7 +1,9 @@
 <?php
+
 /**
  * @package Proj4
  */
+
 /**
  * Author : Julien Moquet
  * 
@@ -58,7 +60,8 @@ class ProjFourphp_ProjLaea
     public function init()
     {
         $t = abs($this->latZero);
-        if (abs($t - ProjFourphp_Common::$halfPi) < ProjFourphp_Common::$epsln) {
+        if (abs($t - ProjFourphp_Common::$halfPi)
+            < ProjFourphp_Common::$epsln) {
             $this->mode = $this->latZero < 0. ? self::$_sPole : self::$_nPole;
         } else if (abs($t) < ProjFourphp_Common::$epsln) {
             $this->mode = self::$_equit;
@@ -68,27 +71,30 @@ class ProjFourphp_ProjLaea
         if ($this->es > 0) {
             #$sinphi;
 
-            $this->qp = ProjFourphp::$common->qsfnz($this->e, 1.0);
+            $this->qp  = ProjFourphp::$common->qsfnz($this->e, 1.0);
             $this->mmf = .5 / (1. - $this->es);
             $this->apa = $this->authset($this->es);
             switch ($this->mode) {
                 case self::$_nPole:
                 case self::$_sPole:
-                    $this->dd = 1.;
+                    $this->dd      = 1.;
                     break;
                 case self::$_equit:
-                    $this->rq = sqrt(.5 * $this->qp);
-                    $this->dd = 1. / $this->rq;
-                    $this->xmf = 1.;
-                    $this->ymf = .5 * $this->qp;
+                    $this->rq      = sqrt(.5 * $this->qp);
+                    $this->dd      = 1. / $this->rq;
+                    $this->xmf     = 1.;
+                    $this->ymf     = .5 * $this->qp;
                     break;
                 case self::$_obliq:
-                    $this->rq = sqrt(.5 * $this->qp);
-                    $sinphi = sin($this->latZero);
-                    $this->sinbOne = ProjFourphp::$common->qsfnz($this->e, $sinphi) / $this->qp;
-                    $this->cosbOne = sqrt(1. - $this->sinbOne * $this->sinbOne);
-                    $this->dd = cos($this->latZero) / (sqrt(1. - $this->es * $sinphi * $sinphi) * $this->rq * $this->cosbOne);
-                    $this->ymf = ($this->xmf = $this->rq) / $this->dd;
+                    $this->rq      = sqrt(.5 * $this->qp);
+                    $sinphi        = sin($this->latZero);
+                    $this->sinbOne =
+                        ProjFourphp::$common->qsfnz($this->e, $sinphi) / $this->qp;
+                    $this->cosbOne =
+                        sqrt(1. - $this->sinbOne * $this->sinbOne);
+                    $this->dd      =
+                        cos($this->latZero) / (sqrt(1. - $this->es * $sinphi * $sinphi) * $this->rq * $this->cosbOne);
+                    $this->ymf     = ($this->xmf     = $this->rq) / $this->dd;
                     $this->xmf *= $this->dd;
                     break;
             }
@@ -127,7 +133,13 @@ class ProjFourphp_ProjLaea
             switch ($this->mode) {
                 case self::$_obliq:
                 case self::$_equit:
-                    $y = ($this->mode == self::$_equit) ? 1. + $cosphi * $coslam : 1. + $this->sinphZero * $sinphi + $this->cosphZero * $cosphi * $coslam;
+                    if ($this->mode == self::$_equit) {
+                        $y = 1. + $cosphi * $coslam;
+                    } else {
+                        $y = 1. + $this->sinphZero * $sinphi
+                            + $this->cosphZero * $cosphi * $coslam;
+                    }
+
                     if (y <= ProjFourphp_Common::$epsln) {
                         ProjFourphp::reportError("laea:fwd:y less than eps");
                         return null;
@@ -300,9 +312,9 @@ class ProjFourphp_ProjLaea
                         $p->y = $this->phiZero;
                         return $p;
                     }
-                    $sCe = 2. * asin(.5 * $rho / $this->rq);
-                    $cCe = cos($sCe);
-                    $x *= ($sCe = sin($sCe));
+                    $sCe  = 2. * asin(.5 * $rho / $this->rq);
+                    $cCe  = cos($sCe);
+                    $x *= ($sCe  = sin($sCe));
                     if ($this->mode == self::$_obliq) {
                         $ab = $cCe * $this->sinbOne + $y * $sCe * $this->cosbOne / $rho;
                         $q  = $this->qp * $ab;
@@ -325,7 +337,7 @@ class ProjFourphp_ProjLaea
                     /*
                       q = $this->qp - q;
                      */
-                    $ab = 1. - $q / $this->qp;
+                    $ab   = 1. - $q / $this->qp;
                     if ($this->mode == self::$_sPole) {
                         $ab  = - $ab;
                     }
