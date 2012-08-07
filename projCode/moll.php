@@ -80,8 +80,10 @@ class ProjFourphp_ProjMoll
           ----------------------------------------------------------------- */
         if (ProjFourphp_common::$pi / 2 - abs($lat)
             < ProjFourphp_Common::$epsln) $deltaLon = 0;
-        $x        = 0.900316316158 * $this->a * $deltaLon * cos($theta) + $this->xZero;
-        $y        = 1.4142135623731 * $this->a * sin($theta) + $this->yZero;
+        $x        =
+            0.900316316158 * $this->a * $deltaLon * cos($theta) + $this->xZero;
+        $y        =
+            1.4142135623731 * $this->a * sin($theta) + $this->yZero;
 
         $p->x = $x;
         $p->y = $y;
@@ -108,15 +110,23 @@ class ProjFourphp_ProjMoll
          *   Therefore
           a number very close to one is used instead.
           ------------------------------------------------------------------- */
-        if (abs($arg) > 0.999999999999) $arg   = 0.999999999999;
+        if (abs($arg) > 0.999999999999) {
+            $arg   = 0.999999999999;
+        }
         $theta = asin($arg);
         $lon   =
             ProjFourphp_Common::adjustLon($this->longZero + ($p->x / (0.900316316158 * $this->a * cos($theta))));
-        if ($lon < (-ProjFourphp_common::$pi)) $lon   = -ProjFourphp_common::$pi;
-        if ($lon > ProjFourphp_common::$pi) $lon   = ProjFourphp_common::$pi;
-        $arg   = (2.0 * $theta + sin(2.0 * $theta)) / ProjFourphp_common::$pi;
-        if (abs($arg) > 1.0) $arg   = 1.0;
-        $lat   = asin($arg);
+        if ($lon < (-ProjFourphp_common::$pi)) {
+            $lon = -ProjFourphp_common::$pi;
+        }
+        if ($lon > ProjFourphp_common::$pi) {
+            $lon  = ProjFourphp_common::$pi;
+        }
+        $argT = (2.0 * $theta + sin(2.0 * $theta)) / ProjFourphp_common::$pi;
+        if (abs($argT) > 1.0) {
+            $argT = 1.0;
+        }
+        $lat  = asin($argT);
         //return(OK);
 
         $p->x = $lon;

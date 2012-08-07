@@ -103,7 +103,10 @@ class ProjFourphp_ProjLcc
         $lat = $p->y;
 
         // convert to radians
-        if ($lat <= 90.0 && $lat >= -90.0 && $lon <= 180.0 && $lon >= -180.0) {
+        if ($lat <= 90.0
+            && $lat >= -90.0
+            && $lon <= 180.0
+            && $lon >= -180.0) {
             //lon = lon * ProjFourphp::$common.D2R;
             //lat = lat * ProjFourphp::$common.D2R;
         } else {

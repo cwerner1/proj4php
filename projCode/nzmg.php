@@ -247,8 +247,10 @@ class ProjFourphp_ProjNzmg
             $thNImOne = $thNIm * $thRe + $thNRe * $thIm;
             $thNRe    = $thNReOne;
             $thNIm    = $thNImOne;
-            $zRe      = $zRe + $this->bRe[$n] * $thNRe - $this->bIm[$n] * $thNIm;
-            $zIm      = $zIm + $this->bIm[$n] * $thNRe + $this->bRe[$n] * $thNIm;
+            $zRe      =
+                $zRe + $this->bRe[$n] * $thNRe - $this->bIm[$n] * $thNIm;
+            $zIm      =
+                $zIm + $this->bIm[$n] * $thNRe + $this->bRe[$n] * $thNIm;
         }
 
         // 4. Calculate easting and northing
@@ -277,9 +279,10 @@ class ProjFourphp_ProjNzmg
         // 2a. Calculate theta - first approximation gives km accuracy
         $zNRe = 1;
         $zNIm = 0;  // z^0
-        $zNReOne;
-        $zNImOne;
-
+        /**
+         *  $zNReOne;
+         *  $zNImOne;
+         */
         $thRe = 0;
         $thIm = 0;
         for ($n = 1; $n <= 6; $n++) {
@@ -287,8 +290,10 @@ class ProjFourphp_ProjNzmg
             $zNImOne = $zNIm * $zRe + $zNRe * $zIm;
             $zNRe    = $zNReOne;
             $zNIm    = $zNImOne;
-            $thRe    = $thRe + $this->cRe[$n] * $zNRe - $this->cIm[$n] * $zNIm;
-            $thIm    = $thIm + $this->cIm[$n] * $zNRe + $this->cRe[$n] * $zNIm;
+            $thRe    =
+                $thRe + $this->cRe[$n] * $zNRe - $this->cIm[$n] * $zNIm;
+            $thIm    =
+                $thIm + $this->cIm[$n] * $zNRe + $this->cRe[$n] * $zNIm;
         }
 
         // 2b. Iterate to refine the accuracy of the calculation
@@ -299,9 +304,10 @@ class ProjFourphp_ProjNzmg
         for ($i = 0; $i < $this->iterations; $i++) {
             $thNRe = $thRe;
             $thNIm = $thIm;
-            $thNReOne;
-            $thNImOne;
-
+            /**
+             *  $thNReOne;
+              $thNImOne;
+             */
             $numRe = $zRe;
             $numIm = $zIm;
             for ($n = 2; $n <= 6; $n++) {

@@ -78,7 +78,8 @@ class ProjFourphp_ProjOmerc
             $this->ts  =
                 ProjFourphp_Common::tsfnz($this->e, $this->latZero, $this->sinpTwoZero);
             $this->con = sqrt($this->con);
-            $this->d   = $this->bl * $this->com / ($this->cospTwoZero * $this->con);
+            $this->d   =
+                $this->bl * $this->com / ($this->cospTwoZero * $this->con);
             if (($this->d * $this->d - 1.0) > 0.0) {
                 if ($this->latZero >= 0.0) {
                     $this->f = $this->d + sqrt($this->d * $this->d - 1.0);
@@ -109,7 +110,9 @@ class ProjFourphp_ProjOmerc
 
             $this->con = abs($this->latZero);
             if (($this->con
-                > ProjFourphp_Common::$epsln) && (abs($this->con - ProjFourphp_Common::$halfPi) > ProjFourphp_Common::$epsln)) {
+                > ProjFourphp_Common::$epsln) 
+                && (abs($this->con - ProjFourphp_Common::$halfPi) 
+                    > ProjFourphp_Common::$epsln)) {
                 $this->singam = sin($this->gama);
                 $this->cosgam = cos($this->gama);
 

@@ -76,7 +76,8 @@ class ProjFourphp_ProjOrtho
 
         $coslon = cos($dlon);
         $g      =
-            $this->sinPOneFour * sinphi + $this->cosPOneFour * $cosphi * $coslon;
+            $this->sinPOneFour * sinphi
+            + $this->cosPOneFour * $cosphi * $coslon;
         $ksp    = 1.0;
 
         if (($g > 0) || (abs($g) <= ProjFourphp_Common::$epsln)) {

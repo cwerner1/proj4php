@@ -100,9 +100,12 @@ class ProjFourphp_ProjAeqd
                     && (abs($p->x) < ProjFourphp_Common::$epsln)) {
                     //no-op, just keep the lon value as is
                 } else {
-                    #$temp = atan2( ($p->x * $sinz * $this->cosPOneTwo ), ($con * $rh ) ); // $temp is unused !?!
-                    $lon =
-                        ProjFourphp_Common::adjustLon($this->longZero + atan2(($p->x * $sinz * $this->cosPOneTwo), ($con * $rh)));
+                    
+                    $lonPre =
+                        $this->longZero
+                        + atan2(($p->x * $sinz * $this->cosPOneTwo), ($con * $rh));
+                    $lon    =
+                        ProjFourphp_Common::adjustLon($lonPre);
                 }
             }
         }

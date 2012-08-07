@@ -37,7 +37,8 @@ function phi4z($eccent, $eZero, $eOne, $eTwo, $eThree, $a, $b, &$c, $phi)
         $sinTwoph = sin(2.0 * $phi);
         /*
           ml = e0 * *phi - eOne * sinTwoph + eTwo * sin (4.0 *  *phi);
-          mlp = e0 - 2.0 * eOne * cos (2.0 *  *phi) + 4.0 * eTwo *  cos (4.0 *  *phi);
+          mlp = e0 - 2.0 * eOne * cos (2.0 *  *phi) + 4.0 * eTwo *
+         *  cos (4.0 *  *phi);
          */
         $ml       = $eZero * $phi - $eOne * $sinTwoph + $eTwo * sin(4.0 * $phi)
             - $eThree * sin(6.0 * $phi);

@@ -89,11 +89,13 @@ class ProjFourphp_ProjLaea
                     $this->rq      = sqrt(.5 * $this->qp);
                     $sinphi        = sin($this->latZero);
                     $this->sinbOne =
-                        ProjFourphp::$common->qsfnz($this->e, $sinphi) / $this->qp;
+                        ProjFourphp::$common->qsfnz($this->e, $sinphi)
+                        / $this->qp;
                     $this->cosbOne =
                         sqrt(1. - $this->sinbOne * $this->sinbOne);
                     $this->dd      =
-                        cos($this->latZero) / (sqrt(1. - $this->es * $sinphi * $sinphi) * $this->rq * $this->cosbOne);
+                        cos($this->latZero)
+                        / (sqrt(1. - $this->es * $sinphi * $sinphi) * $this->rq * $this->cosbOne);
                     $this->ymf     = ($this->xmf     = $this->rq) / $this->dd;
                     $this->xmf *= $this->dd;
                     break;
@@ -346,11 +348,11 @@ class ProjFourphp_ProjLaea
                     $cCe  = cos($sCe);
                     $x *= ($sCe  = sin($sCe));
                     if ($this->mode == self::$_obliq) {
-                        $ab = $cCe
-                            * $this->sinbOne + $y * $sCe * $this->cosbOne / $rho;
+                        $ab = $cCe * $this->sinbOne
+                            + $y * $sCe * $this->cosbOne / $rho;
                         $q  = $this->qp * $ab;
-                        $y  = $rho
-                            * $this->cosbOne * $cCe - $y * $this->sinbOne * $sCe;
+                        $y  = $rho * $this->cosbOne
+                            * $cCe - $y * $this->sinbOne * $sCe;
                     } else {
                         $ab = $y * $sCe / $rho;
                         $q  = $this->qp * $ab;

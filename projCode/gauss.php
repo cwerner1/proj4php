@@ -63,7 +63,8 @@ class ProjFourphp_ProjGauss
         $delTol = 1e-14;
         $lon    = $p->x / $this->c;
         $lat    = $p->y;
-        $num    = pow(tan(0.5 * $lat + ProjFourphp_Common::$fortPi) / $this->k, 1. / $this->c);
+        $num    =
+            pow(tan(0.5 * $lat + ProjFourphp_Common::$fortPi) / $this->k, 1. / $this->c);
 
         for ($i = ProjFourphp_Common::$maxIter; $i > 0; --$i) {
             $lat  = 2.0 *
