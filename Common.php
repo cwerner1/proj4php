@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package Proj4
  */
@@ -24,7 +25,8 @@ class ProjFourphp_Common
     public static $epsln     = 1.0e-10;
     public static $maxIter   = 20;
     // following constants from geocent.c
-    public static $cosOf67P5 = 0.38268343236508977;  /* cosine of 67.5 degrees */
+    public static $cosOf67P5 = 0.38268343236508977;  /*
+     * cosine of 67.5 degrees */
     public static $adC       = 1.0026000;
     /* Toms region 1 constant */
 
@@ -100,7 +102,7 @@ class ProjFourphp_Common
     {
         $eccnth = .5 * $eccent;
         $phi    = self::$halfPi - 2 * atan($ts);
-        for ($i      = 0; $i <= 15; $i++) {
+        for ($i = 0; $i <= 15; $i++) {
             $con  = $eccent * sin($phi);
             $dphi = self::$halfPi -
                 2 * atan($ts * (pow(((1.0 - $con) / (1.0 + $con)), $eccnth)))
@@ -120,7 +122,8 @@ class ProjFourphp_Common
     {
         if ($eccent > 1.0e-7) {
             $con = $eccent * $sinphi;
-            return (( 1.0 - $eccent * $eccent) * ($sinphi / (1.0 - $con * $con) - (.5 / $eccent) * log((1.0 - $con) / (1.0 + $con))));
+            return (( 1.0 - $eccent * $eccent) * ($sinphi / (1.0 - $con * $con)
+                - (.5 / $eccent) * log((1.0 - $con) / (1.0 + $con))));
         } else {
             return(2.0 * $sinphi);
         }
@@ -160,7 +163,8 @@ class ProjFourphp_Common
 
     public static function mlfn($e0, $eOne, $eTwo, $eThree, $phi)
     {
-        return($e0 * $phi - $eOne * sin(2.0 * $phi) + $eTwo * sin(4.0 * $phi) - $eThree * sin(6.0 * $phi));
+        return($e0 * $phi - $eOne * sin(2.0 * $phi) + $eTwo * sin(4.0 * $phi)
+            - $eThree * sin(6.0 * $phi));
     }
 
     public static function srat($esinp, $exp)
@@ -181,7 +185,12 @@ class ProjFourphp_Common
 // Function to adjust longitude to -180 to 180; input in radians
     public static function adjustLon($x)
     {
-        $x = (abs($x) < self::$pi) ? $x : ($x - (self::$sign($x) * self::$twoPi) );
+        if (abs($x) < self::$pi) {
+            return $x;
+        } else {
+            $x = ($x - (self::$sign($x) * self::$twoPi) );
+        }
+
         return $x;
     }
 
@@ -189,7 +198,11 @@ class ProjFourphp_Common
 // Function to adjust latitude to -90 to 90; input in radians
     public static function adjustLat($x)
     {
-        $x = (abs($x) < self::$halfPi) ? $x : ($x - (self::$sign($x) * self::$pi) );
+        if (abs($x) < self::$halfPi) {
+            return $x;
+        } else {
+            $x = ($x - (self::$sign($x) * self::$pi) );
+        }
         return $x;
     }
 
@@ -201,7 +214,8 @@ class ProjFourphp_Common
         if ($phi == -1.0 * self::$halfPi) return -1.0 * INF;
 
         $con = $eccent * $sinphi;
-        return log(tan((self::$halfPi + $phi) / 2.0)) + $eccent * log((1.0 - $con) / (1.0 + $con)) / 2.0;
+        return log(tan((self::$halfPi + $phi) / 2.0))
+            + $eccent * log((1.0 - $con) / (1.0 + $con)) / 2.0;
     }
 
     public static function fL($x, $l)
@@ -218,7 +232,8 @@ class ProjFourphp_Common
         do {
             $iPhi = $phi;
             $con  = $eccent * sin($iPhi);
-            $phi  = self::$fL(exp($eccent * log((1.0 + $con) / (1.0 - $con)) / 2.0), $ts);
+            $phi  =
+                self::$fL(exp($eccent * log((1.0 + $con) / (1.0 - $con)) / 2.0), $ts);
         } while (abs($phi - $iPhi) > 1.0e-12);
         return $phi;
     }
@@ -235,10 +250,22 @@ class ProjFourphp_Common
     {
 
         $en = array();
-        $en[0] = self::$_cZeroZero - $es * (self::$_cZeroTwo + $es * (self::$_cZeroFour + $es * (self::$_cZeroSix + $es * self::$_cZeroEight)));
-        $en[1] = es * (self::$_cTwoTwo - $es * (self::$_cZeroFour + $es * (self::$_cZeroSix + $es * self::$_cZeroEight)));
+        $en[0] =
+            self::$_cZeroZero - $es *
+            (self::$_cZeroTwo + $es
+            * (self::$_cZeroFour + $es
+            * (self::$_cZeroSix + $es
+            * self::$_cZeroEight)));
+
+        $en[1] =
+            es * (self::$_cTwoTwo - $es
+            * (self::$_cZeroFour + $es
+            * (self::$_cZeroSix +
+            $es * self::$_cZeroEight)));
         $t     = $es * $es;
-        $en[2] = $t * (self::$_cFourFour - $es * (self::$_cFourSix + $es * self::$_cFourEight));
+        $en[2] =
+            $t * (self::$_cFourFour -
+            $es * (self::$_cFourSix + $es * self::$_cFourEight));
         $t *= $es;
         $en[3] = $t * (self::$_cSixSix - $es * self::$_cSixEight);
         $en[4] = $t * $es * self::$_cEightEight;
@@ -249,19 +276,22 @@ class ProjFourphp_Common
     {
         $cphi *= $sphi;
         $sphi *= $sphi;
-        return($en[0] * $phi - $cphi * ($en[1] + $sphi * ($en[2] + $sphi * ($en[3] + $sphi * $en[4]))));
+        return($en[0] * $phi - $cphi * ($en[1] + $sphi *
+            ($en[2] + $sphi * ($en[3] + $sphi * $en[4]))));
     }
 
     public static function pjInvMlfn($arg, $es, $en)
     {
         $k   = 1. / (1. - $es);
         $phi = $arg;
-        for ($i   = self::$maxIter; $i; --$i) { /* rarely goes over 2 iterations */
+        for ($i = self::$maxIter; $i; --$i) { /* rarely goes over 2 iterations */
             $s = sin($phi);
             $t = 1. - $es * $s * $s;
             //$t = self::$pj_mlfn($phi, $s, cos($phi), $en) - $arg;
             //$phi -= $t * ($t * sqrt($t)) * $k;
-            $t = (self::$pjMlfn($phi, $s, cos($phi), $en) - $arg) * ($t * sqrt($t)) * $k;
+            $t =
+                (self::$pjMlfn($phi, $s, cos($phi), $en) - $arg)
+                * ($t * sqrt($t)) * $k;
             $phi -= $t;
             if (abs($t) < self::$epsln) return $phi;
         }

@@ -1,8 +1,8 @@
 <?php
+
 /**
  * @package Proj4
  */
-
 /**
  * Author : Julien Moquet
  * 
@@ -39,9 +39,10 @@ class ProjFourphp_Point
         if (is_array($x)) {
             $this->x = $x[0];
             $this->y = $x[1];
-            $this->z = isset($x[2]) ? $x[2] : 0.0; #(count( $x ) > 2) ? $x[2] : 0.0;
+            $this->z = isset($x[2]) ? $x[2] : 0.0;
+            #(count( $x ) > 2) ? $x[2] : 0.0;
         } else if (is_string($x) && !is_numeric($y)) {
-            $coord = explode(' ', $x);
+            $coord   = explode(' ', $x);
             $this->x = floatval($coord[0]);
             $this->y = floatval($coord[1]);
             $this->z = (count($coord) > 2) ? floatval($coord[2]) : 0.0;

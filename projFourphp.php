@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package Proj4
  */
@@ -78,7 +79,8 @@ class ProjFourphp
     //build this out as required
     protected function initWKTProjections()
     {
-        self::$wktProjections["Lambert Tangential Conformal Conic Projection"] = "lcc";
+        self::$wktProjections["Lambert Tangential Conformal Conic Projection"]
+            = "lcc";
         self::$wktProjections["Mercator"] = "merc";
         self::$wktProjections["Mercator_1SP"] = "merc";
         self::$wktProjections["Transverse_Mercator"] = "tmerc";
@@ -293,13 +295,13 @@ class ProjFourphp
     protected function initPrimeMeridian()
     {
         self::$primeMeridian["greenwich"] = '0.0';               //"0dE",
-        self::$primeMeridian["lisbon"] = -9.131906111111;   //"9dZero7'54.862\"W",
+        self::$primeMeridian["lisbon"] = -9.131906111111; //"9dZero7'54.862\"W",
         self::$primeMeridian["paris"] = 2.337229166667;   //"2dTwo0'14.025\"E",
-        self::$primeMeridian["bogota"] = -74.080916666667;  //"74dZero4'51.3\"W",
+        self::$primeMeridian["bogota"] = -74.080916666667; //"74dZero4'51.3\"W",
         self::$primeMeridian["madrid"] = -3.687938888889;  //"3d41'16.58\"W",
         self::$primeMeridian["rome"] = 12.452333333333;  //"12dTwo7'8.4\"E",
         self::$primeMeridian["bern"] = 7.439583333333;  //"7dTwo6'22.5\"E",
-        self::$primeMeridian["jakarta"] = 106.807719444444;  //"106d48'27.79\"E",
+        self::$primeMeridian["jakarta"] = 106.807719444444; //"106d48'27.79\"E",
         self::$primeMeridian["ferro"] = -17.666666666667;  //"17d40'W",
         self::$primeMeridian["brussels"] = 4.367975;        //"4dTwo2'4.71\"E",
         self::$primeMeridian["stockholm"] = 18.058277777778;  //"18d3'29.8\"E",
@@ -520,7 +522,7 @@ class ProjFourphp
         $zin = isset($point->z) ? $point->z : 0.0;
         #$v;
         #$t;
-        for ($i   = 0; $i < 3; $i++) {
+        for ($i = 0; $i < 3; $i++) {
             if ($denorm && $i == 2 && !isset($point->z)) {
                 continue;
             }
@@ -554,7 +556,7 @@ class ProjFourphp
                     break;
                 case 'd':
                     if (isset($point[$t])) {
-                        $point->z = -$v;
+                        $point->z      = -$v;
                     }
                     break;
                 default :
@@ -583,7 +585,10 @@ class ProjFourphp
      * Function : loadScript
      * adapted from original. PHP is simplier.
      */
-    public static function loadScript($filename, $onload = null, $onfail = null, $loadCheck = null)
+    public static function loadScript($filename
+    , $onload = null
+    , $onfail = null
+    , $loadCheck = null)
     {
 
         if (stripos($filename, 'http://') !== false) {
@@ -614,8 +619,7 @@ class ProjFourphp
      */
     public static function extend($destination, $source)
     {
-        if ($source != null)
-            foreach ($source as $key => $value) {
+        if ($source != null) foreach ($source as $key => $value) {
                 $destination->$key = $value;
             }
         return $destination;
@@ -643,8 +647,7 @@ if (!function_exists('dbg')) {
             echo "<pre>";
             var_dump($var);
         }
-        else
-            echo $var . '<br>';
+        else echo $var . '<br>';
 
         if ($die === TRUE) {
             throw new Exception('cant die');
