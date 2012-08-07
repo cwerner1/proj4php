@@ -86,9 +86,9 @@ class ProjFourphp_Common
      */
     public static function tsfnz($eccent, $phi, $sinphi)
     {
-        $con = $eccent * $sinphi;
+        $conO = $eccent * $sinphi;
         $com = 0.5 * $eccent;
-        $con = pow(((1.0 - $con) / (1.0 + $con)), $com);
+        $con = pow(((1.0 - $conO) / (1.0 + $conO)), $com);
         return (tan(.5 * (self::$halfPi - $phi)) / $con);
     }
 
@@ -161,9 +161,9 @@ class ProjFourphp_Common
         return($x * $x * $x * (35.0 / 3072.0));
     }
 
-    public static function mlfn($e0, $eOne, $eTwo, $eThree, $phi)
+    public static function mlfn($eZero, $eOne, $eTwo, $eThree, $phi)
     {
-        return($e0 * $phi - $eOne * sin(2.0 * $phi) + $eTwo * sin(4.0 * $phi)
+        return($eZero * $phi - $eOne * sin(2.0 * $phi) + $eTwo * sin(4.0 * $phi)
             - $eThree * sin(6.0 * $phi));
     }
 
@@ -188,7 +188,7 @@ class ProjFourphp_Common
         if (abs($x) < self::$pi) {
             return $x;
         } else {
-            $x = ($x - (self::$sign($x) * self::$twoPi) );
+            $x = ($x - (self::sign($x) * self::$twoPi) );
         }
 
         return $x;
@@ -201,7 +201,7 @@ class ProjFourphp_Common
         if (abs($x) < self::$halfPi) {
             return $x;
         } else {
-            $x = ($x - (self::$sign($x) * self::$pi) );
+            $x = ($x - (self::sign($x) * self::$pi) );
         }
         return $x;
     }
@@ -226,14 +226,14 @@ class ProjFourphp_Common
 // Inverse Latitude Isometrique - close to phTwoz
     public static function invlatiso($eccent, $ts)
     {
-        $phi  = self::$fL(1.0, $ts);
+        $phi  = self::fL(1.0, $ts);
         $iPhi = 0.0;
         $con  = 0.0;
         do {
             $iPhi = $phi;
             $con  = $eccent * sin($iPhi);
             $phi  =
-                self::$fL(exp($eccent * log((1.0 + $con) / (1.0 - $con)) / 2.0), $ts);
+                self::fL(exp($eccent * log((1.0 + $con) / (1.0 - $con)) / 2.0), $ts);
         } while (abs($phi - $iPhi) > 1.0e-12);
         return $phi;
     }
@@ -286,14 +286,14 @@ class ProjFourphp_Common
         $phi = $arg;
         for ($i = self::$maxIter; $i; --$i) { /* rarely goes over 2 iterations */
             $s = sin($phi);
-            $t = 1. - $es * $s * $s;
+            $tO = 1. - $es * $s * $s;
             //$t = self::$pj_mlfn($phi, $s, cos($phi), $en) - $arg;
             //$phi -= $t * ($t * sqrt($t)) * $k;
-            $t =
-                (self::$pjMlfn($phi, $s, cos($phi), $en) - $arg)
-                * ($t * sqrt($t)) * $k;
-            $phi -= $t;
-            if (abs($t) < self::$epsln) return $phi;
+            $tT =
+                (self::pjMlfn($phi, $s, cos($phi), $en) - $arg)
+                * ($tO * sqrt($tO)) * $k;
+            $phi -= $tT;
+            if (abs($tT) < self::$epsln) return $phi;
         }
 
         ProjFourphp::reportError("cass:pjInvMlfn: Convergence error");
