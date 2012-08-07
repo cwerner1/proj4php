@@ -75,7 +75,7 @@ class ProjFourphp_Proj
      *
      * @var type 
      */
-    protected $_wktRE  = '/^(\w+)\[(.*)\]$/';
+    protected $_wktRE = '/^(\w+)\[(.*)\]$/';
 
     /**
      * Constructor: initialize
@@ -578,19 +578,24 @@ class ProjFourphp_Proj
                     $this->rf            = floatval(paramVal);
                     break; // inverse flattening rf= a/(a-b)
                 case "lat_0":
-                    $this->latZero       = $paramVal * ProjFourphp_Common::$dToR;
+                    $this->latZero       =
+                        $paramVal * ProjFourphp_Common::$dToR;
                     break;        // phiZero, central latitude
                 case "lat_1":
-                    $this->latOne        = $paramVal * ProjFourphp_Common::$dToR;
+                    $this->latOne        =
+                        $paramVal * ProjFourphp_Common::$dToR;
                     break;        //standard parallel 1
                 case "lat_2":
-                    $this->latTwo        = $paramVal * ProjFourphp_Common::$dToR;
+                    $this->latTwo        =
+                        $paramVal * ProjFourphp_Common::$dToR;
                     break;        //standard parallel 2
                 case "latTs":
-                    $this->latTs         = $paramVal * ProjFourphp_Common::$dToR;
+                    $this->latTs         =
+                        $paramVal * ProjFourphp_Common::$dToR;
                     break;      // used in merc and eqc
                 case "lon_0":
-                    $this->longZero      = $paramVal * ProjFourphp_Common::$dToR;
+                    $this->longZero      =
+                        $paramVal * ProjFourphp_Common::$dToR;
                     break;       // lamZero, central longitude
                 case "alpha":
                     $this->alpha         =
@@ -627,13 +632,19 @@ class ProjFourphp_Proj
                     $this->toMeter       = floatval($paramVal);
                     break; // cartesian scaling
                 case "fromGreenwich":
-                    $this->fromGreenwich = $paramVal * ProjFourphp_Common::$dToR;
+                    $this->fromGreenwich =
+                        $paramVal * ProjFourphp_Common::$dToR;
                     break;
                 // DGR 2008-07-09 : if pm is not a well-known prime meridian take
                 // the value instead of 0.0, then convert to radians
                 case "pm": $paramVal            = trim($paramVal);
-                    $this->fromGreenwich =
-                        ProjFourphp::$primeMeridian[$paramVal] ? ProjFourphp::$primeMeridian[$paramVal] : floatval($paramVal);
+
+                    if (ProjFourphp::$primeMeridian[$paramVal]) {
+                        $this->fromGreenwich =
+                            ProjFourphp::$primeMeridian[$paramVal];
+                    } else {
+                        $this->fromGreenwich = floatval($paramVal);
+                    }
                     $this->fromGreenwich *= ProjFourphp_Common::$dToR;
                     break;
                 // DGR 2010-11-12: axis
@@ -671,17 +682,26 @@ class ProjFourphp_Proj
             $datumDef = ProjFourphp::$datum[$this->datumCode];
 
             if (is_array($datumDef)) {
-
-                $this->datumParams = array_key_exists('towgs84', $datumDef) ? explode(',', $datumDef['towgs84']) : null;
+                if (array_key_exists('towgs84', $datumDef)) {
+                    $this->datumParams = explode(',', $datumDef['towgs84']);
+                } else {
+                    $this->datumParams = null;
+                }
                 $this->ellps       = $datumDef['ellipse'];
-                $this->datumName   = array_key_exists('datumName', $datumDef) ? $datumDef['datumName'] : $this->datumCode;
+
+                if (array_key_exists('datumName', $datumDef)) {
+                    $this->datumName = $datumDef['datumName'];
+                } else {
+                    $this->datumName = $this->datumCode;
+                }
             }
         }
         if (!isset($this->a)) {    // do we have an ellipsoid?
             if (!isset($this->ellps)
                 || strlen($this->ellps) == 0
-                || !array_key_exists($this->ellps, ProjFourphp::$ellipsoid)) $ellipse = ProjFourphp::$ellipsoid['WGS84'];
-            else {
+                || !array_key_exists($this->ellps, ProjFourphp::$ellipsoid)) {
+                $ellipse = ProjFourphp::$ellipsoid['WGS84'];
+            } else {
                 $ellipse = ProjFourphp::$ellipsoid[$this->ellps];
             }
 
@@ -713,6 +733,16 @@ class ProjFourphp_Proj
         $this->epTwo = ($this->aTwo - $this->b2) / $this->b2;
         //// used in geocentric
         if (!isset($this->kZero)) $this->kZero = 1.0;    //default value
+
+
+
+
+
+
+
+
+
+
 
 
 

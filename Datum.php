@@ -133,7 +133,8 @@ class ProjFourphp_Datum
         /*
          * * Don't blow up if Latitude is just a little out of the value
          * * range as it may just be a rounding issue.  Also removed longitude
-         * * test, it should be wrapped by cos() and sin().  NFW for PROJ.4, Sep/2001.
+         * * test, it should be wrapped by cos() and sin().  
+         * NFW for PROJ.4, Sep/2001.
          */
         if ($latitude < - ProjFourphp_Common::$halfPi
             && $latitude > -1.001 * ProjFourphp_Common::$halfPi) {
@@ -148,8 +149,9 @@ class ProjFourphp_Datum
             return null;
         }
 
-        if ($longitude > ProjFourphp_Common::$pi) $longitude -= (2 * ProjFourphp_Common::$pi);
-
+        if ($longitude > ProjFourphp_Common::$pi) {
+            $longitude -= (2 * ProjFourphp_Common::$pi);
+        }
         $sinLat    = sin($latitude); /*  sin(Latitude)  */
         $cosLat    = cos($latitude); /*  cos(Latitude)  */
         $sinTwoLat = $sinLat * $sinLat; /*  Square of sin(Latitude)  */
@@ -336,11 +338,13 @@ class ProjFourphp_Datum
         $cosBzero      = $w / $sZero;
         $sinThreeBZero = $sinBZero * $sinBZero * $sinBZero;
         $tOne          = $z + $this->b * $this->epTwo * $sinThreeBZero;
-        $sum           = $w - $this->a * $this->es * $cosBzero * $cosBzero * $cosBzero;
+        $sum           =
+            $w - $this->a * $this->es * $cosBzero * $cosBzero * $cosBzero;
         $sOne          = sqrt($tOne * $tOne + $sum * $sum);
         $sinPOne       = $tOne / $sOne;
         $cosPOne       = $sum / $sOne;
-        $rn            = $this->a / sqrt(1.0 - $this->es * $sinPOne * $sinPOne);
+        $rn            =
+        $this->a / sqrt(1.0 - $this->es * $sinPOne * $sinPOne);
         if ($cosPOne >= ProjFourphp_Common::$cosOf67P5) {
             $height = $w / $cosPOne - $rn;
         } else if ($cosPOne <= - ProjFourphp_Common::$cosOf67P5) {
