@@ -328,7 +328,7 @@ class ProjFourphp_ProjOmerc
         } else {
             $con   = 1.0 / $this->bl;
             $tsOne = pow(($this->el / sqrt((1.0 + $ul) / (1.0 - $ul))), $con);
-            $lat   = ProjFourphp::$common->phi2z($this->e, $tsOne);
+            $lat   = ProjFourphp_Common::phi2z($this->e, $tsOne);
             //if ($flag != 0)
             //return($flag);
             //~ con = cos($this->bl * us /al);
