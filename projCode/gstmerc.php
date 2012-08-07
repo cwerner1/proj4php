@@ -69,11 +69,14 @@ class ProjFourphp_ProjGstmerc
         $x = $p->x;
         $y = $p->y;
 
-        $l      = atan(ProjFourphp_Common::sinh(($x - $this->xs) / $this->nTwo) / cos(($y - $this->ys) / $this->nTwo));
-        $latOne = asin(sin(($y - $this->ys) / $this->nTwo) / ProjFourphp_Common::cosh(($x - $this->xs) / $this->nTwo));
+        $l      =
+            atan(ProjFourphp_Common::sinh(($x - $this->xs) / $this->nTwo) / cos(($y - $this->ys) / $this->nTwo));
+        $latOne =
+            asin(sin(($y - $this->ys) / $this->nTwo) / ProjFourphp_Common::cosh(($x - $this->xs) / $this->nTwo));
         $lc     = ProjFourphp_Common::latiso(0.0, $latOne, sin($latOne));
         $p->x   = $this->lc + $l / $this->rs;
-        $p->y   = ProjFourphp_Common::invlatiso($this->e, ($lc - $this->cp) / $this->rs);
+        $p->y   =
+            ProjFourphp_Common::invlatiso($this->e, ($lc - $this->cp) / $this->rs);
         return $p;
     }
 

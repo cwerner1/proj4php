@@ -28,7 +28,7 @@
 
   2.  Snyder, John P. and Voxland, Philip M., "An Album of Map Projections",
   U.S. Geological Survey Professional Paper 1453 , United State Government
- * *************************************************************************** */
+ * ************************************************************************* */
 
 
 //<2104> +proj=lcc +lat_1=10.16666666666667 +lat_0=10.16666666666667 +lon_0=
